@@ -73,15 +73,16 @@ def extract(stat: dict, cells: dict) -> dict[int, float]:
     return out
 
 
-def best_tab(stat: dict, cells: dict, tabs: list[dict]) -> tuple[dict, dict[int, float]]:
-    """Some tables list the pay item twice (e.g. codes 10 and 42, one per estimation method).
-    Use the one with the most recent data, then the most years."""
-    best = (cells["tab"], {})
-    for tab in tabs:
-        got = extract(stat, {**cells, "tab": tab})
-        if got and (not best[1] or (max(got), len(got)) > (max(best[1]), len(best[1]))):
-            best = (tab, got)
-    return best
+def merge_tabs(stat: dict, cells: dict, tabs: list[dict]) -> dict[int, float]:
+    """Some tables list the pay item twice (e.g. codes 10 and 42) and spread the years across them
+    (2021-2022 under one, 2020 and 2023 under the other). Combine them; where both have a year,
+    the code with the most recent data wins."""
+    results = [extract(stat, {**cells, "tab": tab}) for tab in tabs]
+    results = sorted((r for r in results if r), key=lambda r: (max(r), len(r)))
+    merged: dict[int, float] = {}
+    for r in results:  # later (more recent) results overwrite earlier ones
+        merged.update(r)
+    return merged
 
 
 def candidate_tables(app_id: str, config: dict) -> list[str]:
@@ -120,8 +121,7 @@ def main() -> None:
         tabs = [e for e in classes.get("tab", []) if config["tab_match"] in e.get("@name", "")]
         filters = {f"cd{k.capitalize()}": e["@code"] for k, e in cells.items()}
         filters["cdTab"] = ",".join(e["@code"] for e in tabs)
-        tab, got = best_tab(fetch_table(app_id, tid, filters), cells, tabs)
-        cells["tab"] = tab
+        got = merge_tabs(fetch_table(app_id, tid, filters), cells, tabs)
         print(f"  use  {tid} {title}: {', '.join(e.get('@name', '') for e in cells.values())} -> "
               f"{min(got) if got else '-'}..{max(got) if got else '-'}")
         if got:
