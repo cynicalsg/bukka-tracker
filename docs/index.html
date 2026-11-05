@@ -575,7 +575,9 @@ function renderWages(t) {
   const wy = Math.max(...pay.keys());
   box.innerHTML = `<h2>${t.wagesTitle}</h2><div class="unit">${t.wagesSub(y0, y1)}</div>
     <div class="chips" style="margin-top:10px">${rows.map(([label, map]) => pct(map) == null ? "" :
-      `<div class="chip"><span>${label}</span>${pctSpan(map.get(y1), map.get(y0))}</div>`).join("")}</div>
+      `<div class="chip"><span>${label}</span>${map === pay  // for pay, a rise is good news: swap the colours
+        ? pctSpan(map.get(y1), map.get(y0)).replace(/chg (up|down)/, (_, c) => `chg ${c === "up" ? "down" : "up"}`)
+        : pctSpan(map.get(y1), map.get(y0))}</div>`).join("")}</div>
     <div class="chart tall"><canvas></canvas></div>
     ${real != null ? `<p style="margin:8px 0 0"><b class="chg ${real < 0 ? "up" : "down"}" style="font-size:1rem">${t.realPay(real)}</b></p>` : ""}
     ${latestBasket ? `<p class="unit" style="margin:4px 0 0">${t.share(latestBasket / (pay.get(wy) * 1000) * 100, wy)}</p>` : ""}
