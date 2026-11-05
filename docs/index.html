@@ -102,8 +102,8 @@ const T = {
         item: "品目", amount: "量", cost: "金額", share: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
         movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
         noMoves: "変動なし",
-        cpiRef: "食料CPIの場合", ifCpi: "食料CPIと同じ率で上がった場合", baseline: "食料CPI",
-        cpiNote: n => `CPI(消費者物価指数)は「${n}」の指数で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。` },
+        cpiRef: "食料CPI", ifCpi: "食料CPIと同じ率で上がった場合", baseline: "食料CPI",
+        cpiNote: n => `CPI(消費者物価指数)は名古屋市の「${n}」指数(外食を含む)で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。` },
   en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials in Nagoya", per: "per",
         r24: "2 yrs", r60: "5 yrs", rall: "All", yoy: "vs. last year", noData: "No data yet. It will appear after the first GitHub Action run.",
         source: "Source", updated: "Updated", toggle: "日本語",
@@ -113,7 +113,7 @@ const T = {
         movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
         noMoves: "No change",
         cpiRef: "Food CPI", ifCpi: "If it had risen with food CPI", baseline: "Food CPI",
-        cpiNote: n => `CPI (consumer price index) here is Nagoya's “${n}” index. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.` },
+        cpiNote: n => `CPI (consumer price index) here is Nagoya's food index (${n}), which includes eating out. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.` },
 };
 let lang = (() => { try { return localStorage.getItem("lang"); } catch { return null; } })()
   || (navigator.language.startsWith("ja") ? "ja" : "en");
