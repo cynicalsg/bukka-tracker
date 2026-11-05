@@ -26,8 +26,7 @@ def main() -> None:
         print(f"  {t['@id']}  [{text(t.get('CYCLE'))}] {text(t.get('STATISTICS_NAME'))} / {text(t.get('TITLE'))}"
               f"  updated {text(t.get('UPDATED_DATE'))}")
 
-    likely = [t for t in rows if text(t.get("CYCLE")) == "月次"
-              and any(w in text(t.get("TITLE")) + text(t.get("STATISTICS_NAME")) for w in ("都市", "市別", "地域"))]
+    likely = [seen[i] for i in ("0004052037", "0003427113") if i in seen]
     print(f"\nInspecting {min(len(likely), 8)} likely tables:")
     for t in likely[:8]:
         meta = api_get("getMetaInfo", {"appId": app_id, "statsDataId": t["@id"]})["GET_META_INFO"]
@@ -39,12 +38,16 @@ def main() -> None:
         for key, entries in classes.items():
             names = [e.get("@name", "") for e in entries]
             if key == "time":
-                print(f"    time: {len(names)} periods, {names[-1] if names else ''} .. {names[0] if names else ''}")
+                codes = sorted(e["@code"] for e in entries)
+                print(f"    time: {len(codes)} periods, codes {codes[:2]} .. {codes[-2:]}")
             elif key == "area":
                 print(f"    area: {len(names)} areas; Nagoya: {[ (e['@code'], e['@name']) for e in entries if '名古屋' in e.get('@name','')]}")
             else:
-                food = [(e["@code"], e["@name"]) for e in entries if "食料" in e.get("@name", "") or "総合" in e.get("@name", "")]
-                print(f"    {key}: {len(names)} entries, e.g. {names[:4]}; food/総合: {food[:8]}")
+                food = [(e["@code"], e["@name"], e.get("@level", "")) for e in entries
+                        if any(w in e.get("@name", "") for w in ("食料", "総合", "生鮮", "外食"))]
+                print(f"    {key} ({len(names)} entries), e.g. {names[:6]}")
+                for f in food[:20]:
+                    print(f"      {f}")
 
 
 if __name__ == "__main__":
