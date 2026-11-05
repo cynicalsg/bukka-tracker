@@ -41,11 +41,12 @@ jobs:
         env:
           ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
         run: python fetch/fetch_cpi.py
-      - name: Discover tables (temporary)
+      - name: Fetch Aichi wages from e-Stat
+        # Annual data; a problem here shouldn't stop the price update either.
         continue-on-error: true
         env:
           ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
-        run: python fetch/discover.py
+        run: python fetch/fetch_wages.py
       - name: Note the latest month after fetching
         id: after
         run: echo "month=$(python fetch/monthly_summary.py --latest-month)" >> "$GITHUB_OUTPUT"
