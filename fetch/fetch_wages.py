@@ -98,6 +98,14 @@ def main() -> None:
         if not cells:
             print(f"  skip {tid} {title}")
             continue
+        classes = class_objects(meta)
+        for k, es in classes.items():  # log the table's shape, to check the choices above
+            if k == "time":
+                print(f"         time: {sorted(e['@code'] for e in es)}")
+            elif len(es) <= 12 or k == "tab":
+                print(f"         {k}: {[(e['@code'], e.get('@name', '')) for e in es][:15]}")
+            else:
+                print(f"         {k}: {len(es)} entries, e.g. {[e.get('@name', '') for e in es[:6]]}")
         filters = {f"cd{k.capitalize()}": e["@code"] for k, e in cells.items()}
         got = extract(fetch_table(app_id, tid, filters), cells)
         print(f"  use  {tid} {title}: {', '.join(e.get('@name', '') for e in cells.values())} -> "
