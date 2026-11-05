@@ -44,6 +44,12 @@
   .chip { border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: .85rem; font-variant-numeric: tabular-nums; }
   .chip span { color: var(--muted); margin-right: 6px; }
   .chart.tall { height: 190px; }
+  .chips.cpi { margin-top: -2px; }
+  .chips.cpi .chip { border-style: dashed; }
+  .key { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--muted); font-size: .8rem; margin: 6px 0 0; }
+  .key i { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--nagoya); vertical-align: middle; margin-right: 6px; }
+  .key i.dash { border-top: 2px dashed var(--muted); }
+  .note { color: var(--muted); font-size: .78rem; margin: 6px 0 0; }
   details { margin-top: 10px; font-size: .9rem; }
   summary { cursor: pointer; color: var(--muted); }
   table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
@@ -95,7 +101,9 @@ const T = {
         allItems: "品目別の価格", mom: "前月比", y1: "1年前比", y5: "5年前比", inBasket: "かごの中身",
         item: "品目", amount: "量", cost: "金額", share: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
         movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
-        noMoves: "変動なし" },
+        noMoves: "変動なし",
+        cpiRef: "食料CPIの場合", ifCpi: "食料CPIと同じ率で上がった場合", baseline: "食料CPI",
+        cpiNote: n => `CPI(消費者物価指数)は「${n}」の指数で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。` },
   en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials in Nagoya", per: "per",
         r24: "2 yrs", r60: "5 yrs", rall: "All", yoy: "vs. last year", noData: "No data yet. It will appear after the first GitHub Action run.",
         source: "Source", updated: "Updated", toggle: "日本語",
@@ -103,13 +111,16 @@ const T = {
         allItems: "Prices by item", mom: "1 mo", y1: "1 yr", y5: "5 yrs", inBasket: "What's in the basket",
         item: "Item", amount: "Amount", cost: "Cost", share: "Share", basketSub: n => `${n} staples at Nagoya retail prices`,
         movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
-        noMoves: "No change" },
+        noMoves: "No change",
+        cpiRef: "Food CPI", ifCpi: "If it had risen with food CPI", baseline: "Food CPI",
+        cpiNote: n => `CPI (consumer price index) here is Nagoya's “${n}” index. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.` },
 };
 let lang = (() => { try { return localStorage.getItem("lang"); } catch { return null; } })()
   || (navigator.language.startsWith("ja") ? "ja" : "en");
 let range = "60";
 let data = null;
 let basket = null;
+let cpi = null;
 let sortBy = (() => { try { return localStorage.getItem("sortBy"); } catch { return null; } })() || "category";
 const charts = [];
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -142,11 +153,29 @@ function basketSeries() {
   return { parts, points };
 }
 
-function lineChart(canvas, labels, values, label) {
+const cpiFood = () => cpi?.series?.food?.points?.length ? new Map(cpi.series.food.points) : null;
+
+// Where a price would be if it had moved with food CPI since the first shown month that has both values.
+function cpiPath(labels, values) {
+  const idx = cpiFood();
+  if (!idx) return null;
+  const k = labels.findIndex((m, i) => values[i] != null && idx.has(m));
+  if (k < 0) return null;
+  const base = values[k] / idx.get(labels[k]);
+  return labels.map((m, i) => i < k || !idx.has(m) ? null : base * idx.get(m));
+}
+const refDataset = (labels, values, label) => {
+  const path = cpiPath(labels, values);
+  return path ? [{ label, data: path, borderColor: css("--muted"), borderWidth: 1.25, borderDash: [4, 4],
+                   pointRadius: 0, spanGaps: true, tension: 0.2 }] : [];
+};
+
+function lineChart(canvas, labels, values, label, refLabel) {
   return new Chart(canvas, {
     type: "line",
     data: { labels, datasets: [{ label, data: values, borderColor: css("--nagoya"), borderWidth: 2,
-                                 pointRadius: 0, spanGaps: true, tension: 0.2 }] },
+                                 pointRadius: 0, spanGaps: true, tension: 0.2 },
+                               ...(refLabel ? refDataset(labels, values, refLabel) : [])] },
     options: {
       maintainAspectRatio: false, animation: false,
       interaction: { mode: "index", intersect: false },
@@ -158,6 +187,15 @@ function lineChart(canvas, labels, values, label) {
       },
     },
   });
+}
+
+// Food CPI change over the same windows as the basket chips, ending in the same month.
+function cpiChips(m, t) {
+  const idx = cpiFood();
+  if (!idx || !idx.has(m)) return "";
+  const c = (label, n) => idx.has(monthsBack(m, n))
+    ? `<div class="chip"><span>${label}</span>${pctSpan(idx.get(m), idx.get(monthsBack(m, n)))}</div>` : "";
+  return `<div class="chips cpi"><div class="chip" style="border:none;padding-left:0"><span>${t.cpiRef}</span></div>${c(t.mom, 1)}${c(t.y1, 12)}${c(t.y5, 60)}</div>`;
 }
 
 function renderSummary(t) {
@@ -183,7 +221,10 @@ function renderSummary(t) {
         <div class="unit">${t.basketSub(parts.length)}</div>
         <div class="price"><span class="big">${yen(now)}</span><span class="unit">${m}</span></div>
         <div class="chips">${chip(t.mom, 1)}${chip(t.y1, 12)}${chip(t.y5, 60)}</div>
+        ${cpiChips(m, t)}
         <div class="chart tall"><canvas></canvas></div>
+        ${cpiFood() ? `<div class="key"><span><i></i>${esc(basket["name_" + lang])}</span><span><i class="dash"></i>${t.ifCpi}</span></div>
+        <p class="note">${t.cpiNote(esc(cpi.series.food.estat_name))}</p>` : ""}
         <details><summary>${t.inBasket}</summary>
           <table><thead><tr><th>${t.item}</th><th>${t.amount}</th><th>${t.cost}</th><th>${t.share}</th></tr></thead>
           <tbody>${rows.map(({ p, cost }) => `<tr><td>${esc(p.item["name_" + lang])}</td>
@@ -193,7 +234,7 @@ function renderSummary(t) {
       box.appendChild(card);
       const shown = range === "all" ? points : points.slice(-Number(range));
       charts.push(lineChart(card.querySelector("canvas"), shown.map(p => p[0]), shown.map(p => p[1]),
-                            basket["name_" + lang]));
+                            basket["name_" + lang], t.ifCpi));
     }
   }
 
@@ -210,7 +251,10 @@ function renderSummary(t) {
     const c = changes(n).sort((a, b) => b.pct - a.pct);
     const ups = c.filter(r => r.pct > 0.05).slice(0, 3);
     const downs = c.filter(r => r.pct < -0.05).reverse().slice(0, 3);
-    return `<h3 style="color:var(--text);font-weight:600">${title}</h3>` +
+    const idx = cpiFood();
+    const base = idx && idx.has(latest) && idx.has(monthsBack(latest, n))
+      ? ` <span class="unit" style="font-weight:400">(${t.baseline} ${pctSpan(idx.get(latest), idx.get(monthsBack(latest, n)))})</span>` : "";
+    return `<h3 style="color:var(--text);font-weight:600">${title}${base}</h3>` +
       (ups.length || downs.length ? list(ups, t.up) + list(downs, t.down) : `<p class="unit">${t.noMoves}</p>`);
   };
   const movers = document.createElement("section");
@@ -295,12 +339,12 @@ function render() {
       type: "line",
       data: {
         labels: shown,
-        datasets: data.areas.filter(a => item.series[a.id]).map(a => {
+        datasets: [...data.areas.filter(a => item.series[a.id]).map(a => {
           const m = new Map(item.series[a.id]);
           return { label: a["name_" + lang], data: shown.map(x => m.get(x) ?? null),
                    borderColor: color(a.id), borderWidth: a.id === "nagoya" ? 2 : 1.25,
                    pointRadius: 0, spanGaps: true, tension: 0.2 };
-        }),
+        }), ...refDataset(shown, shown.map(x => new Map(main).get(x) ?? null), t.ifCpi)],
       },
       options: {
         maintainAspectRatio: false, animation: false,
@@ -316,7 +360,7 @@ function render() {
   }
   const s = data.source;
   document.getElementById("footer").innerHTML =
-    `${t.source}: ${s["name_" + lang]} (<a href="https://www.e-stat.go.jp/">e-Stat</a>) · ${t.updated}: ${data.updated.slice(0, 10)}`;
+    `${t.source}: ${s["name_" + lang]}${cpi ? "; " + cpi.source["name_" + lang] : ""} (<a href="https://www.e-stat.go.jp/">e-Stat</a>) · ${t.updated}: ${data.updated.slice(0, 10)}`;
 }
 
 document.querySelectorAll("[data-range]").forEach(b => b.onclick = () => { range = b.dataset.range; render(); });
@@ -333,8 +377,8 @@ document.getElementById("lang").onclick = () => {
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
 
 const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
-Promise.all([load("data/prices.json"), load("basket.json")])
-  .then(([d, b]) => { data = d; basket = b; render(); });
+Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json")])
+  .then(([d, b, c]) => { data = d; basket = b; cpi = c; render(); });
 </script>
 </body>
 </html>
