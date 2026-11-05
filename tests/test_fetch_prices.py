@@ -47,6 +47,21 @@ class BuildDataset(unittest.TestCase):
         milk = next(i for i in CONFIG["items"] if i["id"] == "milk")
         self.assertEqual(fp.match_item(milk, entries)["@code"], "01303")
 
+    def test_categories_carried_through(self):
+        self.assertEqual(self.items["rice"]["category"], "grains")
+        self.assertTrue(any(c["id"] == "grains" for c in self.ds["categories"]))
+        known = {c["id"] for c in CONFIG["categories"]}
+        self.assertTrue(all(i["category"] in known for i in CONFIG["items"]))
+
+    def test_dump_dataset_round_trips(self):
+        self.assertEqual(json.loads(fp.dump_dataset(self.ds)), self.ds)
+
+    def test_adjust_series_since_and_rescale(self):
+        pts = [["2012-12", 14.0], ["2013-06", 15.0], ["2014-01", 150.0]]
+        item = {"since": "2013-01", "rescale": [{"before": "2014-01", "factor": 10}]}
+        self.assertEqual(fp.adjust_series(pts, item), [["2013-06", 150.0], ["2014-01", 150.0]])
+        self.assertEqual(fp.adjust_series(pts, {}), pts)
+
     def test_missing_values_skipped(self):
         self.assertEqual(self.items["milk"]["series"]["nagoya"], [["2024-01", 250.0]])
 

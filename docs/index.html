@@ -54,7 +54,12 @@
   .movers h3:first-of-type { margin-top: 8px; }
   .movers ol { list-style: none; margin: 0; padding: 0; }
   .movers li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
-  .section-title { margin: 28px 0 0; font-size: 1.1rem; }
+  .section-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin: 28px 0 0; }
+  .section-title { margin: 0; font-size: 1.1rem; }
+  .sorts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sorts button { font-size: .85rem; padding: 4px 10px; }
+  .cat-title { grid-column: 1 / -1; margin: 14px 0 -4px; font-size: .95rem; color: var(--muted); font-weight: 600; }
+  .cat-title:first-child { margin-top: 0; }
   footer { color: var(--muted); font-size: .8rem; padding-top: 24px; padding-bottom: 32px; }
   footer a { color: inherit; }
 </style>
@@ -72,7 +77,10 @@
 </header>
 <main>
   <div class="summary" id="summary"></div>
-  <h2 class="section-title" data-i18n="allItems"></h2>
+  <div class="section-head">
+    <h2 class="section-title" data-i18n="allItems"></h2>
+    <div class="sorts"><button data-sort="category"></button><button data-sort="up"></button><button data-sort="down"></button></div>
+  </div>
   <div class="legend" id="legend"></div>
   <div class="grid" id="grid"></div>
 </main>
@@ -83,6 +91,7 @@ const T = {
   ja: { title: "名古屋 物価トラッカー", subtitle: "名古屋市の生活必需品の小売価格の推移(月次)", per: "あたり",
         r24: "2年", r60: "5年", rall: "全期間", yoy: "前年同月比", noData: "データはまだありません。GitHub Action の初回実行後に表示されます。",
         source: "出典", updated: "更新", toggle: "English",
+        sort_category: "分類別", sort_up: "値上がり順", sort_down: "値下がり順", other: "その他",
         allItems: "品目別の価格", mom: "前月比", y1: "1年前比", y5: "5年前比", inBasket: "かごの中身",
         item: "品目", amount: "量", cost: "金額", share: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
         movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
@@ -90,6 +99,7 @@ const T = {
   en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials in Nagoya", per: "per",
         r24: "2 yrs", r60: "5 yrs", rall: "All", yoy: "vs. last year", noData: "No data yet. It will appear after the first GitHub Action run.",
         source: "Source", updated: "Updated", toggle: "日本語",
+        sort_category: "By category", sort_up: "Biggest rise", sort_down: "Biggest fall", other: "Other",
         allItems: "Prices by item", mom: "1 mo", y1: "1 yr", y5: "5 yrs", inBasket: "What's in the basket",
         item: "Item", amount: "Amount", cost: "Cost", share: "Share", basketSub: n => `${n} staples at Nagoya retail prices`,
         movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
@@ -100,6 +110,7 @@ let lang = (() => { try { return localStorage.getItem("lang"); } catch { return 
 let range = "60";
 let data = null;
 let basket = null;
+let sortBy = (() => { try { return localStorage.getItem("sortBy"); } catch { return null; } })() || "category";
 const charts = [];
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const yen = v => "¥" + Math.round(v).toLocaleString();
@@ -234,16 +245,45 @@ function render() {
   document.getElementById("legend").innerHTML = data.areas.length < 2 ? "" : data.areas.map(a =>
     `<span><span class="swatch" style="background:${color(a.id)}"></span>${a["name_" + lang]}</span>`).join("");
 
-  for (const item of data.items) {
+  document.querySelectorAll("[data-sort]").forEach(b => {
+    b.textContent = t["sort_" + b.dataset.sort];
+    b.setAttribute("aria-pressed", b.dataset.sort === sortBy);
+  });
+
+  // Latest price and year-on-year change for each item, then order them.
+  const rows = data.items.map(item => {
     const main = seriesOf(item);
-    if (!main.length) continue;
+    if (!main.length) return null;
     const [lastMonth, last] = main[main.length - 1];
-    const chg = pctSpan(last, new Map(main).get(monthsBack(lastMonth, 12)), t.yoy);
+    const before = new Map(main).get(monthsBack(lastMonth, 12));
+    return { item, main, lastMonth, last, before, pct: before ? last / before - 1 : null };
+  }).filter(Boolean);
+  const cats = data.categories || [];
+  const catIndex = id => { const i = cats.findIndex(c => c.id === id); return i < 0 ? cats.length : i; };
+  if (sortBy === "category") rows.sort((a, b) => catIndex(a.item.category) - catIndex(b.item.category));
+  else {
+    const dir = sortBy === "up" ? -1 : 1;
+    rows.sort((a, b) => (a.pct == null) - (b.pct == null) || dir * (a.pct - b.pct));
+  }
+
+  let currentCat;
+  for (const { item, main, lastMonth, last, before } of rows) {
+    if (sortBy === "category" && item.category !== currentCat) {
+      currentCat = item.category;
+      const c = cats.find(c => c.id === currentCat);
+      const h = document.createElement("h3");
+      h.className = "cat-title";
+      h.textContent = c ? c["name_" + lang] : t.other;
+      grid.appendChild(h);
+    }
+    const chg = pctSpan(last, before, t.yoy);
+    const unit = item["unit_" + lang] ? (lang === "ja" ? `${item.unit_ja}${t.per}` : `${t.per} ${item.unit_en}`) : "";
+    const sub = [unit, item["note_" + lang]].filter(Boolean).join(" · ");
 
     const card = document.createElement("section");
     card.className = "card";
     card.innerHTML = `<h2>${item["name_" + lang]}</h2>
-      <div class="unit">${lang === "ja" ? `${item.unit_ja}${t.per}` : `${t.per} ${item.unit_en}`}${item["note_" + lang] ? ` · ${item["note_" + lang]}` : ""}</div>
+      <div class="unit">${sub || "&nbsp;"}</div>
       <div class="price"><strong>${yen(last)}</strong>${chg}</div>
       <div class="unit">${lastMonth}</div>
       <div class="chart"><canvas></canvas></div>`;
@@ -280,6 +320,11 @@ function render() {
 }
 
 document.querySelectorAll("[data-range]").forEach(b => b.onclick = () => { range = b.dataset.range; render(); });
+document.querySelectorAll("[data-sort]").forEach(b => b.onclick = () => {
+  sortBy = b.dataset.sort;
+  try { localStorage.setItem("sortBy", sortBy); } catch {}
+  render();
+});
 document.getElementById("lang").onclick = () => {
   lang = lang === "ja" ? "en" : "ja";
   try { localStorage.setItem("lang", lang); } catch {}

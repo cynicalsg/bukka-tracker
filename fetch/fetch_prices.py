@@ -152,6 +152,21 @@ def match_item(item: dict, entries: list[dict]) -> dict | None:
     return hits[0] if hits else None
 
 
+def adjust_series(points: list, item: dict) -> list:
+    """Apply an item's "since" (drop months before a product-definition change) and "rescale"
+    ([{"before": "YYYY-MM", "factor": f}] converts older prices to the current unit, e.g. per 100 g -> per 1 kg)."""
+    since = item.get("since")
+    out = []
+    for month, price in points:
+        if since and month < since:
+            continue
+        for r in item.get("rescale", []):
+            if month < r["before"]:
+                price = round(price * r["factor"], 1)
+        out.append([month, price])
+    return out
+
+
 def build_dataset(stat: dict, config: dict) -> dict:
     classes = class_objects(stat)
     item_dim = find_item_dimension(classes, config["items"])
@@ -175,6 +190,7 @@ def build_dataset(stat: dict, config: dict) -> dict:
         entry = {
             "id": item["id"], "name_ja": item["name_ja"], "name_en": item["name_en"],
             "estat_code": hit["@code"], "estat_name": hit["@name"],
+            "category": item.get("category", ""),
             "unit_ja": item.get("unit_ja", ""), "unit_en": item.get("unit_en", ""),
             **{k: item[k] for k in ("note_ja", "note_en") if k in item},
             "series": {a["id"]: [] for a in config["areas"] if a["id"] in area_codes.values()},
@@ -190,9 +206,10 @@ def build_dataset(stat: dict, config: dict) -> dict:
         if entry and area_id and month and price is not None:
             entry["series"][area_id].append([month, price])
 
+    cfg_by_id = {i["id"]: i for i in config["items"]}
     for entry in items_out:
-        for points in entry["series"].values():
-            points.sort()
+        for area_id, points in entry["series"].items():
+            entry["series"][area_id] = adjust_series(sorted(points), cfg_by_id[entry["id"]])
 
     table = stat.get("TABLE_INF", {})
     return {
@@ -205,8 +222,18 @@ def build_dataset(stat: dict, config: dict) -> dict:
         },
         "areas": [{k: a[k] for k in ("id", "name_ja", "name_en")} for a in config["areas"]
                   if a["id"] in area_codes.values()],
+        "categories": config.get("categories", []),
         "items": items_out,
     }
+
+
+def dump_dataset(dataset: dict) -> str:
+    """Compact JSON with one item per line, so monthly updates give readable diffs."""
+    head = {k: v for k, v in dataset.items() if k != "items"}
+    lines = ["{"] + [f"{json.dumps(k)}: {json.dumps(v, ensure_ascii=False)}," for k, v in head.items()]
+    items = [json.dumps(i, ensure_ascii=False, separators=(",", ":")) for i in dataset["items"]]
+    lines += ['"items": [', ",\n".join(items), "]", "}"]
+    return "\n".join(lines) + "\n"
 
 
 def write_catalog(meta: dict) -> None:
@@ -233,7 +260,7 @@ def main() -> None:
     stat = fetch_table(app_id, table_id, filters)
     dataset = build_dataset(stat, config)
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(json.dumps(dataset, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    OUTPUT_PATH.write_text(dump_dataset(dataset), encoding="utf-8")
     n = sum(len(p) for i in dataset["items"] for p in i["series"].values())
     print(f"Wrote {len(dataset['items'])} items, {n} data points to {OUTPUT_PATH.relative_to(ROOT)}")
 
