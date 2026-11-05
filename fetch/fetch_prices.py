@@ -275,6 +275,48 @@ def dump_dataset(dataset: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+# ---------------------------------------------------------------- national average
+
+def capital_areas(classes: dict[str, list[dict]], capitals: list[str]) -> dict[str, str]:
+    """Map e-Stat area codes to prefectural-capital names. Former codes of the same city
+    (e.g. '熊本市【～2012年３月】') map to the same capital."""
+    out = {}
+    for e in classes.get("area", []):
+        name = e.get("@name", "")
+        for cap in capitals:
+            if name == cap or name.startswith(cap + "【"):
+                out[e["@code"]] = cap
+    return out
+
+
+def national_average(stat: dict, item_dim: str, area_to_cap: dict[str, str], min_cities: int) -> dict[str, list]:
+    """Unweighted mean across prefectural capitals, per item code and month.
+    A month is kept only when at least `min_cities` capitals report a price."""
+    acc: dict[tuple, dict[str, list]] = {}
+    for v in as_list(stat["DATA_INF"]["VALUE"]):
+        cap = area_to_cap.get(v.get("@area"))
+        month = parse_month(v.get("@time", ""))
+        price = parse_number(v.get("$"))
+        if cap and month and price is not None:
+            acc.setdefault((v.get(f"@{item_dim}"), month), {}).setdefault(cap, []).append(price)
+    out: dict[str, list] = {}
+    for (code, month), caps in acc.items():
+        if len(caps) >= min_cities:
+            per_city = [sum(vals) / len(vals) for vals in caps.values()]
+            out.setdefault(code, []).append([month, round(sum(per_city) / len(per_city), 1)])
+    return {code: sorted(pts) for code, pts in out.items()}
+
+
+def add_national(dataset: dict, averages: dict[str, list], config: dict) -> None:
+    nat = config["national"]
+    cfg_by_id = {i["id"]: i for i in config["items"]}
+    for entry in dataset["items"]:
+        pts = averages.get(entry["estat_code"])
+        if pts:
+            entry["series"][nat["id"]] = adjust_series(pts, cfg_by_id[entry["id"]])
+    dataset["areas"].append({k: nat[k] for k in ("id", "name_ja", "name_en")})
+
+
 def write_catalog(meta: dict) -> None:
     """Save every dimension of the table except time, so items and cities can be chosen by hand."""
     catalog = {key: [{k.lstrip("@"): v for k, v in e.items()} for e in entries]
@@ -298,6 +340,22 @@ def main() -> None:
     print(f"Filters: {filters}")
     stat = fetch_table(app_id, table_id, filters)
     dataset = build_dataset(stat, config)
+
+    nat = config.get("national")
+    if nat:
+        classes = class_objects(meta)
+        item_dim = find_item_dimension(classes, config["items"])
+        area_to_cap = capital_areas(classes, nat["capitals"])
+        found = set(area_to_cap.values())
+        print(f"National average: {len(found)}/{len(nat['capitals'])} capitals found"
+              + (f"; missing {sorted(set(nat['capitals']) - found)}" if len(found) < len(nat["capitals"]) else ""))
+        y, m = nat["from"].split("-")
+        nat_filters = {**{k: v for k, v in filters.items() if k != "cdArea"},
+                       "cdArea": ",".join(area_to_cap), "cdTimeFrom": f"{y}00{m}{m}"}
+        averages = national_average(fetch_table(app_id, table_id, nat_filters), item_dim, area_to_cap, nat["min_cities"])
+        add_national(dataset, averages, config)
+        print(f"National average: {sum(len(v) for v in averages.values())} item-months")
+
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(dump_dataset(dataset), encoding="utf-8")
     n = sum(len(p) for i in dataset["items"] for p in i["series"].values())

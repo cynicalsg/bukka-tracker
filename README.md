@@ -11,8 +11,10 @@ Track and visualize changes in essential food prices in Japan over time, startin
   - **Comparison with official inflation:** Nagoya's food CPI (消費者物価指数, 食料, which includes eating out) over the same 1-month, 1-year and 5-year windows, plus a dashed line on every chart showing where the price would be had it risen with food CPI. `fetch/fetch_cpi.py` fetches it from the 2025-base CPI table on e-Stat.
   - **Seasonal patterns:** produce and fish with a clear yearly pattern show a 12-month bar strip (usually cheapest and priciest months), and a **seasonal guide** lists what's usually cheap or expensive this month. Patterns come from the last 10 years of Nagoya prices (`seasonal_profile` in `fetch/fetch_prices.py`).
   - **Price check (値段チェック):** enter a shelf price and pack size to see how it compares with Nagoya's current average and 12-month range. Open it directly with `…/bukka-tracker/#check` (handy as a phone home-screen bookmark).
+  - **Nagoya vs. the national average:** every item card and chart compares Nagoya with the average of the 47 prefectural capitals (from 2010; the survey has no official monthly national average, so `fetch_prices.py` computes this unweighted mean).
+  - **Prices and pay:** Aichi's average scheduled monthly pay (所定内給与額, annual, from the Basic Survey on Wage Structure via `fetch/fetch_wages.py`) against Nagoya's CPI and your basket since 2015, with real pay and the basket's share of a month's pay.
   - **Biggest changes:** the items that rose or fell the most since last month and since last year.
-  - **One chart per item** (36 staples in 7 categories), with the latest price and the change from a year earlier. Items can be grouped by category or sorted by biggest rise or fall.
+  - **One chart per item** (48 items in 9 categories, including utilities & fuel and household goods), with the latest price and the change from a year earlier. Items can be grouped by category or sorted by biggest rise or fall.
 
 ## Setup
 

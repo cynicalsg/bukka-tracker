@@ -87,6 +87,22 @@ class BuildDataset(unittest.TestCase):
     def test_seasonal_profile_needs_enough_data(self):
         self.assertIsNone(fp.seasonal_profile([["2026-01", 100.0], ["2026-02", 101.0]]))
 
+    def test_capital_areas_and_national_average(self):
+        classes = {"area": [{"@code": "23100", "@name": "名古屋市"}, {"@code": "43100", "@name": "熊本市"},
+                            {"@code": "43201", "@name": "熊本市【～2012年３月】"}, {"@code": "23202", "@name": "岡崎市"}]}
+        area_to_cap = fp.capital_areas(classes, ["名古屋市", "熊本市"])
+        self.assertEqual(area_to_cap, {"23100": "名古屋市", "43100": "熊本市", "43201": "熊本市"})
+        stat = {"DATA_INF": {"VALUE": [
+            {"@cat01": "01001", "@area": "23100", "@time": "2012000303", "$": "100"},
+            {"@cat01": "01001", "@area": "43201", "@time": "2012000303", "$": "200"},   # old Kumamoto code
+            {"@cat01": "01001", "@area": "23100", "@time": "2012000404", "$": "110"},
+            {"@cat01": "01001", "@area": "43100", "@time": "2012000404", "$": "210"},   # new Kumamoto code
+            {"@cat01": "01001", "@area": "23202", "@time": "2012000404", "$": "999"},   # not a capital
+            {"@cat01": "01001", "@area": "23100", "@time": "2012000505", "$": "120"},   # only one city: dropped
+        ]}}
+        avg = fp.national_average(stat, "cat01", area_to_cap, min_cities=2)
+        self.assertEqual(avg, {"01001": [["2012-03", 150.0], ["2012-04", 160.0]]})
+
     def test_missing_values_skipped(self):
         self.assertEqual(self.items["milk"]["series"]["nagoya"], [["2024-01", 250.0]])
 

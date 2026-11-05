@@ -60,7 +60,7 @@ def basket_cost(prices: dict, basket: dict, m: str):
         p = price_with_carry(dict(series(item)), m)
         if p is None:
             return None
-        total += spec["default"] * mult * spec["per"] * p
+        total += spec["default"] * (1 if spec.get("fixed") else mult) * spec["per"] * p
     return total
 
 

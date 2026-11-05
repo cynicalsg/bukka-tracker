@@ -1,0 +1,11 @@
+{
+  "_comment": "Aichi's average scheduled monthly earnings (所定内給与額, 千円) from the Basic Survey on Wage Structure (賃金構造基本統計調査), annual. Tables are found by title; in every other dimension the 'total' category (男女計, 年齢計, 産業計, 企業規模計...) is used. The survey changed its estimation method in 2020, so 2019 and 2020 are not strictly comparable.",
+  "stats_code": "00450091",
+  "search_words": ["都道府県別"],
+  "title_must": ["都道府県別"],
+  "title_exclude": ["参考表", "短時間", "５～９人", "5～9人", "職種", "初任給", "外国人", "新規学卒"],
+  "known_tables": ["0003084609"],
+  "area_match": "愛知",
+  "tab_match": "所定内給与額",
+  "name_ja": "愛知県の平均賃金(所定内給与額)", "name_en": "Aichi average monthly pay (scheduled earnings)"
+}

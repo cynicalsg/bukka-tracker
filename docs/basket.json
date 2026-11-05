@@ -1,5 +1,5 @@
 {
-  "_comment": "Default basket. Amounts are per adult per month in everyday units; 'per' converts one input unit to the survey unit of fetch/items.json (e.g. rice is priced per 5 kg, so 1 kg = 0.2). Items with 'default': null start unticked and use 'suggest' when ticked. Viewers can customise their own basket on the page.",
+  "_comment": "Default basket. Amounts are per adult per month in everyday units; 'per' converts one input unit to the survey unit of fetch/items.json (e.g. rice is priced per 5 kg, so 1 kg = 0.2). Items with 'default': null start unticked and use 'suggest' when ticked. Viewers can customise their own basket on the page. Items with 'fixed': true are per household (utility bills, fuel) and don't scale with the number of people.",
   "name_ja": "我が家の1か月分",
   "name_en": "Our monthly basket",
   "household": {"adults": 2, "children": 0},
@@ -40,6 +40,18 @@
     "sugar": {"input_ja": "g", "input_en": "g", "per": 0.001, "step": 50, "default": null, "suggest": 250},
     "nori": {"input_ja": "枚", "input_en": "sheets", "per": 0.1, "step": 5, "default": null, "suggest": 10},
     "coffee": {"input_ja": "個", "input_en": "jars", "per": 1, "step": 0.5, "default": null, "suggest": 0.5},
-    "greentea": {"input_ja": "g", "input_en": "g", "per": 0.01, "step": 25, "default": null, "suggest": 50}
+    "greentea": {"input_ja": "g", "input_en": "g", "per": 0.01, "step": 25, "default": null, "suggest": 50},
+    "electricity": {"input_ja": "か月", "input_en": "months", "per": 1, "step": 1, "default": null, "suggest": 1, "fixed": true},
+    "citygas": {"input_ja": "か月", "input_en": "months", "per": 1, "step": 1, "default": null, "suggest": 1, "fixed": true},
+    "water": {"input_ja": "か月", "input_en": "months", "per": 1, "step": 1, "default": null, "suggest": 1, "fixed": true},
+    "kerosene": {"input_ja": "L", "input_en": "L", "per": 0.055556, "step": 18, "default": null, "suggest": 18, "fixed": true},
+    "gasoline": {"input_ja": "L", "input_en": "L", "per": 1, "step": 5, "default": null, "suggest": 40, "fixed": true},
+    "toiletpaper": {"input_ja": "パック", "input_en": "packs", "per": 1, "step": 0.5, "default": null, "suggest": 0.5},
+    "tissue": {"input_ja": "箱", "input_en": "boxes", "per": 0.2, "step": 1, "default": null, "suggest": 2},
+    "dishsoap": {"input_ja": "本", "input_en": "bottles", "per": 1, "step": 0.5, "default": null, "suggest": 0.5},
+    "laundry": {"input_ja": "パック", "input_en": "packs", "per": 1, "step": 0.5, "default": null, "suggest": 0.5},
+    "wrap": {"input_ja": "本", "input_en": "rolls", "per": 1, "step": 0.5, "default": null, "suggest": 0.5},
+    "shampoo": {"input_ja": "本", "input_en": "bottles", "per": 1, "step": 0.5, "default": null, "suggest": 0.5},
+    "toothpaste": {"input_ja": "本", "input_en": "tubes", "per": 1, "step": 0.5, "default": null, "suggest": 0.5}
   }
 }
