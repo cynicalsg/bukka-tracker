@@ -62,6 +62,31 @@ class BuildDataset(unittest.TestCase):
         self.assertEqual(fp.adjust_series(pts, item), [["2013-06", 150.0], ["2014-01", 150.0]])
         self.assertEqual(fp.adjust_series(pts, {}), pts)
 
+    def test_seasonal_profile_finds_cheap_and_dear_months(self):
+        # 10 years of a price that is 20% cheaper every May and 20% dearer every November, with slow inflation.
+        pts = []
+        for y in range(2015, 2027):
+            for mo in range(1, 13):
+                level = 100 * (1.01 ** (y - 2015))
+                bump = {5: 0.8, 11: 1.2}.get(mo, 1.0)
+                pts.append([f"{y}-{mo:02d}", round(level * bump, 2)])
+        prof = fp.seasonal_profile(pts)
+        f = prof["factors"]
+        self.assertEqual(f.index(min(f)), 4)    # May
+        self.assertEqual(f.index(max(f)), 10)   # November
+        self.assertAlmostEqual(sum(f) / 12, 1, places=3)
+        self.assertGreater(prof["amplitude"], 0.4)
+
+    def test_seasonal_profile_handles_out_of_season_gaps(self):
+        pts = [[f"{y}-{mo:02d}", 500 + (mo - 10) * 20] for y in range(2014, 2027) for mo in (9, 10, 11, 12, 1, 2, 3)]
+        pts.sort()
+        prof = fp.seasonal_profile(pts)
+        self.assertIsNotNone(prof)
+        self.assertIsNone(prof["factors"][6])  # July: never surveyed
+
+    def test_seasonal_profile_needs_enough_data(self):
+        self.assertIsNone(fp.seasonal_profile([["2026-01", 100.0], ["2026-02", 101.0]]))
+
     def test_missing_values_skipped(self):
         self.assertEqual(self.items["milk"]["series"]["nagoya"], [["2024-01", 250.0]])
 

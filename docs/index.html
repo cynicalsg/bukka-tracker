@@ -73,6 +73,40 @@
   .ed-row input[type=number]:disabled { opacity: .4; }
   .ed-row .u { color: var(--muted); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .ed-row .c { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  /* seasonal strip on item cards */
+  .season { margin-top: 8px; }
+  .bars { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; align-items: end; height: 30px; }
+  .bars span { display: block; background: var(--line); border-radius: 2px 2px 0 0; min-height: 3px; }
+  .bars span.lo { background: var(--down); opacity: .75; }
+  .bars span.hi { background: var(--up); opacity: .65; }
+  .bars span.now { outline: 2px solid var(--text); outline-offset: 1px; }
+  .bars span.na { background: none; border-bottom: 1px dashed var(--line); }
+  .bar-labels { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; font-size: .62rem; color: var(--muted); text-align: center; margin-top: 2px; }
+  .season p { margin: 4px 0 0; font-size: .8rem; color: var(--muted); }
+  /* seasonal guide + price checker cards */
+  .wide { margin-top: 14px; }
+  .guide-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 0 32px; }
+  .guide-cols h3 { margin: 12px 0 4px; font-size: .9rem; color: var(--muted); font-weight: 500; }
+  .guide-cols ol { list-style: none; margin: 0; padding: 0; }
+  .guide-cols li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+  .checker[hidden] { display: none; }
+  .checker { margin-top: 20px; border-color: var(--nagoya); }
+  .check-form { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1.3fr); gap: 10px; margin-top: 10px; }
+  @media (max-width: 560px) { .check-form { grid-template-columns: 1fr 1fr; } .check-form .f-item { grid-column: 1 / -1; } }
+  .check-form label { display: flex; flex-direction: column; gap: 4px; font-size: .8rem; color: var(--muted); }
+  .check-form select, .check-form input { font: inherit; font-size: 1rem; color: var(--text); background: var(--bg);
+                                           border: 1px solid var(--line); border-radius: 8px; padding: 8px; width: 100%; }
+  .with-unit { display: flex; align-items: center; gap: 6px; }
+  .with-unit span { color: var(--muted); white-space: nowrap; }
+  .verdict { margin-top: 14px; }
+  .verdict .v { font-size: 1.25rem; font-weight: 700; }
+  .verdict .v.good { color: var(--down); } .verdict .v.bad { color: var(--up); }
+  .range { position: relative; height: 8px; background: var(--line); border-radius: 4px; margin: 26px 6px 22px; }
+  .range .avg { position: absolute; top: -4px; width: 2px; height: 16px; background: var(--muted); }
+  .range .you { position: absolute; top: -6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%;
+                background: var(--nagoya); border: 2px solid var(--card); }
+  .range .lbl { position: absolute; top: 14px; font-size: .72rem; color: var(--muted); white-space: nowrap; transform: translateX(-50%); }
+  .range .lbl.top { top: -22px; }
   details { margin-top: 10px; font-size: .9rem; }
   summary { cursor: pointer; color: var(--muted); }
   table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
@@ -101,12 +135,15 @@
   </div>
   <div class="controls">
     <button data-range="24"></button><button data-range="60"></button><button data-range="all"></button>
+    <button id="check-btn" aria-expanded="false"></button>
     <button id="lang">English</button>
   </div>
 </header>
 <main>
+  <section class="card checker" id="checker" hidden></section>
   <div class="summary" id="summary"></div>
   <section class="card editor" id="basket-editor" hidden></section>
+  <section class="card wide" id="guide" hidden></section>
   <div class="section-head">
     <h2 class="section-title" data-i18n="allItems"></h2>
     <div class="sorts"><button data-sort="category"></button><button data-sort="up"></button><button data-sort="down"></button></div>
@@ -126,6 +163,18 @@ const T = {
         item: "品目", amount: "量", cost: "金額", share: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
         movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
         noMoves: "変動なし",
+        check: "値段チェック", checkTitle: "この値段はお得?", checkItem: "品目", checkPrice: "店頭価格", checkQty: "量",
+        checkPer: u => `${u}あたり`, avgLabel: m => `名古屋の平均(${m})`, lowLabel: "過去1年の最安", highLabel: "過去1年の最高",
+        youLabel: "この値段",
+        vLow: "過去1年で最も安い水準です", vGood: "お得です", vAvg: "ほぼ平均的な値段です", vHigh: "平均より高めです", vTop: "過去1年で最も高い水準です",
+        vsAvg: p => `名古屋の平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`,
+        checkNote: "調査価格は特定の銘柄(例:国産豚バラ)の平均です。同じような商品同士で比べてください。",
+        guide: m => `旬ガイド:${m}月`, guideCheap: "例年この時期は安い", guideDear: "例年この時期は高い",
+        guideNote: "過去10年の名古屋の価格から、各月の価格を年平均と比べた目安です。", vsYear: "年平均比",
+        cheapest: "例年安い", dearest: "例年高い", monthNames: ["1","2","3","4","5","6","7","8","9","10","11","12"],
+        monthFull: m => `${m + 1}月`,
+        nowVsUsual: (m, p) => `季節要因を除くと、${m}の価格は過去1年の平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`,
+        nowUsual: m => `季節要因を除くと、${m}の価格はほぼ平年並み`,
         myBasket: "あなたのかご", edit: "かごを編集", close: "閉じる", reset: "初期設定に戻す",
         share: "リンクをコピー", copied: "コピーしました", adults: "大人", children: "子ども",
         childNote: "子どもは大人の0.6人分として計算",
@@ -143,6 +192,18 @@ const T = {
         item: "Item", amount: "Amount", cost: "Cost", share: "Share", basketSub: n => `${n} staples at Nagoya retail prices`,
         movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
         noMoves: "No change",
+        check: "Price check", checkTitle: "Is this a good price?", checkItem: "Item", checkPrice: "Shelf price", checkQty: "Amount",
+        checkPer: u => `per ${u}`, avgLabel: m => `Nagoya avg (${m})`, lowLabel: "12-mo low", highLabel: "12-mo high",
+        youLabel: "This price",
+        vLow: "Cheaper than any month in the past year", vGood: "Good price", vAvg: "About average", vHigh: "Above average", vTop: "Higher than any month in the past year",
+        vsAvg: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the Nagoya average`,
+        checkNote: "Survey prices are averages for a specific product (e.g. domestic pork belly), so compare like with like.",
+        guide: m => `Seasonal guide: ${m}`, guideCheap: "Usually cheap this month", guideDear: "Usually expensive this month",
+        guideNote: "Based on Nagoya prices over the past 10 years: each month's typical price compared with the yearly average.", vsYear: "vs. yearly avg",
+        cheapest: "Usually cheapest", dearest: "priciest", monthNames: ["J","F","M","A","M","J","J","A","S","O","N","D"],
+        monthFull: m => ["January","February","March","April","May","June","July","August","September","October","November","December"][m],
+        nowVsUsual: (m, p) => `Seasonally adjusted, the ${m} price is ${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} its past-year average`,
+        nowUsual: m => `Seasonally adjusted, the ${m} price is about normal`,
         myBasket: "Your basket", edit: "Edit basket", close: "Close", reset: "Reset to default",
         share: "Copy link", copied: "Copied", adults: "Adults", children: "Children",
         childNote: "A child counts as 0.6 of an adult",
@@ -416,6 +477,129 @@ function renderEditor() {
   });
 }
 
+// ---------- Seasonal patterns (factors per calendar month from prices.json)
+const SEASON_MIN = 0.10;  // only show patterns with at least a 10% swing
+const seasonal = item => item.seasonal && item.seasonal.amplitude >= SEASON_MIN ? item.seasonal.factors : null;
+const thisMonth0 = () => Number(new Intl.DateTimeFormat("en", { timeZone: "Asia/Tokyo", month: "numeric" }).format(new Date())) - 1;
+const shortMonth = (m, t) => lang === "ja" ? `${+m.slice(5)}月` : t.monthFull(+m.slice(5) - 1).slice(0, 3);
+const joinMonths = (ks, t) => ks.map(k => lang === "ja" ? `${k + 1}月` : t.monthFull(k).slice(0, 3)).join(lang === "ja" ? "・" : ", ");
+
+function seasonStrip(item, main, t) {
+  const f = seasonal(item);
+  if (!f) return "";
+  const vals = f.filter(v => v != null), lo = Math.min(...vals), hi = Math.max(...vals);
+  const now0 = thisMonth0();
+  const bars = f.map((v, k) => v == null ? `<span class="na" title="—"></span>` :
+    `<span class="${v <= 0.95 ? "lo" : v >= 1.05 ? "hi" : ""}${k === now0 ? " now" : ""}" style="height:${(4 + 26 * (v - lo) / (hi - lo || 1)).toFixed(0)}px"
+      title="${lang === "ja" ? `${k + 1}月` : t.monthFull(k)}: ${v >= 1 ? "+" : ""}${((v - 1) * 100).toFixed(0)}%"></span>`).join("");
+  const cheap = f.map((v, k) => [v, k]).filter(([v]) => v != null && v <= lo + 0.03).map(([, k]) => k).slice(0, 3);
+  const dear = f.map((v, k) => [v, k]).filter(([v]) => v != null && v >= hi - 0.03).map(([, k]) => k).slice(0, 3);
+  // Latest price with the season removed, against the average of the previous 12 months, also deseasonalised.
+  let nowLine = "";
+  const de = main.map(([m, v]) => [m, f[+m.slice(5) - 1] ? v / f[+m.slice(5) - 1] : null]).filter(([, v]) => v != null);
+  if (de.length > 12) {
+    const [mNow, vNow] = de[de.length - 1];
+    const prev = de.slice(-13, -1).map(([, v]) => v);
+    const dev = (vNow / (prev.reduce((a, b) => a + b, 0) / prev.length) - 1) * 100;
+    nowLine = Math.abs(dev) < 3 ? t.nowUsual(shortMonth(mNow, t)) : t.nowVsUsual(shortMonth(mNow, t), dev);
+  }
+  return `<div class="season"><div class="bars">${bars}</div>
+    <div class="bar-labels">${t.monthNames.map(n => `<span>${n}</span>`).join("")}</div>
+    <p>${t.cheapest}: ${joinMonths(cheap, t)} · ${t.dearest}: ${joinMonths(dear, t)}</p>
+    ${nowLine ? `<p>${nowLine}</p>` : ""}</div>`;
+}
+
+function renderGuide(t) {
+  const box = document.getElementById("guide");
+  const k = thisMonth0();
+  const rows = data.items.map(i => ({ i, f: seasonal(i)?.[k] })).filter(r => r.f != null);
+  const cheap = rows.filter(r => r.f <= 0.95).sort((a, b) => a.f - b.f);
+  const dear = rows.filter(r => r.f >= 1.05).sort((a, b) => b.f - a.f);
+  if (!cheap.length && !dear.length) { box.hidden = true; return; }
+  const list = (rs, cls) => `<ol>${rs.map(r => `<li><span>${esc(r.i["name_" + lang])}</span>
+      <span class="chg ${cls}">${r.f > 1 ? "+" : ""}${((r.f - 1) * 100).toFixed(0)}% <span class="unit">${t.vsYear}</span></span></li>`).join("")}</ol>`;
+  box.innerHTML = `<h2>${t.guide(lang === "ja" ? k + 1 : t.monthFull(k))}</h2>
+    <div class="guide-cols">
+      <div><h3>${t.guideCheap}</h3>${cheap.length ? list(cheap, "down") : "<p class='unit'>–</p>"}</div>
+      <div><h3>${t.guideDear}</h3>${dear.length ? list(dear, "up") : "<p class='unit'>–</p>"}</div>
+    </div>
+    <p class="note">${t.guideNote}</p>`;
+  box.hidden = false;
+}
+
+// ---------- Price checker
+const CHECK_KEY = "check.v1";
+function toggleChecker(open) {
+  const box = document.getElementById("checker");
+  box.hidden = open === undefined ? !box.hidden : !open;
+  document.getElementById("check-btn").setAttribute("aria-expanded", String(!box.hidden));
+  if (!box.hidden) { renderChecker(); box.querySelector("#ck-price")?.focus(); }
+}
+function renderChecker() {
+  const box = document.getElementById("checker");
+  if (box.hidden || !data || !basket) return;
+  const t = T[lang];
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(CHECK_KEY)) || {}; } catch {}
+  const items = data.items.filter(i => basket.items[i.id] && seriesOf(i).length);
+  const cur = items.find(i => i.id === saved.id) || items.find(i => i.id === "eggs") || items[0];
+  const cats = data.categories || [];
+  const opts = cats.map(c => {
+    const list = items.filter(i => i.category === c.id);
+    return list.length ? `<optgroup label="${esc(c["name_" + lang])}">${list.map(i =>
+      `<option value="${i.id}" ${i === cur ? "selected" : ""}>${esc(i["name_" + lang])}</option>`).join("")}</optgroup>` : "";
+  }).join("");
+  box.innerHTML = `<div class="card-head"><h2>${t.checkTitle}</h2><button class="btn-sm" id="ck-close">${t.close}</button></div>
+    <div class="check-form">
+      <label class="f-item">${t.checkItem}<select id="ck-item">${opts}</select></label>
+      <label>${t.checkPrice}<span class="with-unit"><span>¥</span><input id="ck-price" type="number" inputmode="decimal" min="0" step="1"></span></label>
+      <label>${t.checkQty}<span class="with-unit"><input id="ck-qty" type="number" inputmode="decimal" min="0"><span id="ck-unit"></span></span></label>
+    </div>
+    <div id="ck-result"></div>`;
+  const sel = box.querySelector("#ck-item"), price = box.querySelector("#ck-price"), qty = box.querySelector("#ck-qty");
+  const setItem = (keepQty) => {
+    const item = data.items.find(i => i.id === sel.value), spec = basket.items[item.id];
+    box.querySelector("#ck-unit").textContent = spec["input_" + lang];
+    qty.step = spec.step;
+    if (!keepQty) qty.value = fmtQty(1 / spec.per);  // one survey unit, e.g. 10 eggs or 5 kg of rice
+    update();
+  };
+  const update = () => {
+    const item = data.items.find(i => i.id === sel.value), spec = basket.items[item.id];
+    try { localStorage.setItem(CHECK_KEY, JSON.stringify({ id: item.id })); } catch {}
+    const out = box.querySelector("#ck-result");
+    const pr = Number(price.value), q = Number(qty.value);
+    const s = seriesOf(item), [m, avg] = s[s.length - 1];
+    const last12 = s.slice(-12).map(p => p[1]), lo = Math.min(...last12), hi = Math.max(...last12);
+    const unitName = item["unit_" + lang] || spec["input_" + lang];
+    if (!(pr > 0 && q > 0)) {
+      out.innerHTML = `<p class="note" style="margin-top:12px">${t.avgLabel(m)}: <b>${yen(avg)}</b> ${t.checkPer(esc(unitName))} ·
+        ${t.lowLabel} ${yen(lo)} · ${t.highLabel} ${yen(hi)}</p><p class="note">${t.checkNote}</p>`;
+      return;
+    }
+    const yours = pr / (q * spec.per);  // price per survey unit
+    const diff = (yours / avg - 1) * 100;
+    const [cls, verdict] = yours < lo ? ["good", t.vLow] : diff <= -5 ? ["good", t.vGood] : diff < 5 ? ["", t.vAvg]
+                         : yours > hi ? ["bad", t.vTop] : ["bad", t.vHigh];
+    const a = Math.min(lo, yours, avg) * 0.97, b = Math.max(hi, yours, avg) * 1.03;
+    const x = v => `${((v - a) / (b - a) * 100).toFixed(1)}%`;
+    out.innerHTML = `<div class="verdict"><div class="v ${cls}">${verdict}</div>
+        <div>${yen(yours)} ${t.checkPer(esc(unitName))} · ${t.vsAvg(diff)}</div></div>
+      <div class="range" aria-hidden="true">
+        <div style="position:absolute;left:${x(lo)};width:calc(${x(hi)} - ${x(lo)});height:100%;background:var(--muted);opacity:.35;border-radius:4px"></div>
+        <div class="avg" style="left:${x(avg)}"></div><span class="lbl top" style="left:${x(avg)}">${t.avgLabel(m)} ${yen(avg)}</span>
+        <div class="you" style="left:${x(yours)}"></div>
+        <span class="lbl" style="left:${x(lo)}">${yen(lo)}</span><span class="lbl" style="left:${x(hi)}">${yen(hi)}</span>
+      </div>
+      <p class="note">${t.lowLabel} ${yen(lo)} – ${t.highLabel} ${yen(hi)}. ${t.checkNote}</p>`;
+  };
+  sel.onchange = () => setItem(false);
+  price.oninput = update;
+  qty.oninput = update;
+  box.querySelector("#ck-close").onclick = () => toggleChecker(false);
+  setItem(false);
+}
+
 function renderSummary(t) {
   const box = document.getElementById("summary");
   box.innerHTML = "";
@@ -467,6 +651,7 @@ function render() {
   charts.splice(0).forEach(c => c.destroy());
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
+  document.getElementById("check-btn").textContent = t.check;
   renderSummary(t);
   renderEditor();
 
@@ -476,6 +661,8 @@ function render() {
     document.getElementById("footer").textContent = "";
     return;
   }
+  renderGuide(t);
+  renderChecker();
 
   const color = id => css(id === "nagoya" ? "--nagoya" : "--tokyo");
   document.getElementById("legend").innerHTML = data.areas.length < 2 ? "" : data.areas.map(a =>
@@ -522,7 +709,8 @@ function render() {
       <div class="unit">${sub || "&nbsp;"}</div>
       <div class="price"><strong>${yen(last)}</strong>${chg}</div>
       <div class="unit">${lastMonth}</div>
-      <div class="chart"><canvas></canvas></div>`;
+      <div class="chart"><canvas></canvas></div>
+      ${seasonStrip(item, main, t)}`;
     grid.appendChild(card);
 
     const months = [...new Set(Object.values(item.series).flat().map(p => p[0]))].sort();
@@ -567,6 +755,7 @@ document.getElementById("lang").onclick = () => {
   render();
 };
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+document.getElementById("check-btn").onclick = () => toggleChecker();
 
 const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
 Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json")])
@@ -574,6 +763,7 @@ Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"
     data = d; basket = b; cpi = c;
     if (basket) myBasket = loadBasket();
     render();
+    if (/[#&]check\b/.test(location.hash)) toggleChecker(true);  // bookmarkable: .../#check
   });
 </script>
 </body>

@@ -3,12 +3,20 @@ name: Update price data
 on:
   schedule:
     # The Retail Price Survey is published around the 20th–25th of each month.
-    # Run on the 26th at 03:17 UTC (12:17 JST).
+    # Run on the 26th, and again on the 3rd in case publication was late
+    # (03:17 UTC = 12:17 JST). A summary issue is posted only for a new month.
     - cron: "17 3 26 * *"
+    - cron: "17 3 3 * *"
   workflow_dispatch:
+    inputs:
+      post_summary:
+        description: "Post the monthly summary issue even if there is no new month"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   update:
@@ -20,6 +28,9 @@ jobs:
           python-version: "3.12"
       - name: Run tests
         run: python -m unittest discover -s tests -v
+      - name: Note the latest month before fetching
+        id: before
+        run: echo "month=$(python fetch/monthly_summary.py --latest-month)" >> "$GITHUB_OUTPUT"
       - name: Fetch prices from e-Stat
         env:
           ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
@@ -30,6 +41,9 @@ jobs:
         env:
           ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
         run: python fetch/fetch_cpi.py
+      - name: Note the latest month after fetching
+        id: after
+        run: echo "month=$(python fetch/monthly_summary.py --latest-month)" >> "$GITHUB_OUTPUT"
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
@@ -41,3 +55,10 @@ jobs:
             git commit -m "Update price data ($(date -u +%Y-%m-%d))"
             git push
           fi
+      - name: Post monthly summary issue
+        if: steps.after.outputs.month != steps.before.outputs.month || inputs.post_summary
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python fetch/monthly_summary.py > summary.md
+          gh issue create --title "$(python fetch/monthly_summary.py --title)" --body-file summary.md
