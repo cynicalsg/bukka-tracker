@@ -1,5 +1,5 @@
 {
-"updated": "2026-11-05T03:41:19Z",
+"updated": "2026-11-05T03:43:58Z",
 "source": {"name_ja": "総務省統計局「小売物価統計調査」(e-Stat)", "name_en": "Statistics Bureau of Japan, Retail Price Survey (e-Stat)", "stats_data_id": "0003421913", "table_title": "主要品目の都市別小売価格－都道府県庁所在市及び人口15万以上の市(2000年1月～)"},
 "areas": [{"id": "nagoya", "name_ja": "名古屋市", "name_en": "Nagoya"}],
 "categories": [{"id": "grains", "name_ja": "穀類・パン・麺", "name_en": "Grains, bread & noodles"}, {"id": "meat", "name_ja": "肉・魚", "name_en": "Meat & fish"}, {"id": "dairy", "name_ja": "乳製品・卵", "name_en": "Dairy & eggs"}, {"id": "veg", "name_ja": "野菜", "name_en": "Vegetables"}, {"id": "fruit", "name_ja": "果物", "name_en": "Fruit"}, {"id": "pantry", "name_ja": "大豆製品・調味料", "name_en": "Soy foods & pantry"}, {"id": "drinks", "name_ja": "飲料", "name_en": "Drinks"}],
