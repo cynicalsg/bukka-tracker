@@ -50,6 +50,29 @@
   .key i { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--nagoya); vertical-align: middle; margin-right: 6px; }
   .key i.dash { border-top: 2px dashed var(--muted); }
   .note { color: var(--muted); font-size: .78rem; margin: 6px 0 0; }
+  .card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: 8px; }
+  .card-head h2 { margin: 0; white-space: nowrap; }
+  .btn-sm { font-size: .82rem; padding: 4px 10px; white-space: nowrap; }
+  .banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--bg); border: 1px dashed var(--nagoya);
+            border-radius: 8px; padding: 8px 10px; margin: 10px 0 4px; font-size: .85rem; }
+  .editor { margin-top: 14px; }
+  .editor[hidden] { display: none; }
+  .editor-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+  .people { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; margin: 12px 0 4px; }
+  .stepper { display: inline-flex; align-items: center; gap: 8px; }
+  .stepper button { width: 32px; height: 32px; padding: 0; font-size: 1.1rem; }
+  .stepper output { min-width: 1.5em; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .ed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 4px 32px; }
+  .ed-cat { grid-column: 1 / -1; margin: 14px 0 2px; font-size: .9rem; color: var(--muted); font-weight: 600; }
+  .ed-row { display: grid; grid-template-columns: minmax(0, 1fr) 72px 44px 58px; gap: 6px; align-items: center;
+            padding: 4px 0; border-bottom: 1px solid var(--line); font-size: .9rem; }
+  .ed-row label { display: flex; gap: 8px; align-items: center; min-width: 0; }
+  .ed-row label span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ed-row input[type=number] { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line);
+                               border-radius: 6px; padding: 3px 6px; text-align: right; }
+  .ed-row input[type=number]:disabled { opacity: .4; }
+  .ed-row .u { color: var(--muted); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ed-row .c { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
   details { margin-top: 10px; font-size: .9rem; }
   summary { cursor: pointer; color: var(--muted); }
   table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
@@ -83,6 +106,7 @@
 </header>
 <main>
   <div class="summary" id="summary"></div>
+  <section class="card editor" id="basket-editor" hidden></section>
   <div class="section-head">
     <h2 class="section-title" data-i18n="allItems"></h2>
     <div class="sorts"><button data-sort="category"></button><button data-sort="up"></button><button data-sort="down"></button></div>
@@ -102,6 +126,13 @@ const T = {
         item: "品目", amount: "量", cost: "金額", share: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
         movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
         noMoves: "変動なし",
+        myBasket: "あなたのかご", edit: "かごを編集", close: "閉じる", reset: "初期設定に戻す",
+        share: "リンクをコピー", copied: "コピーしました", adults: "大人", children: "子ども",
+        childNote: "子どもは大人の0.6人分として計算",
+        amountsNote: "量は世帯全体の1か月分です。人数を変えると自動で調整されます。価格は最新月のものです。",
+        household: (a, c) => `大人${a}人${c ? `・子ども${c}人` : ""}`,
+        shared: "共有されたかごを表示しています。", saveMine: "自分のかごとして保存", backMine: "自分のかごに戻る",
+        carried: "* 旬以外の月は直近の旬の価格で計算", empty: "品目が選ばれていません。「かごを編集」から追加してください。",
         cpiRef: "食料CPI", ifCpi: "食料CPIと同じ率で上がった場合", baseline: "食料CPI",
         cpiNote: n => `CPI(消費者物価指数)は名古屋市の「${n}」指数(外食を含む)で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。` },
   en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials in Nagoya", per: "per",
@@ -112,6 +143,13 @@ const T = {
         item: "Item", amount: "Amount", cost: "Cost", share: "Share", basketSub: n => `${n} staples at Nagoya retail prices`,
         movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
         noMoves: "No change",
+        myBasket: "Your basket", edit: "Edit basket", close: "Close", reset: "Reset to default",
+        share: "Copy link", copied: "Copied", adults: "Adults", children: "Children",
+        childNote: "A child counts as 0.6 of an adult",
+        amountsNote: "Amounts are monthly totals for your household and scale when you change the number of people. Costs use the latest month's prices.",
+        household: (a, c) => `${a} adult${a === 1 ? "" : "s"}${c ? `, ${c} child${c === 1 ? "" : "ren"}` : ""}`,
+        shared: "You're viewing a shared basket.", saveMine: "Save as my basket", backMine: "Back to my basket",
+        carried: "* Out of season: last in-season price used", empty: "No items selected. Use “Edit basket” to add some.",
         cpiRef: "Food CPI", ifCpi: "If it had risen with food CPI", baseline: "Food CPI",
         cpiNote: n => `CPI (consumer price index) here is Nagoya's food index (${n}), which includes eating out. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.` },
 };
@@ -119,7 +157,11 @@ let lang = (() => { try { return localStorage.getItem("lang"); } catch { return 
   || (navigator.language.startsWith("ja") ? "ja" : "en");
 let range = "60";
 let data = null;
-let basket = null;
+let basket = null;      // defaults from basket.json
+let myBasket = null;    // { adults, children, items: { id: amount per adult, in input units } }
+let sharedView = false; // basket came from a share link and isn't saved
+const basketCharts = [];
+const BASKET_KEY = "basket.v1";
 let cpi = null;
 let sortBy = (() => { try { return localStorage.getItem("sortBy"); } catch { return null; } })() || "category";
 const charts = [];
@@ -140,15 +182,62 @@ function pctSpan(now, before, label = "") {
 }
 const seriesOf = item => item.series.nagoya || Object.values(item.series)[0] || [];
 
-// Monthly cost of the basket, only for months where every basket item has a price.
+// ---------- Custom basket
+function defaultBasket() {
+  return { adults: basket.household.adults, children: basket.household.children,
+           items: Object.fromEntries(Object.entries(basket.items).filter(([, v]) => v.default != null).map(([k, v]) => [k, v.default])) };
+}
+// Accept only known items and sane numbers from storage or a share link.
+function cleanBasket(b) {
+  if (!b || typeof b !== "object") return null;
+  const int = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi ? v : null;
+  const adults = int(b.adults, 0, 20), children = int(b.children, 0, 20);
+  if (adults == null || children == null || !b.items || typeof b.items !== "object") return null;
+  const items = {};
+  for (const [k, v] of Object.entries(b.items)) {
+    if (basket.items[k] && typeof v === "number" && Number.isFinite(v) && v > 0 && v < 1e6) items[k] = v;
+  }
+  return { adults, children, items };
+}
+const b64url = str => btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const unb64url = str => atob(str.replace(/-/g, "+").replace(/_/g, "/"));
+function loadBasket() {
+  const h = location.hash.match(/[#&]b=([A-Za-z0-9_-]+)/);
+  if (h) {
+    try { const b = cleanBasket(JSON.parse(unb64url(h[1]))); if (b) { sharedView = true; return b; } } catch {}
+  }
+  try { const b = cleanBasket(JSON.parse(localStorage.getItem(BASKET_KEY))); if (b) return b; } catch {}
+  return defaultBasket();
+}
+function saveBasket() {
+  if (sharedView) return;
+  try { localStorage.setItem(BASKET_KEY, JSON.stringify(myBasket)); } catch {}
+}
+const multiplier = () => myBasket.adults + basket.child_factor * myBasket.children;
+const sameAsDefault = () => JSON.stringify(cleanBasket(myBasket)) === JSON.stringify(cleanBasket(defaultBasket()));
+const fmtQty = v => v >= 100 ? String(Math.round(v)) : String(Math.round(v * 100) / 100);
+const latestPrice = item => { const s = seriesOf(item); return s.length ? s[s.length - 1][1] : null; };
+
+// Monthly cost of the custom basket. Seasonal items reuse their last in-season price for up to 11 months;
+// months before an item's series starts are left out.
 function basketSeries() {
-  const parts = data.items.filter(i => basket.items[i.id])
-    .map(i => ({ item: i, qty: basket.items[i.id].qty, prices: new Map(seriesOf(i)) }));
-  if (!parts.length) return { parts, points: [] };
-  const months = [...new Set(parts.flatMap(p => [...p.prices.keys()]))].sort();
+  const mult = multiplier();
+  const parts = data.items.filter(i => basket.items[i.id] && myBasket.items[i.id] > 0).map(i => ({
+    item: i, amount: myBasket.items[i.id] * mult, units: myBasket.items[i.id] * mult * basket.items[i.id].per,
+    own: new Map(seriesOf(i)), prices: new Map(), carried: new Set(),
+  }));
+  if (!parts.length || mult <= 0) return { parts, points: [] };
+  const months = [...new Set(parts.flatMap(p => [...p.own.keys()]))].sort();
+  for (const p of parts) {
+    let last = null, lastK = -99;
+    months.forEach((m, k) => {
+      if (p.own.has(m)) { last = p.own.get(m); lastK = k; p.prices.set(m, last); }
+      else if (last != null && k - lastK <= 11) { p.prices.set(m, last); p.carried.add(m); }
+    });
+  }
   const points = [];
   for (const m of months) {
-    if (parts.every(p => p.prices.has(m))) points.push([m, parts.reduce((sum, p) => sum + p.qty * p.prices.get(m), 0)]);
+    if (parts.every(p => p.prices.has(m))) points.push([m, parts.reduce((sum, p) => sum + p.units * p.prices.get(m), 0)]);
   }
   return { parts, points };
 }
@@ -198,44 +287,146 @@ function cpiChips(m, t) {
   return `<div class="chips cpi"><div class="chip" style="border:none;padding-left:0"><span>${t.cpiRef}</span></div>${c(t.mom, 1)}${c(t.y1, 12)}${c(t.y5, 60)}</div>`;
 }
 
+function renderBasket(t) {
+  const slot = document.getElementById("basket-slot");
+  if (!slot) return;
+  basketCharts.splice(0).forEach(c => c.destroy());
+  const { parts, points } = basketSeries();
+  const title = sameAsDefault() && !sharedView ? basket["name_" + lang] : t.myBasket;
+  const card = document.createElement("section");
+  card.className = "card";
+  const head = `<div class="card-head"><h2>${esc(title)}</h2>
+      <button class="btn-sm" id="edit-basket" aria-expanded="${!document.getElementById("basket-editor").hidden}">${t.edit}</button></div>
+    <div class="unit">${t.household(myBasket.adults, myBasket.children)} · ${t.basketSub(parts.length)}</div>
+    ${sharedView ? `<div class="banner"><span>${t.shared}</span><button class="btn-sm" id="save-shared">${t.saveMine}</button>
+      <button class="btn-sm" id="drop-shared">${t.backMine}</button></div>` : ""}`;
+  if (!points.length) {
+    card.innerHTML = head + `<p class="unit" style="margin-top:12px">${t.empty}</p>`;
+  } else {
+    const map = new Map(points);
+    const [m, now] = points[points.length - 1];
+    const chip = (label, n) => {
+      const before = map.get(monthsBack(m, n));
+      return before == null ? "" :
+        `<div class="chip"><span>${label}</span>${pctSpan(now, before)} <span>(${now >= before ? "+" : "−"}${yen(Math.abs(now - before))})</span></div>`;
+    };
+    const rows = parts.map(p => ({ p, cost: p.units * p.prices.get(m) })).sort((a, b) => b.cost - a.cost);
+    const anyCarried = rows.some(({ p }) => p.carried.has(m));
+    card.innerHTML = head + `
+      <div class="price"><span class="big">${yen(now)}</span><span class="unit">${m}</span></div>
+      <div class="chips">${chip(t.mom, 1)}${chip(t.y1, 12)}${chip(t.y5, 60)}</div>
+      ${cpiChips(m, t)}
+      <div class="chart tall"><canvas></canvas></div>
+      ${cpiFood() ? `<div class="key"><span><i></i>${esc(title)}</span><span><i class="dash"></i>${t.ifCpi}</span></div>
+      <p class="note">${t.cpiNote(esc(cpi.series.food.estat_name))}</p>` : ""}
+      <details><summary>${t.inBasket}</summary>
+        <table><thead><tr><th>${t.item}</th><th>${t.amount}</th><th>${t.cost}</th><th>${t.share}</th></tr></thead>
+        <tbody>${rows.map(({ p, cost }) => `<tr><td>${esc(p.item["name_" + lang])}${p.carried.has(m) ? " *" : ""}</td>
+          <td>${fmtQty(p.amount)} ${esc(basket.items[p.item.id]["input_" + lang])}</td><td>${yen(cost)}</td>
+          <td>${(cost / now * 100).toFixed(0)}%</td></tr>`).join("")}</tbody></table>
+        ${anyCarried ? `<p class="note">${t.carried}</p>` : ""}
+      </details>`;
+    const shown = range === "all" ? points : points.slice(-Number(range));
+    slot.replaceChildren(card);
+    basketCharts.push(lineChart(card.querySelector("canvas"), shown.map(p => p[0]), shown.map(p => p[1]), title, t.ifCpi));
+  }
+  if (!points.length) slot.replaceChildren(card);
+  card.querySelector("#edit-basket").onclick = () => toggleEditor();
+  if (sharedView) {
+    card.querySelector("#save-shared").onclick = () => { sharedView = false; clearHash(); saveBasket(); renderBasket(T[lang]); renderEditor(); };
+    card.querySelector("#drop-shared").onclick = () => { sharedView = false; clearHash(); myBasket = loadBasket(); renderBasket(T[lang]); renderEditor(); };
+  }
+}
+const clearHash = () => history.replaceState(null, "", location.pathname + location.search);
+
+// ---------- Basket editor
+function toggleEditor(open) {
+  const ed = document.getElementById("basket-editor");
+  ed.hidden = open === undefined ? !ed.hidden : !open;
+  document.getElementById("edit-basket")?.setAttribute("aria-expanded", String(!ed.hidden));
+  if (!ed.hidden) { renderEditor(); ed.scrollIntoView({ behavior: "smooth", block: "start" }); }
+}
+let basketTimer;
+function basketChanged(rerenderEditor) {
+  saveBasket();
+  if (rerenderEditor) renderEditor();
+  clearTimeout(basketTimer);
+  basketTimer = setTimeout(() => renderBasket(T[lang]), 120);
+}
+function renderEditor() {
+  const ed = document.getElementById("basket-editor");
+  if (ed.hidden || !data || !basket) return;
+  const t = T[lang];
+  const mult = multiplier();
+  const cats = data.categories || [];
+  const byCat = id => data.items.filter(i => basket.items[i.id] && (i.category || "") === id);
+  const groups = [...cats.map(c => [c, byCat(c.id)]), [{ ["name_" + lang]: t.other }, data.items.filter(i => basket.items[i.id] && !cats.some(c => c.id === i.category))]]
+    .filter(([, list]) => list.length);
+  const costOf = (i, amount) => { const pr = latestPrice(i); return pr == null ? "–" : yen(amount * basket.items[i.id].per * pr); };
+  ed.innerHTML = `<div class="card-head"><h2>${t.edit}</h2>
+      <div class="editor-actions"><button class="btn-sm" id="ed-reset">${t.reset}</button>
+      <button class="btn-sm" id="ed-share">${t.share}</button><button class="btn-sm" id="ed-close">${t.close}</button></div></div>
+    <div class="people">
+      ${["adults", "children"].map(k => `<span class="stepper"><span>${t[k]}</span>
+        <button data-step="${k}" data-d="-1" aria-label="${t[k]} −">−</button><output>${myBasket[k]}</output>
+        <button data-step="${k}" data-d="1" aria-label="${t[k]} +">+</button></span>`).join("")}
+      <span class="note" style="margin:0">${t.childNote}</span>
+    </div>
+    <p class="note">${t.amountsNote}</p>
+    <div class="ed-grid">${groups.map(([c, list]) => `<h3 class="ed-cat">${esc(c["name_" + lang])}</h3>` + list.map(i => {
+      const spec = basket.items[i.id], on = myBasket.items[i.id] > 0;
+      const amount = (on ? myBasket.items[i.id] : spec.suggest) * (mult || 1);
+      return `<div class="ed-row" data-id="${i.id}">
+        <label><input type="checkbox" ${on ? "checked" : ""}><span>${esc(i["name_" + lang])}</span></label>
+        <input type="number" min="0" step="${spec.step}" value="${fmtQty(amount)}" ${on ? "" : "disabled"} aria-label="${esc(i["name_" + lang])}">
+        <span class="u">${esc(spec["input_" + lang])}</span>
+        <span class="c">${on ? costOf(i, amount) : ""}</span></div>`;
+    }).join("")).join("")}</div>`;
+
+  ed.querySelector("#ed-close").onclick = () => toggleEditor(false);
+  ed.querySelector("#ed-reset").onclick = () => { myBasket = defaultBasket(); basketChanged(true); };
+  ed.querySelector("#ed-share").onclick = async e => {
+    const btn = e.currentTarget;  // currentTarget is cleared once the handler awaits
+    const url = `${location.origin}${location.pathname}#b=${b64url(JSON.stringify(myBasket))}`;
+    try { await navigator.clipboard.writeText(url); } catch { window.prompt(t.share, url); return; }
+    btn.textContent = t.copied; setTimeout(() => { btn.textContent = t.share; }, 1500);
+  };
+  ed.querySelectorAll("[data-step]").forEach(b => b.onclick = () => {
+    const k = b.dataset.step, min = k === "adults" ? 1 : 0;
+    myBasket[k] = Math.max(min, Math.min(20, myBasket[k] + Number(b.dataset.d)));
+    basketChanged(true);
+  });
+  ed.querySelectorAll(".ed-row").forEach(row => {
+    const id = row.dataset.id, item = data.items.find(i => i.id === id), spec = basket.items[id];
+    const box = row.querySelector("input[type=checkbox]"), num = row.querySelector("input[type=number]"), cost = row.querySelector(".c");
+    box.onchange = () => {
+      if (box.checked) myBasket.items[id] = (Number(num.value) || spec.suggest * (multiplier() || 1)) / (multiplier() || 1);
+      else delete myBasket.items[id];
+      num.disabled = !box.checked;
+      cost.textContent = box.checked ? costOf(item, myBasket.items[id] * multiplier()) : "";
+      basketChanged(false);
+    };
+    num.oninput = () => {
+      const v = Number(num.value);
+      if (!Number.isFinite(v) || v < 0) return;
+      if (v === 0) delete myBasket.items[id]; else myBasket.items[id] = v / (multiplier() || 1);
+      cost.textContent = v > 0 ? costOf(item, v) : "";
+      basketChanged(false);
+    };
+  });
+}
+
 function renderSummary(t) {
   const box = document.getElementById("summary");
   box.innerHTML = "";
   if (!data || !data.items.length) return;
 
-  // ---- Basket card
-  if (basket) {
-    const { parts, points } = basketSeries();
-    if (points.length) {
-      const map = new Map(points);
-      const [m, now] = points[points.length - 1];
-      const chip = (label, n) => {
-        const before = map.get(monthsBack(m, n));
-        return before == null ? "" :
-          `<div class="chip"><span>${label}</span>${pctSpan(now, before)} <span>(${now >= before ? "+" : "−"}${yen(Math.abs(now - before))})</span></div>`;
-      };
-      const rows = parts.map(p => ({ p, cost: p.qty * p.prices.get(m) })).sort((a, b) => b.cost - a.cost);
-      const card = document.createElement("section");
-      card.className = "card";
-      card.innerHTML = `<h2>${esc(basket["name_" + lang])}</h2>
-        <div class="unit">${t.basketSub(parts.length)}</div>
-        <div class="price"><span class="big">${yen(now)}</span><span class="unit">${m}</span></div>
-        <div class="chips">${chip(t.mom, 1)}${chip(t.y1, 12)}${chip(t.y5, 60)}</div>
-        ${cpiChips(m, t)}
-        <div class="chart tall"><canvas></canvas></div>
-        ${cpiFood() ? `<div class="key"><span><i></i>${esc(basket["name_" + lang])}</span><span><i class="dash"></i>${t.ifCpi}</span></div>
-        <p class="note">${t.cpiNote(esc(cpi.series.food.estat_name))}</p>` : ""}
-        <details><summary>${t.inBasket}</summary>
-          <table><thead><tr><th>${t.item}</th><th>${t.amount}</th><th>${t.cost}</th><th>${t.share}</th></tr></thead>
-          <tbody>${rows.map(({ p, cost }) => `<tr><td>${esc(p.item["name_" + lang])}</td>
-            <td>${esc(basket.items[p.item.id][lang] ?? p.qty)}</td><td>${yen(cost)}</td>
-            <td>${(cost / now * 100).toFixed(0)}%</td></tr>`).join("")}</tbody></table>
-        </details>`;
-      box.appendChild(card);
-      const shown = range === "all" ? points : points.slice(-Number(range));
-      charts.push(lineChart(card.querySelector("canvas"), shown.map(p => p[0]), shown.map(p => p[1]),
-                            basket["name_" + lang], t.ifCpi));
-    }
+  // ---- Basket card (rendered separately so editing doesn't redraw every chart)
+  if (basket && myBasket) {
+    const slot = document.createElement("div");
+    slot.id = "basket-slot";
+    box.appendChild(slot);
+    renderBasket(t);
   }
 
   // ---- Biggest changes card
@@ -277,6 +468,7 @@ function render() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
   renderSummary(t);
+  renderEditor();
 
   if (!data || !data.items.length) {
     document.getElementById("legend").innerHTML = "";
@@ -378,7 +570,11 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
 
 const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
 Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json")])
-  .then(([d, b, c]) => { data = d; basket = b; cpi = c; render(); });
+  .then(([d, b, c]) => {
+    data = d; basket = b; cpi = c;
+    if (basket) myBasket = loadBasket();
+    render();
+  });
 </script>
 </body>
 </html>
