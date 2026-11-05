@@ -46,5 +46,20 @@ class Wages(unittest.TestCase):
         self.assertEqual(fw.extract(stat, cells), {2019: 312.5, 2018: 309.0})
 
 
+    def test_best_tab_prefers_most_recent_years(self):
+        cells = fw.resolve_cells(CLASSES, CONFIG)
+        base = {"@cat01": "1", "@cat02": "01", "@cat04": "T1", "@area": "23000"}
+        stat = {"DATA_INF": {"VALUE": [
+            dict(base, **{"@tab": "10", "@time": "2021000000", "$": "300"}),
+            dict(base, **{"@tab": "10", "@time": "2022000000", "$": "301"}),
+            dict(base, **{"@tab": "42", "@time": "2020000000", "$": "299"}),
+            dict(base, **{"@tab": "42", "@time": "2023000000", "$": "305"}),
+        ]}}
+        tabs = [{"@code": "10", "@name": "所定内給与額"}, {"@code": "42", "@name": "所定内給与額"}]
+        tab, got = fw.best_tab(stat, cells, tabs)
+        self.assertEqual(tab["@code"], "42")
+        self.assertEqual(got, {2020: 299.0, 2023: 305.0})
+
+
 if __name__ == "__main__":
     unittest.main()

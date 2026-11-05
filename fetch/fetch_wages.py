@@ -73,6 +73,17 @@ def extract(stat: dict, cells: dict) -> dict[int, float]:
     return out
 
 
+def best_tab(stat: dict, cells: dict, tabs: list[dict]) -> tuple[dict, dict[int, float]]:
+    """Some tables list the pay item twice (e.g. codes 10 and 42, one per estimation method).
+    Use the one with the most recent data, then the most years."""
+    best = (cells["tab"], {})
+    for tab in tabs:
+        got = extract(stat, {**cells, "tab": tab})
+        if got and (not best[1] or (max(got), len(got)) > (max(best[1]), len(best[1]))):
+            best = (tab, got)
+    return best
+
+
 def candidate_tables(app_id: str, config: dict) -> list[str]:
     found = list(config.get("known_tables", []))
     for word in config["search_words"]:
@@ -106,8 +117,11 @@ def main() -> None:
                 print(f"         {k}: {[(e['@code'], e.get('@name', '')) for e in es][:15]}")
             else:
                 print(f"         {k}: {len(es)} entries, e.g. {[e.get('@name', '') for e in es[:6]]}")
+        tabs = [e for e in classes.get("tab", []) if config["tab_match"] in e.get("@name", "")]
         filters = {f"cd{k.capitalize()}": e["@code"] for k, e in cells.items()}
-        got = extract(fetch_table(app_id, tid, filters), cells)
+        filters["cdTab"] = ",".join(e["@code"] for e in tabs)
+        tab, got = best_tab(fetch_table(app_id, tid, filters), cells, tabs)
+        cells["tab"] = tab
         print(f"  use  {tid} {title}: {', '.join(e.get('@name', '') for e in cells.values())} -> "
               f"{min(got) if got else '-'}..{max(got) if got else '-'}")
         if got:
