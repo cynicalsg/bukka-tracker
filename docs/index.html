@@ -37,6 +37,24 @@
   .chg.up { color: var(--up); } .chg.down { color: var(--down); }
   .chart { height: 150px; }
   .empty { background: var(--card); border: 1px dashed var(--line); border-radius: 12px; padding: 24px; color: var(--muted); }
+  .summary { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 14px; margin-top: 20px; }
+  @media (max-width: 760px) { .summary { grid-template-columns: minmax(0, 1fr); } }
+  .big { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 10px; }
+  .chip { border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: .85rem; font-variant-numeric: tabular-nums; }
+  .chip span { color: var(--muted); margin-right: 6px; }
+  .chart.tall { height: 190px; }
+  details { margin-top: 10px; font-size: .9rem; }
+  summary { cursor: pointer; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  td, th { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: right; }
+  td:first-child, th:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 500; }
+  .movers h3 { margin: 12px 0 4px; font-size: .9rem; color: var(--muted); font-weight: 500; }
+  .movers h3:first-of-type { margin-top: 8px; }
+  .movers ol { list-style: none; margin: 0; padding: 0; }
+  .movers li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+  .section-title { margin: 28px 0 0; font-size: 1.1rem; }
   footer { color: var(--muted); font-size: .8rem; padding-top: 24px; padding-bottom: 32px; }
   footer a { color: inherit; }
 </style>
@@ -53,6 +71,8 @@
   </div>
 </header>
 <main>
+  <div class="summary" id="summary"></div>
+  <h2 class="section-title" data-i18n="allItems"></h2>
   <div class="legend" id="legend"></div>
   <div class="grid" id="grid"></div>
 </main>
@@ -62,18 +82,132 @@
 const T = {
   ja: { title: "名古屋 物価トラッカー", subtitle: "名古屋市の生活必需品の小売価格の推移(月次)", per: "あたり",
         r24: "2年", r60: "5年", rall: "全期間", yoy: "前年同月比", noData: "データはまだありません。GitHub Action の初回実行後に表示されます。",
-        source: "出典", updated: "更新", toggle: "English" },
+        source: "出典", updated: "更新", toggle: "English",
+        allItems: "品目別の価格", mom: "前月比", y1: "1年前比", y5: "5年前比", inBasket: "かごの中身",
+        item: "品目", amount: "量", cost: "金額", share: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
+        movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
+        noMoves: "変動なし" },
   en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials in Nagoya", per: "per",
         r24: "2 yrs", r60: "5 yrs", rall: "All", yoy: "vs. last year", noData: "No data yet. It will appear after the first GitHub Action run.",
-        source: "Source", updated: "Updated", toggle: "日本語" },
+        source: "Source", updated: "Updated", toggle: "日本語",
+        allItems: "Prices by item", mom: "1 mo", y1: "1 yr", y5: "5 yrs", inBasket: "What's in the basket",
+        item: "Item", amount: "Amount", cost: "Cost", share: "Share", basketSub: n => `${n} staples at Nagoya retail prices`,
+        movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
+        noMoves: "No change" },
 };
 let lang = (() => { try { return localStorage.getItem("lang"); } catch { return null; } })()
   || (navigator.language.startsWith("ja") ? "ja" : "en");
 let range = "60";
 let data = null;
+let basket = null;
 const charts = [];
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const yen = v => "¥" + Math.round(v).toLocaleString();
+const esc = v => String(v).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+// "2026-09" shifted back n months -> "2025-09" for n = 12
+function monthsBack(m, n) {
+  const total = +m.slice(0, 4) * 12 + (+m.slice(5, 7) - 1) - n;
+  return `${Math.floor(total / 12)}-${String(total % 12 + 1).padStart(2, "0")}`;
+}
+function pctSpan(now, before, label = "") {
+  if (before == null || !before) return "";
+  const pct = (now / before - 1) * 100;
+  const cls = pct > 0.05 ? "up" : pct < -0.05 ? "down" : "";
+  return `<span class="chg ${cls}">${pct > 0 ? "+" : ""}${pct.toFixed(1)}%${label ? " " + label : ""}</span>`;
+}
+const seriesOf = item => item.series.nagoya || Object.values(item.series)[0] || [];
+
+// Monthly cost of the basket, only for months where every basket item has a price.
+function basketSeries() {
+  const parts = data.items.filter(i => basket.items[i.id])
+    .map(i => ({ item: i, qty: basket.items[i.id].qty, prices: new Map(seriesOf(i)) }));
+  if (!parts.length) return { parts, points: [] };
+  const months = [...new Set(parts.flatMap(p => [...p.prices.keys()]))].sort();
+  const points = [];
+  for (const m of months) {
+    if (parts.every(p => p.prices.has(m))) points.push([m, parts.reduce((sum, p) => sum + p.qty * p.prices.get(m), 0)]);
+  }
+  return { parts, points };
+}
+
+function lineChart(canvas, labels, values, label) {
+  return new Chart(canvas, {
+    type: "line",
+    data: { labels, datasets: [{ label, data: values, borderColor: css("--nagoya"), borderWidth: 2,
+                                 pointRadius: 0, spanGaps: true, tension: 0.2 }] },
+    options: {
+      maintainAspectRatio: false, animation: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: { legend: { display: false },
+                 tooltip: { callbacks: { label: c => `${c.dataset.label}: ${yen(c.parsed.y)}` } } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 5, color: css("--muted") }, grid: { display: false } },
+        y: { ticks: { maxTicksLimit: 4, color: css("--muted"), callback: v => yen(v) }, grid: { color: css("--line") } },
+      },
+    },
+  });
+}
+
+function renderSummary(t) {
+  const box = document.getElementById("summary");
+  box.innerHTML = "";
+  if (!data || !data.items.length) return;
+
+  // ---- Basket card
+  if (basket) {
+    const { parts, points } = basketSeries();
+    if (points.length) {
+      const map = new Map(points);
+      const [m, now] = points[points.length - 1];
+      const chip = (label, n) => {
+        const before = map.get(monthsBack(m, n));
+        return before == null ? "" :
+          `<div class="chip"><span>${label}</span>${pctSpan(now, before)} <span>(${now >= before ? "+" : "−"}${yen(Math.abs(now - before))})</span></div>`;
+      };
+      const rows = parts.map(p => ({ p, cost: p.qty * p.prices.get(m) })).sort((a, b) => b.cost - a.cost);
+      const card = document.createElement("section");
+      card.className = "card";
+      card.innerHTML = `<h2>${esc(basket["name_" + lang])}</h2>
+        <div class="unit">${t.basketSub(parts.length)}</div>
+        <div class="price"><span class="big">${yen(now)}</span><span class="unit">${m}</span></div>
+        <div class="chips">${chip(t.mom, 1)}${chip(t.y1, 12)}${chip(t.y5, 60)}</div>
+        <div class="chart tall"><canvas></canvas></div>
+        <details><summary>${t.inBasket}</summary>
+          <table><thead><tr><th>${t.item}</th><th>${t.amount}</th><th>${t.cost}</th><th>${t.share}</th></tr></thead>
+          <tbody>${rows.map(({ p, cost }) => `<tr><td>${esc(p.item["name_" + lang])}</td>
+            <td>${esc(basket.items[p.item.id][lang] ?? p.qty)}</td><td>${yen(cost)}</td>
+            <td>${(cost / now * 100).toFixed(0)}%</td></tr>`).join("")}</tbody></table>
+        </details>`;
+      box.appendChild(card);
+      const shown = range === "all" ? points : points.slice(-Number(range));
+      charts.push(lineChart(card.querySelector("canvas"), shown.map(p => p[0]), shown.map(p => p[1]),
+                            basket["name_" + lang]));
+    }
+  }
+
+  // ---- Biggest changes card
+  const latest = data.items.map(seriesOf).filter(s => s.length).map(s => s[s.length - 1][0]).sort().pop();
+  const changes = n => data.items.map(i => {
+    const m = new Map(seriesOf(i));
+    const now = m.get(latest), before = m.get(monthsBack(latest, n));
+    return now != null && before ? { i, now, before, pct: (now / before - 1) * 100 } : null;
+  }).filter(Boolean);
+  const list = (rows, label) => rows.length ? `<h3>${label}</h3><ol>${rows.map(r =>
+      `<li><span>${esc(r.i["name_" + lang])}</span>${pctSpan(r.now, r.before)}</li>`).join("")}</ol>` : "";
+  const block = (title, n) => {
+    const c = changes(n).sort((a, b) => b.pct - a.pct);
+    const ups = c.filter(r => r.pct > 0.05).slice(0, 3);
+    const downs = c.filter(r => r.pct < -0.05).reverse().slice(0, 3);
+    return `<h3 style="color:var(--text);font-weight:600">${title}</h3>` +
+      (ups.length || downs.length ? list(ups, t.up) + list(downs, t.down) : `<p class="unit">${t.noMoves}</p>`);
+  };
+  const movers = document.createElement("section");
+  movers.className = "card movers";
+  movers.innerHTML = `<h2>${t.movers}</h2><div class="unit">${latest}</div>
+    ${block(t.sinceMonth, 1)}${block(t.sinceYear, 12)}`;
+  box.appendChild(movers);
+}
 
 function render() {
   const t = T[lang];
@@ -87,6 +221,7 @@ function render() {
   charts.splice(0).forEach(c => c.destroy());
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
+  renderSummary(t);
 
   if (!data || !data.items.length) {
     document.getElementById("legend").innerHTML = "";
@@ -100,14 +235,10 @@ function render() {
     `<span><span class="swatch" style="background:${color(a.id)}"></span>${a["name_" + lang]}</span>`).join("");
 
   for (const item of data.items) {
-    const main = item.series.nagoya || Object.values(item.series)[0] || [];
+    const main = seriesOf(item);
     if (!main.length) continue;
     const [lastMonth, last] = main[main.length - 1];
-    const prevYear = String(+lastMonth.slice(0, 4) - 1) + lastMonth.slice(4);
-    const ago = main.find(p => p[0] === prevYear);
-    const pct = ago ? (last / ago[1] - 1) * 100 : null;
-    const chg = pct === null ? "" :
-      `<span class="chg ${pct > 0 ? "up" : pct < 0 ? "down" : ""}">${pct > 0 ? "+" : ""}${pct.toFixed(1)}% ${t.yoy}</span>`;
+    const chg = pctSpan(last, new Map(main).get(monthsBack(lastMonth, 12)), t.yoy);
 
     const card = document.createElement("section");
     card.className = "card";
@@ -156,10 +287,9 @@ document.getElementById("lang").onclick = () => {
 };
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
 
-fetch("data/prices.json", { cache: "no-cache" })
-  .then(r => r.ok ? r.json() : null)
-  .catch(() => null)
-  .then(d => { data = d; render(); });
+const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
+Promise.all([load("data/prices.json"), load("basket.json")])
+  .then(([d, b]) => { data = d; basket = b; render(); });
 </script>
 </body>
 </html>
