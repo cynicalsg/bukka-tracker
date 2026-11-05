@@ -41,6 +41,11 @@ jobs:
         env:
           ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
         run: python fetch/fetch_cpi.py
+      - name: Discover tables (temporary)
+        continue-on-error: true
+        env:
+          ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
+        run: python fetch/discover.py
       - name: Note the latest month after fetching
         id: after
         run: echo "month=$(python fetch/monthly_summary.py --latest-month)" >> "$GITHUB_OUTPUT"

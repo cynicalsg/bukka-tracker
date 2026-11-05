@@ -12,7 +12,9 @@
     {"id": "veg", "name_ja": "野菜", "name_en": "Vegetables"},
     {"id": "fruit", "name_ja": "果物", "name_en": "Fruit"},
     {"id": "pantry", "name_ja": "大豆製品・調味料", "name_en": "Soy foods & pantry"},
-    {"id": "drinks", "name_ja": "飲料", "name_en": "Drinks"}
+    {"id": "drinks", "name_ja": "飲料", "name_en": "Drinks"},
+    {"id": "utilities", "name_ja": "光熱・水道・燃料", "name_en": "Utilities & fuel"},
+    {"id": "household", "name_ja": "日用品", "name_en": "Household goods"}
   ],
   "items": [
     {"id": "rice", "match": ["うるち米", "コシヒカリ"], "exclude": ["以外"], "name_ja": "米(コシヒカリ)", "name_en": "Rice (Koshihikari)", "unit_ja": "5kg", "unit_en": "5 kg", "category": "grains", "rescale": [{"before": "2002-01", "factor": 0.5}], "note_ja": "2001年以前は10kg単位の価格を換算", "note_en": "Pre-2002 prices converted from 10 kg"},
@@ -50,6 +52,18 @@
     {"id": "sugar", "code": "01632", "match": [], "name_ja": "砂糖", "name_en": "Sugar", "category": "pantry", "unit_ja": "1kg", "unit_en": "1 kg"},
     {"id": "nori", "code": "01461", "match": [], "name_ja": "干しのり", "name_en": "Nori (dried seaweed)", "category": "pantry", "unit_ja": "全形10枚", "unit_en": "10 sheets"},
     {"id": "coffee", "code": "01921", "match": [], "name_ja": "インスタントコーヒー", "name_en": "Instant coffee", "category": "drinks", "unit_ja": "", "unit_en": ""},
-    {"id": "greentea", "code": "01902", "match": [], "name_ja": "緑茶", "name_en": "Green tea (leaf)", "category": "drinks", "unit_ja": "100g", "unit_en": "100 g"}
+    {"id": "greentea", "code": "01902", "match": [], "name_ja": "緑茶", "name_en": "Green tea (leaf)", "category": "drinks", "unit_ja": "100g", "unit_en": "100 g"},
+    {"id": "electricity", "code": "03511", "match": [], "name_ja": "電気代", "name_en": "Electricity", "category": "utilities", "unit_ja": "", "unit_en": "", "since": "2015-01"},
+    {"id": "citygas", "code": "03605", "match": [], "name_ja": "都市ガス代", "name_en": "City gas", "category": "utilities", "unit_ja": "", "unit_en": "", "since": "2015-01"},
+    {"id": "water", "code": "03800", "match": [], "name_ja": "水道料", "name_en": "Water", "category": "utilities", "unit_ja": "", "unit_en": "", "since": "2015-01"},
+    {"id": "kerosene", "code": "03701", "match": [], "name_ja": "灯油", "name_en": "Kerosene", "category": "utilities", "unit_ja": "", "unit_en": ""},
+    {"id": "gasoline", "code": "07301", "match": [], "name_ja": "ガソリン", "name_en": "Gasoline", "category": "utilities", "unit_ja": "", "unit_en": ""},
+    {"id": "toiletpaper", "code": "04413", "match": [], "name_ja": "トイレットペーパー", "name_en": "Toilet paper", "category": "household", "unit_ja": "", "unit_en": ""},
+    {"id": "tissue", "code": "04412", "match": [], "name_ja": "ティシュペーパー", "name_en": "Tissues", "category": "household", "unit_ja": "", "unit_en": ""},
+    {"id": "dishsoap", "code": "04431", "match": [], "name_ja": "台所用洗剤", "name_en": "Dish soap", "category": "household", "unit_ja": "", "unit_en": ""},
+    {"id": "laundry", "code": "04441", "match": [], "name_ja": "洗濯用洗剤", "name_en": "Laundry detergent", "category": "household", "unit_ja": "", "unit_en": ""},
+    {"id": "wrap", "code": "04401", "match": [], "name_ja": "ラップ", "name_en": "Plastic wrap", "category": "household", "unit_ja": "", "unit_en": ""},
+    {"id": "shampoo", "code": "09622", "match": [], "name_ja": "シャンプー", "name_en": "Shampoo", "category": "household", "unit_ja": "", "unit_en": ""},
+    {"id": "toothpaste", "code": "09623", "match": [], "name_ja": "歯磨き", "name_en": "Toothpaste", "category": "household", "unit_ja": "", "unit_en": ""}
   ]
 }
