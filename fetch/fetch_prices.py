@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import statistics
 import sys
 import urllib.parse
 import urllib.request
@@ -167,6 +168,40 @@ def adjust_series(points: list, item: dict) -> list:
     return out
 
 
+def month_index(m: str) -> int:
+    """'2026-09' -> months since year 0 (Jan = 0 mod 12)."""
+    return int(m[:4]) * 12 + int(m[5:7]) - 1
+
+
+def seasonal_profile(points: list, years: int = 10, min_obs: int = 3) -> dict | None:
+    """Typical price of each calendar month relative to the yearly average, from the last `years` years.
+
+    Each month's price is divided by the mean of the prices within 6 months either side (so slow
+    inflation cancels out); the median of those ratios per calendar month is the seasonal factor.
+    Months without enough observations (e.g. fruit out of season) are None. Factors average to 1.
+    """
+    if not points:
+        return None
+    prices = {month_index(m): v for m, v in points}
+    last = max(prices)
+    start = last - years * 12 + 1
+    ratios = {k: [] for k in range(12)}
+    for t, v in prices.items():
+        if t < start or t > last - 6:  # need a full window on both sides
+            continue
+        window = [prices[u] for u in range(t - 6, t + 7) if u in prices]
+        if len(window) >= 6:
+            ratios[t % 12].append(v / (sum(window) / len(window)))
+    medians = [statistics.median(r) if len(r) >= min_obs else None for _, r in sorted(ratios.items())]
+    known = [x for x in medians if x]
+    if len(known) < 6:
+        return None
+    mean = sum(known) / len(known)
+    factors = [round(x / mean, 4) if x else None for x in medians]
+    vals = [f for f in factors if f]
+    return {"factors": factors, "amplitude": round(max(vals) / min(vals) - 1, 4), "years": years}
+
+
 def build_dataset(stat: dict, config: dict) -> dict:
     classes = class_objects(stat)
     item_dim = find_item_dimension(classes, config["items"])
@@ -210,6 +245,10 @@ def build_dataset(stat: dict, config: dict) -> dict:
     for entry in items_out:
         for area_id, points in entry["series"].items():
             entry["series"][area_id] = adjust_series(sorted(points), cfg_by_id[entry["id"]])
+        main = next(iter(entry["series"].values()), [])
+        profile = seasonal_profile(main)
+        if profile:
+            entry["seasonal"] = profile
 
     table = stat.get("TABLE_INF", {})
     return {
