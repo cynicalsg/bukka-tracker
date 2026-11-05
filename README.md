@@ -10,7 +10,7 @@ Track and visualize changes in essential food prices in Japan over time, startin
 
 ## Setup
 
-1. Register for a free e-Stat app ID: https://www.e-stat.go.jp/api/ (ユーザ登録 → マイページ → API機能(アプリケーションID発行)). For the URL field, `http://localhost/` is fine.
+1. Register for a free e-Stat app ID: https://www.e-stat.go.jp/api/ (ユーザ登録 → マイページ → API機能(アプリケーションID発行)). For the URL field use `https://cynicalsg.github.io/bukka-tracker/` (e-Stat rejects localhost and private IPs).
 2. In this repo on GitHub: **Settings → Secrets and variables → Actions → New repository secret**, name `ESTAT_APP_ID`, value = your app ID.
 3. **Settings → Pages:** Source "Deploy from a branch", branch `main`, folder `/docs`.
 4. **Actions → Update price data → Run workflow** to fetch the first batch of data.
