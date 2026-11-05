@@ -34,17 +34,20 @@ def meta(tid, words):
             print(f"    {k} ({len(names)}): {names[:5]} hits: {hits[:12]}")
 
 
-# A. national average retail prices
-show(tables(statsCode="00200571", searchWord="全国"), "retail price survey: 全国")
-show(tables(statsCode="00200571", searchWord="平均"), "retail price survey: 平均")
-# B. wages
-wage = tables(searchWord="毎月勤労統計調査 地方調査") + tables(searchWord="きまって支給する給与 愛知県")
+# Wages: try likely statistics codes for the Monthly Labour Survey, and simpler searches.
 seen = {}
-for t in wage:
-    seen.setdefault(t["@id"], t)
-show(list(seen.values()), "wages")
-cands = [t["@id"] for t in seen.values()
-         if text(t.get("CYCLE")) == "月次" and "愛知" in text(t.get("TITLE")) + text(t.get("STATISTICS_NAME"))][:4]
-cands += [t["@id"] for t in seen.values() if text(t.get("CYCLE")) == "月次"][:3]
-for tid in dict.fromkeys(cands):
+for code in ("00450071", "00450072", "00450073", "00450091", "00450092", "00450093"):
+    ts = tables(statsCode=code)
+    show(ts, f"statsCode {code}")
+    for t in ts:
+        seen.setdefault(t["@id"], t)
+for word in ("毎月勤労統計", "きまって支給する給与", "現金給与総額 愛知県"):
+    ts = tables(searchWord=word)
+    show(ts, f"search {word}")
+    for t in ts:
+        seen.setdefault(t["@id"], t)
+aichi = [t["@id"] for t in seen.values() if "愛知" in text(t.get("TITLE")) + text(t.get("STATISTICS_NAME"))]
+monthly = [t["@id"] for t in seen.values() if text(t.get("CYCLE")) == "月次"
+           and any(w in text(t.get("TITLE")) for w in ("都道府県", "地方", "給与"))]
+for tid in list(dict.fromkeys(aichi[:4] + monthly[:4])):
     meta(tid, ("愛知", "きまって", "現金給与", "調査産業計", "5人以上", "事業所規模"))
