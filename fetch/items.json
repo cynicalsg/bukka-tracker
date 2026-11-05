@@ -1,0 +1,25 @@
+{
+  "_comment": "Items to track. 'match' strings must all appear in the e-Stat item name (銘柄). If e-Stat's naming changes, pin an item with \"code\" instead. Areas are matched by name.",
+  "survey_stats_code": "00200571",
+  "stats_data_id": null,
+  "areas": [
+    {"id": "nagoya", "match": "名古屋市", "name_ja": "名古屋市", "name_en": "Nagoya"},
+    {"id": "tokyo",  "match": "東京都区部", "name_ja": "東京都区部", "name_en": "Tokyo (23 wards)"}
+  ],
+  "items": [
+    {"id": "rice",     "match": ["うるち米", "コシヒカリ"], "name_ja": "米(コシヒカリ)", "name_en": "Rice (Koshihikari)"},
+    {"id": "bread",    "match": ["食パン"],     "name_ja": "食パン",   "name_en": "Sliced bread"},
+    {"id": "milk",     "match": ["牛乳"],       "name_ja": "牛乳",     "name_en": "Milk"},
+    {"id": "eggs",     "match": ["鶏卵"],       "name_ja": "鶏卵",     "name_en": "Eggs"},
+    {"id": "pork",     "match": ["豚肉"],       "name_ja": "豚肉",     "name_en": "Pork"},
+    {"id": "chicken",  "match": ["鶏肉"],       "name_ja": "鶏肉",     "name_en": "Chicken"},
+    {"id": "tofu",     "match": ["豆腐"],       "name_ja": "豆腐",     "name_en": "Tofu"},
+    {"id": "natto",    "match": ["納豆"],       "name_ja": "納豆",     "name_en": "Natto"},
+    {"id": "cabbage",  "match": ["キャベツ"],   "name_ja": "キャベツ", "name_en": "Cabbage"},
+    {"id": "onion",    "match": ["たまねぎ"],   "name_ja": "たまねぎ", "name_en": "Onions"},
+    {"id": "potato",   "match": ["じゃがいも"], "name_ja": "じゃがいも", "name_en": "Potatoes"},
+    {"id": "carrot",   "match": ["にんじん"],   "name_ja": "にんじん", "name_en": "Carrots"},
+    {"id": "banana",   "match": ["バナナ"],     "name_ja": "バナナ",   "name_en": "Bananas"},
+    {"id": "oil",      "match": ["食用油"],     "name_ja": "食用油",   "name_en": "Cooking oil"}
+  ]
+}
