@@ -9,7 +9,7 @@ Track and visualize changes in essential food prices in Japan over time, startin
 - **Site:** `docs/index.html` is a static page (Chart.js) served by GitHub Pages, in Japanese or English. It shows:
   - **A household basket:** the monthly cost of the staples for a two-person household, with its change over 1 month, 1 year and 5 years. The quantities are estimates in `docs/basket.json`. Edit them to match your own shopping, and the page recalculates.
   - **Biggest changes:** the items that rose or fell the most since last month and since last year.
-  - **One chart per item,** with the latest price and the change from a year earlier.
+  - **One chart per item** (36 staples in 7 categories), with the latest price and the change from a year earlier. Items can be grouped by category or sorted by biggest rise or fall.
 
 ## Setup
 
@@ -25,5 +25,7 @@ python -m unittest discover -s tests          # tests use a sample fixture, no n
 ESTAT_APP_ID=your-id python fetch/fetch_prices.py
 python -m http.server -d docs 8000            # then open http://localhost:8000
 ```
+
+**Unit changes:** the survey sometimes changes an item's pricing unit or product definition (e.g. tofu went from per 100 g to per 1 kg in 2014). In `fetch/items.json`, `rescale` converts older prices to the current unit and `since` starts a series after a definition change, so the charts don't show false jumps. Units are not in the e-Stat table; they are set in `items.json` from the survey's standard quantities and checked against price levels.
 
 If an item is missing or matched the wrong product, the fetch log prints which e-Stat item each one matched. Pin the right one by adding `"code": "..."` to that item in `fetch/items.json`.
