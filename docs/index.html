@@ -182,8 +182,9 @@ const T = {
         household: (a, c) => `大人${a}人${c ? `・子ども${c}人` : ""}`,
         shared: "共有されたかごを表示しています。", saveMine: "自分のかごとして保存", backMine: "自分のかごに戻る",
         carried: "* 旬以外の月は直近の旬の価格で計算", empty: "品目が選ばれていません。「かごを編集」から追加してください。",
-        cpiRef: "食料CPI", ifCpi: "食料CPIと同じ率で上がった場合", baseline: "食料CPI",
-        cpiNote: n => `CPI(消費者物価指数)は名古屋市の「${n}」指数(外食を含む)で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。` },
+        cpiRef: k => k === "all" ? "総合CPI" : "食料CPI", ifCpi: k => `${k === "all" ? "総合CPI" : "食料CPI"}と同じ率で上がった場合`, baseline: "食料CPI",
+        cpiNote: (k, n) => `CPI(消費者物価指数)は名古屋市の「${n}」指数${k === "all" ? "(全品目・サービス)" : "(外食を含む)"}で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。`,
+        vsNational: p => `全国平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`, sameNational: "全国平均とほぼ同じ", cpiLegend: "CPIと同じ率で上がった場合(食品は食料CPI、その他は総合CPI)" },
   en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials in Nagoya", per: "per",
         r24: "2 yrs", r60: "5 yrs", rall: "All", yoy: "vs. last year", noData: "No data yet. It will appear after the first GitHub Action run.",
         source: "Source", updated: "Updated", toggle: "日本語",
@@ -211,8 +212,9 @@ const T = {
         household: (a, c) => `${a} adult${a === 1 ? "" : "s"}${c ? `, ${c} child${c === 1 ? "" : "ren"}` : ""}`,
         shared: "You're viewing a shared basket.", saveMine: "Save as my basket", backMine: "Back to my basket",
         carried: "* Out of season: last in-season price used", empty: "No items selected. Use “Edit basket” to add some.",
-        cpiRef: "Food CPI", ifCpi: "If it had risen with food CPI", baseline: "Food CPI",
-        cpiNote: n => `CPI (consumer price index) here is Nagoya's food index (${n}), which includes eating out. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.` },
+        cpiRef: k => k === "all" ? "Overall CPI" : "Food CPI", ifCpi: k => `If it had risen with ${k === "all" ? "overall" : "food"} CPI`, baseline: "Food CPI",
+        cpiNote: (k, n) => `CPI (consumer price index) here is Nagoya's ${k === "all" ? "overall index (総合, all goods and services)" : `food index (${n}), which includes eating out`}. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.`,
+        vsNational: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the national average`, sameNational: "About the national average", cpiLegend: "If it had risen with CPI (food CPI for food, overall CPI otherwise)" },
 };
 let lang = (() => { try { return localStorage.getItem("lang"); } catch { return null; } })()
   || (navigator.language.startsWith("ja") ? "ja" : "en");
@@ -275,6 +277,8 @@ function saveBasket() {
   try { localStorage.setItem(BASKET_KEY, JSON.stringify(myBasket)); } catch {}
 }
 const multiplier = () => myBasket.adults + basket.child_factor * myBasket.children;
+// Household amount = stored amount x people, except per-household items (utility bills, fuel).
+const scaleOf = id => basket.items[id]?.fixed ? 1 : (multiplier() || 1);
 const sameAsDefault = () => JSON.stringify(cleanBasket(myBasket)) === JSON.stringify(cleanBasket(defaultBasket()));
 const fmtQty = v => v >= 100 ? String(Math.round(v)) : String(Math.round(v * 100) / 100);
 const latestPrice = item => { const s = seriesOf(item); return s.length ? s[s.length - 1][1] : null; };
@@ -284,7 +288,7 @@ const latestPrice = item => { const s = seriesOf(item); return s.length ? s[s.le
 function basketSeries() {
   const mult = multiplier();
   const parts = data.items.filter(i => basket.items[i.id] && myBasket.items[i.id] > 0).map(i => ({
-    item: i, amount: myBasket.items[i.id] * mult, units: myBasket.items[i.id] * mult * basket.items[i.id].per,
+    item: i, amount: myBasket.items[i.id] * scaleOf(i.id), units: myBasket.items[i.id] * scaleOf(i.id) * basket.items[i.id].per,
     own: new Map(seriesOf(i)), prices: new Map(), carried: new Set(),
   }));
   if (!parts.length || mult <= 0) return { parts, points: [] };
@@ -303,29 +307,34 @@ function basketSeries() {
   return { parts, points };
 }
 
-const cpiFood = () => cpi?.series?.food?.points?.length ? new Map(cpi.series.food.points) : null;
+const cpiIdx = (kind = "food") => cpi?.series?.[kind]?.points?.length ? new Map(cpi.series[kind].points) : null;
+const cpiFood = () => cpiIdx("food");
+// Food items are compared with food CPI; utilities and household goods with overall CPI.
+const NON_FOOD = new Set(["utilities", "household"]);
+const cpiKindForItem = item => NON_FOOD.has(item.category) && cpiIdx("all") ? "all" : "food";
+const cpiKindForBasket = () => cpiIdx("all") && data.items.some(i => NON_FOOD.has(i.category) && myBasket.items[i.id] > 0) ? "all" : "food";
 
-// Where a price would be if it had moved with food CPI since the first shown month that has both values.
-function cpiPath(labels, values) {
-  const idx = cpiFood();
+// Where a price would be if it had moved with CPI since the first shown month that has both values.
+function cpiPath(labels, values, kind) {
+  const idx = cpiIdx(kind);
   if (!idx) return null;
   const k = labels.findIndex((m, i) => values[i] != null && idx.has(m));
   if (k < 0) return null;
   const base = values[k] / idx.get(labels[k]);
   return labels.map((m, i) => i < k || !idx.has(m) ? null : base * idx.get(m));
 }
-const refDataset = (labels, values, label) => {
-  const path = cpiPath(labels, values);
+const refDataset = (labels, values, label, kind) => {
+  const path = cpiPath(labels, values, kind);
   return path ? [{ label, data: path, borderColor: css("--muted"), borderWidth: 1.25, borderDash: [4, 4],
                    pointRadius: 0, spanGaps: true, tension: 0.2 }] : [];
 };
 
-function lineChart(canvas, labels, values, label, refLabel) {
+function lineChart(canvas, labels, values, label, refLabel, kind) {
   return new Chart(canvas, {
     type: "line",
     data: { labels, datasets: [{ label, data: values, borderColor: css("--nagoya"), borderWidth: 2,
                                  pointRadius: 0, spanGaps: true, tension: 0.2 },
-                               ...(refLabel ? refDataset(labels, values, refLabel) : [])] },
+                               ...(refLabel ? refDataset(labels, values, refLabel, kind) : [])] },
     options: {
       maintainAspectRatio: false, animation: false,
       interaction: { mode: "index", intersect: false },
@@ -339,13 +348,13 @@ function lineChart(canvas, labels, values, label, refLabel) {
   });
 }
 
-// Food CPI change over the same windows as the basket chips, ending in the same month.
-function cpiChips(m, t) {
-  const idx = cpiFood();
+// CPI change over the same windows as the basket chips, ending in the same month.
+function cpiChips(m, t, kind) {
+  const idx = cpiIdx(kind);
   if (!idx || !idx.has(m)) return "";
   const c = (label, n) => idx.has(monthsBack(m, n))
     ? `<div class="chip"><span>${label}</span>${pctSpan(idx.get(m), idx.get(monthsBack(m, n)))}</div>` : "";
-  return `<div class="chips cpi"><div class="chip" style="border:none;padding-left:0"><span>${t.cpiRef}</span></div>${c(t.mom, 1)}${c(t.y1, 12)}${c(t.y5, 60)}</div>`;
+  return `<div class="chips cpi"><div class="chip" style="border:none;padding-left:0"><span>${t.cpiRef(kind)}</span></div>${c(t.mom, 1)}${c(t.y1, 12)}${c(t.y5, 60)}</div>`;
 }
 
 function renderBasket(t) {
@@ -353,6 +362,7 @@ function renderBasket(t) {
   if (!slot) return;
   basketCharts.splice(0).forEach(c => c.destroy());
   const { parts, points } = basketSeries();
+  const kind = cpiKindForBasket();
   const title = sameAsDefault() && !sharedView ? basket["name_" + lang] : t.myBasket;
   const card = document.createElement("section");
   card.className = "card";
@@ -376,10 +386,10 @@ function renderBasket(t) {
     card.innerHTML = head + `
       <div class="price"><span class="big">${yen(now)}</span><span class="unit">${m}</span></div>
       <div class="chips">${chip(t.mom, 1)}${chip(t.y1, 12)}${chip(t.y5, 60)}</div>
-      ${cpiChips(m, t)}
+      ${cpiChips(m, t, kind)}
       <div class="chart tall"><canvas></canvas></div>
-      ${cpiFood() ? `<div class="key"><span><i></i>${esc(title)}</span><span><i class="dash"></i>${t.ifCpi}</span></div>
-      <p class="note">${t.cpiNote(esc(cpi.series.food.estat_name))}</p>` : ""}
+      ${cpiIdx(kind) ? `<div class="key"><span><i></i>${esc(title)}</span><span><i class="dash"></i>${t.ifCpi(kind)}</span></div>
+      <p class="note">${t.cpiNote(kind, esc(cpi.series[kind].estat_name))}</p>` : ""}
       <details><summary>${t.inBasket}</summary>
         <table><thead><tr><th>${t.item}</th><th>${t.amount}</th><th>${t.cost}</th><th>${t.share}</th></tr></thead>
         <tbody>${rows.map(({ p, cost }) => `<tr><td>${esc(p.item["name_" + lang])}${p.carried.has(m) ? " *" : ""}</td>
@@ -389,7 +399,7 @@ function renderBasket(t) {
       </details>`;
     const shown = range === "all" ? points : points.slice(-Number(range));
     slot.replaceChildren(card);
-    basketCharts.push(lineChart(card.querySelector("canvas"), shown.map(p => p[0]), shown.map(p => p[1]), title, t.ifCpi));
+    basketCharts.push(lineChart(card.querySelector("canvas"), shown.map(p => p[0]), shown.map(p => p[1]), title, t.ifCpi(kind), kind));
   }
   if (!points.length) slot.replaceChildren(card);
   card.querySelector("#edit-basket").onclick = () => toggleEditor();
@@ -436,7 +446,7 @@ function renderEditor() {
     <p class="note">${t.amountsNote}</p>
     <div class="ed-grid">${groups.map(([c, list]) => `<h3 class="ed-cat">${esc(c["name_" + lang])}</h3>` + list.map(i => {
       const spec = basket.items[i.id], on = myBasket.items[i.id] > 0;
-      const amount = (on ? myBasket.items[i.id] : spec.suggest) * (mult || 1);
+      const amount = (on ? myBasket.items[i.id] : spec.suggest) * scaleOf(i.id);
       return `<div class="ed-row" data-id="${i.id}">
         <label><input type="checkbox" ${on ? "checked" : ""}><span>${esc(i["name_" + lang])}</span></label>
         <input type="number" min="0" step="${spec.step}" value="${fmtQty(amount)}" ${on ? "" : "disabled"} aria-label="${esc(i["name_" + lang])}">
@@ -461,16 +471,16 @@ function renderEditor() {
     const id = row.dataset.id, item = data.items.find(i => i.id === id), spec = basket.items[id];
     const box = row.querySelector("input[type=checkbox]"), num = row.querySelector("input[type=number]"), cost = row.querySelector(".c");
     box.onchange = () => {
-      if (box.checked) myBasket.items[id] = (Number(num.value) || spec.suggest * (multiplier() || 1)) / (multiplier() || 1);
+      if (box.checked) myBasket.items[id] = (Number(num.value) || spec.suggest * scaleOf(id)) / scaleOf(id);
       else delete myBasket.items[id];
       num.disabled = !box.checked;
-      cost.textContent = box.checked ? costOf(item, myBasket.items[id] * multiplier()) : "";
+      cost.textContent = box.checked ? costOf(item, myBasket.items[id] * scaleOf(id)) : "";
       basketChanged(false);
     };
     num.oninput = () => {
       const v = Number(num.value);
       if (!Number.isFinite(v) || v < 0) return;
-      if (v === 0) delete myBasket.items[id]; else myBasket.items[id] = v / (multiplier() || 1);
+      if (v === 0) delete myBasket.items[id]; else myBasket.items[id] = v / scaleOf(id);
       cost.textContent = v > 0 ? costOf(item, v) : "";
       basketChanged(false);
     };
@@ -665,8 +675,9 @@ function render() {
   renderChecker();
 
   const color = id => css(id === "nagoya" ? "--nagoya" : "--tokyo");
-  document.getElementById("legend").innerHTML = data.areas.length < 2 ? "" : data.areas.map(a =>
-    `<span><span class="swatch" style="background:${color(a.id)}"></span>${a["name_" + lang]}</span>`).join("");
+  document.getElementById("legend").innerHTML = (data.areas.length < 2 ? "" : data.areas.map(a =>
+    `<span><span class="swatch" style="background:${color(a.id)}"></span>${a["name_" + lang]}</span>`).join("")) +
+    (cpiFood() ? `<span><span class="swatch" style="background:none;border-top:2px dashed var(--muted);height:0"></span>${t.cpiLegend}</span>` : "");
 
   document.querySelectorAll("[data-sort]").forEach(b => {
     b.textContent = t["sort_" + b.dataset.sort];
@@ -700,6 +711,9 @@ function render() {
       grid.appendChild(h);
     }
     const chg = pctSpan(last, before, t.yoy);
+    const nat = item.series.national ? new Map(item.series.national).get(lastMonth) : null;
+    const natDiff = nat ? (last / nat - 1) * 100 : null;
+    const natLine = natDiff == null ? "" : Math.abs(natDiff) < 2 ? t.sameNational : t.vsNational(natDiff);
     const unit = item["unit_" + lang] ? (lang === "ja" ? `${item.unit_ja}${t.per}` : `${t.per} ${item.unit_en}`) : "";
     const sub = [unit, item["note_" + lang]].filter(Boolean).join(" · ");
 
@@ -708,7 +722,7 @@ function render() {
     card.innerHTML = `<h2>${item["name_" + lang]}</h2>
       <div class="unit">${sub || "&nbsp;"}</div>
       <div class="price"><strong>${yen(last)}</strong>${chg}</div>
-      <div class="unit">${lastMonth}</div>
+      <div class="unit">${lastMonth}${natLine ? ` · ${natLine}` : ""}</div>
       <div class="chart"><canvas></canvas></div>
       ${seasonStrip(item, main, t)}`;
     grid.appendChild(card);
@@ -724,7 +738,7 @@ function render() {
           return { label: a["name_" + lang], data: shown.map(x => m.get(x) ?? null),
                    borderColor: color(a.id), borderWidth: a.id === "nagoya" ? 2 : 1.25,
                    pointRadius: 0, spanGaps: true, tension: 0.2 };
-        }), ...refDataset(shown, shown.map(x => new Map(main).get(x) ?? null), t.ifCpi)],
+        }), ...refDataset(shown, shown.map(x => new Map(main).get(x) ?? null), t.ifCpi(cpiKindForItem(item)), cpiKindForItem(item))],
       },
       options: {
         maintainAspectRatio: false, animation: false,

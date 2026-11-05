@@ -39,6 +39,12 @@ class Summary(unittest.TestCase):
         # 2 adults: rice 5 kg = 1 bag, eggs 30 = 3 packs
         self.assertAlmostEqual(ms.basket_cost(PRICES, BASKET, "2026-09"), 3550 + 3 * 322)
 
+    def test_fixed_items_do_not_scale_with_people(self):
+        prices = {"items": [item("electricity", [["2026-09", 12000.0]])]}
+        basket = {"household": {"adults": 3, "children": 1}, "child_factor": 0.6,
+                  "items": {"electricity": {"per": 1, "default": 1, "fixed": True}}}
+        self.assertEqual(ms.basket_cost(prices, basket, "2026-09"), 12000.0)
+
     def test_carry_forward_limit(self):
         self.assertEqual(ms.price_with_carry(dict(PRICES["items"][2]["series"]["nagoya"]), "2026-09"), 930.0)
         self.assertIsNone(ms.price_with_carry({"2025-01": 1.0}, "2026-09"))
