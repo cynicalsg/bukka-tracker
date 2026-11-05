@@ -175,7 +175,8 @@ def build_dataset(stat: dict, config: dict) -> dict:
         entry = {
             "id": item["id"], "name_ja": item["name_ja"], "name_en": item["name_en"],
             "estat_code": hit["@code"], "estat_name": hit["@name"],
-            "unit": hit.get("@unit", "円"),
+            "unit_ja": item.get("unit_ja", ""), "unit_en": item.get("unit_en", ""),
+            **{k: item[k] for k in ("note_ja", "note_en") if k in item},
             "series": {a["id"]: [] for a in config["areas"] if a["id"] in area_codes.values()},
         }
         items_out.append(entry)

@@ -1,25 +1,24 @@
 {
-  "_comment": "Items to track. 'match' strings must all appear in the e-Stat item name (銘柄). If e-Stat's naming changes, pin an item with \"code\" instead. Areas are matched by name.",
+  "_comment": "Items to track. 'match' strings must all appear in the e-Stat item name; 'exclude' strings must not. Pin an item with \"code\" if names change. docs/data/catalog.json lists every item and city in the table. Units are the survey's standard quantities (the table itself doesn't include them).",
   "survey_stats_code": "00200571",
   "stats_data_id": "0003421913",
   "areas": [
-    {"id": "nagoya", "match": "名古屋市", "name_ja": "名古屋市", "name_en": "Nagoya"},
-    {"id": "tokyo",  "match": "東京都区部", "name_ja": "東京都区部", "name_en": "Tokyo (23 wards)"}
+    {"id": "nagoya", "match": "名古屋市", "name_ja": "名古屋市", "name_en": "Nagoya"}
   ],
   "items": [
-    {"id": "rice",     "match": ["うるち米", "コシヒカリ"], "exclude": ["以外"], "name_ja": "米(コシヒカリ)", "name_en": "Rice (Koshihikari)"},
-    {"id": "bread",    "match": ["食パン"],     "name_ja": "食パン",   "name_en": "Sliced bread"},
-    {"id": "milk",     "match": ["牛乳"],       "name_ja": "牛乳",     "name_en": "Milk"},
-    {"id": "eggs",     "match": ["鶏卵"],       "name_ja": "鶏卵",     "name_en": "Eggs"},
-    {"id": "pork",     "match": ["豚肉"],       "name_ja": "豚肉",     "name_en": "Pork"},
-    {"id": "chicken",  "match": ["鶏肉"],       "name_ja": "鶏肉",     "name_en": "Chicken"},
-    {"id": "tofu",     "match": ["豆腐"],       "name_ja": "豆腐",     "name_en": "Tofu"},
-    {"id": "natto",    "match": ["納豆"],       "name_ja": "納豆",     "name_en": "Natto"},
-    {"id": "cabbage",  "match": ["キャベツ"],   "name_ja": "キャベツ", "name_en": "Cabbage"},
-    {"id": "onion",    "match": ["たまねぎ"],   "name_ja": "たまねぎ", "name_en": "Onions"},
-    {"id": "potato",   "match": ["じゃがいも"], "name_ja": "じゃがいも", "name_en": "Potatoes"},
-    {"id": "carrot",   "match": ["にんじん"],   "name_ja": "にんじん", "name_en": "Carrots"},
-    {"id": "banana",   "match": ["バナナ"],     "name_ja": "バナナ",   "name_en": "Bananas"},
-    {"id": "oil",      "match": ["食用油"],     "name_ja": "食用油",   "name_en": "Cooking oil"}
+    {"id": "rice", "match": ["うるち米", "コシヒカリ"], "exclude": ["以外"], "name_ja": "米(コシヒカリ)", "name_en": "Rice (Koshihikari)", "unit_ja": "5kg", "unit_en": "5 kg"},
+    {"id": "bread", "match": ["食パン"], "name_ja": "食パン", "name_en": "Sliced bread", "unit_ja": "1kg", "unit_en": "1 kg"},
+    {"id": "milk", "match": ["牛乳", "紙パック"], "name_ja": "牛乳", "name_en": "Milk", "unit_ja": "1000ml", "unit_en": "1 L"},
+    {"id": "eggs", "match": ["鶏卵"], "name_ja": "鶏卵", "name_en": "Eggs", "unit_ja": "1パック(10個)", "unit_en": "10 eggs"},
+    {"id": "pork", "match": ["豚肉"], "name_ja": "豚肉(国産・バラ)", "name_en": "Pork (domestic belly)", "unit_ja": "100g", "unit_en": "100 g", "note_ja": "2014年12月まではロース", "note_en": "Loin until Dec 2014"},
+    {"id": "chicken", "match": ["鶏肉"], "name_ja": "鶏肉", "name_en": "Chicken", "unit_ja": "100g", "unit_en": "100 g"},
+    {"id": "tofu", "match": ["豆腐"], "name_ja": "豆腐", "name_en": "Tofu", "unit_ja": "1kg", "unit_en": "1 kg"},
+    {"id": "natto", "match": ["納豆"], "name_ja": "納豆", "name_en": "Natto", "unit_ja": "1パック(3個)", "unit_en": "3-pack"},
+    {"id": "cabbage", "match": ["キャベツ"], "name_ja": "キャベツ", "name_en": "Cabbage", "unit_ja": "1kg", "unit_en": "1 kg"},
+    {"id": "onion", "match": ["たまねぎ"], "name_ja": "たまねぎ", "name_en": "Onions", "unit_ja": "1kg", "unit_en": "1 kg"},
+    {"id": "potato", "match": ["じゃがいも"], "name_ja": "じゃがいも", "name_en": "Potatoes", "unit_ja": "1kg", "unit_en": "1 kg"},
+    {"id": "carrot", "match": ["にんじん"], "name_ja": "にんじん", "name_en": "Carrots", "unit_ja": "1kg", "unit_en": "1 kg"},
+    {"id": "banana", "match": ["バナナ"], "name_ja": "バナナ", "name_en": "Bananas", "unit_ja": "1kg", "unit_en": "1 kg"},
+    {"id": "oil", "match": ["食用油"], "name_ja": "食用油", "name_en": "Cooking oil", "unit_ja": "1000g", "unit_en": "1 kg"}
   ]
 }

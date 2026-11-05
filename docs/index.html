@@ -60,10 +60,10 @@
 
 <script>
 const T = {
-  ja: { title: "名古屋 物価トラッカー", subtitle: "生活必需品の小売価格の推移(月次)",
+  ja: { title: "名古屋 物価トラッカー", subtitle: "名古屋市の生活必需品の小売価格の推移(月次)", per: "あたり",
         r24: "2年", r60: "5年", rall: "全期間", yoy: "前年同月比", noData: "データはまだありません。GitHub Action の初回実行後に表示されます。",
         source: "出典", updated: "更新", toggle: "English" },
-  en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials",
+  en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials in Nagoya", per: "per",
         r24: "2 yrs", r60: "5 yrs", rall: "All", yoy: "vs. last year", noData: "No data yet. It will appear after the first GitHub Action run.",
         source: "Source", updated: "Updated", toggle: "日本語" },
 };
@@ -96,7 +96,7 @@ function render() {
   }
 
   const color = id => css(id === "nagoya" ? "--nagoya" : "--tokyo");
-  document.getElementById("legend").innerHTML = data.areas.map(a =>
+  document.getElementById("legend").innerHTML = data.areas.length < 2 ? "" : data.areas.map(a =>
     `<span><span class="swatch" style="background:${color(a.id)}"></span>${a["name_" + lang]}</span>`).join("");
 
   for (const item of data.items) {
@@ -112,7 +112,7 @@ function render() {
     const card = document.createElement("section");
     card.className = "card";
     card.innerHTML = `<h2>${item["name_" + lang]}</h2>
-      <div class="unit">${item.estat_name.replace(/^\d+\s*/, "")} · ${item.unit}</div>
+      <div class="unit">${lang === "ja" ? `${item.unit_ja}${t.per}` : `${t.per} ${item.unit_en}`}${item["note_" + lang] ? ` · ${item["note_" + lang]}` : ""}</div>
       <div class="price"><strong>${yen(last)}</strong>${chg}</div>
       <div class="unit">${lastMonth}</div>
       <div class="chart"><canvas></canvas></div>`;
