@@ -1,0 +1,10 @@
+{
+  "_comment": "Consumer Price Index (消費者物価指数) series to compare against. Each series uses the first candidate name found in the table's category list (names without their code prefix). docs/data/cpi_catalog.json lists every category.",
+  "stats_data_id": "0004052037",
+  "area_match": "名古屋市",
+  "series": [
+    {"id": "food", "candidates": ["外食を除く食料", "食料（外食を除く）", "食料(外食を除く)", "食料"],
+     "name_ja": "名古屋市の食料CPI", "name_en": "Nagoya food CPI"},
+    {"id": "all", "candidates": ["総合"], "name_ja": "名古屋市の総合CPI", "name_en": "Nagoya overall CPI"}
+  ]
+}
