@@ -34,20 +34,13 @@ def meta(tid, words):
             print(f"    {k} ({len(names)}): {names[:5]} hits: {hits[:12]}")
 
 
-# Wages: try likely statistics codes for the Monthly Labour Survey, and simpler searches.
+# Wages: Basic Survey on Wage Structure (annual, by prefecture)
 seen = {}
-for code in ("00450071", "00450072", "00450073", "00450091", "00450092", "00450093"):
-    ts = tables(statsCode=code)
-    show(ts, f"statsCode {code}")
+for word in ("都道府県", "都道府県別"):
+    ts = tables(statsCode="00450091", searchWord=word)
+    show(ts, f"wage structure: {word}")
     for t in ts:
         seen.setdefault(t["@id"], t)
-for word in ("毎月勤労統計", "きまって支給する給与", "現金給与総額 愛知県"):
-    ts = tables(searchWord=word)
-    show(ts, f"search {word}")
-    for t in ts:
-        seen.setdefault(t["@id"], t)
-aichi = [t["@id"] for t in seen.values() if "愛知" in text(t.get("TITLE")) + text(t.get("STATISTICS_NAME"))]
-monthly = [t["@id"] for t in seen.values() if text(t.get("CYCLE")) == "月次"
-           and any(w in text(t.get("TITLE")) for w in ("都道府県", "地方", "給与"))]
-for tid in list(dict.fromkeys(aichi[:4] + monthly[:4])):
-    meta(tid, ("愛知", "きまって", "現金給与", "調査産業計", "5人以上", "事業所規模"))
+pref = [t["@id"] for t in seen.values() if "都道府県" in text(t.get("TITLE"))]
+for tid in pref[:6]:
+    meta(tid, ("愛知", "所定内給与", "きまって支給", "産業計", "企業規模計", "男女計", "学歴計", "年齢計", "一般労働者"))
