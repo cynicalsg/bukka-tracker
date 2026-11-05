@@ -1,0 +1,21 @@
+{
+  "_comment": "Estimated monthly purchases for a two-person household. Each qty is a multiple of the item's unit in fetch/items.json (e.g. rice qty 1 = one 5 kg bag, pork qty 10 = 10 x 100 g). Edit freely; the page recalculates on load.",
+  "name_ja": "2人世帯の1か月分",
+  "name_en": "A month for a 2-person household",
+  "items": {
+    "rice":    {"qty": 1,   "ja": "5kg",       "en": "5 kg"},
+    "bread":   {"qty": 1,   "ja": "1kg",       "en": "1 kg"},
+    "milk":    {"qty": 6,   "ja": "6L",        "en": "6 L"},
+    "eggs":    {"qty": 3,   "ja": "30個",      "en": "30 eggs"},
+    "pork":    {"qty": 10,  "ja": "1kg",       "en": "1 kg"},
+    "chicken": {"qty": 15,  "ja": "1.5kg",     "en": "1.5 kg"},
+    "tofu":    {"qty": 1.5, "ja": "1.5kg",     "en": "1.5 kg"},
+    "natto":   {"qty": 4,   "ja": "4パック",   "en": "4 packs"},
+    "cabbage": {"qty": 2,   "ja": "2kg",       "en": "2 kg"},
+    "onion":   {"qty": 2,   "ja": "2kg",       "en": "2 kg"},
+    "potato":  {"qty": 1.5, "ja": "1.5kg",     "en": "1.5 kg"},
+    "carrot":  {"qty": 1,   "ja": "1kg",       "en": "1 kg"},
+    "banana":  {"qty": 2,   "ja": "2kg",       "en": "2 kg"},
+    "oil":     {"qty": 0.5, "ja": "500g",      "en": "500 g"}
+  }
+}
