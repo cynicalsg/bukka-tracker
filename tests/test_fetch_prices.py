@@ -51,6 +51,11 @@ class BuildDataset(unittest.TestCase):
         ds = fp.build_dataset(json.loads(json.dumps(FIXTURE)), config)
         self.assertEqual(ds["items"][0]["series"]["nagoya"], [["2024-01", 2100.0]])
 
+    def test_resolve_filters_requests_only_needed_codes(self):
+        filters = fp.resolve_filters(json.loads(json.dumps(FIXTURE)), CONFIG)
+        self.assertEqual(filters["cdArea"], "13100,23100")  # Osaka left out
+        self.assertEqual(filters["cdCat01"], "01001,03001,04001")  # non-Koshihikari rice left out
+
 
 if __name__ == "__main__":
     unittest.main()

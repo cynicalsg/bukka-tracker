@@ -47,21 +47,30 @@ def find_table(app_id: str, stats_code: str) -> str:
     for t in tables[:20]:
         print(f"  {t['@id']}  {text(t.get('TITLE'))}  ({text(t.get('CYCLE'))})")
     monthly = [t for t in tables if text(t.get("CYCLE")) == "月次"] or tables
-    # Prefer the most recently updated table.
-    monthly.sort(key=lambda t: text(t.get("UPDATED_DATE")), reverse=True)
-    chosen = monthly[0]["@id"]
+    by_city = [t for t in monthly if "都市別" in text(t.get("TITLE"))] or monthly
+    chosen = by_city[0]["@id"]
     print(f"Using table {chosen}. Pin it as stats_data_id in fetch/items.json if this is wrong.")
     return chosen
 
 
-def fetch_table(app_id: str, stats_data_id: str) -> dict:
-    """Download a whole table, following NEXT_KEY paging. Returns the merged STATISTICAL_DATA."""
+def fetch_meta(app_id: str, stats_data_id: str) -> dict:
+    """Return the table's metadata in the same shape as STATISTICAL_DATA (CLASS_INF, TABLE_INF)."""
+    data = api_get("getMetaInfo", {"appId": app_id, "statsDataId": stats_data_id})["GET_META_INFO"]
+    if data["RESULT"]["STATUS"] not in (0, "0"):
+        raise SystemExit(f"e-Stat error: {data['RESULT'].get('ERROR_MSG')}")
+    return data["METADATA_INF"]
+
+
+def fetch_table(app_id: str, stats_data_id: str, filters: dict | None = None) -> dict:
+    """Download a table (optionally filtered, e.g. {"cdArea": "23100,13100"}), following
+    NEXT_KEY paging. Returns the merged STATISTICAL_DATA."""
     merged = None
     start = 1
     while True:
         data = api_get("getStatsData", {
             "appId": app_id, "statsDataId": stats_data_id,
             "startPosition": start, "limit": 100000, "metaGetFlg": "Y",
+            **(filters or {}),
         })["GET_STATS_DATA"]
         status = data["RESULT"]["STATUS"]
         if status not in (0, "0"):
@@ -108,24 +117,43 @@ def class_objects(stat: dict) -> dict[str, list[dict]]:
     return {obj["@id"]: as_list(obj.get("CLASS")) for obj in as_list(stat["CLASS_INF"]["CLASS_OBJ"])}
 
 
-def find_item_dimension(classes: dict[str, list[dict]]) -> str:
-    """The item (銘柄) dimension is a cat0x whose names include our food words."""
-    for key, entries in classes.items():
-        if key.startswith("cat") and any("牛乳" in e.get("@name", "") for e in entries):
-            return key
-    raise SystemExit(f"Could not find the item dimension among {list(classes)}")
+def find_item_dimension(classes: dict[str, list[dict]], items: list[dict]) -> str:
+    """The item (品目/銘柄) dimension is the cat0x dimension that matches the most configured items."""
+    scores = {key: sum(match_item(i, entries) is not None for i in items)
+              for key, entries in classes.items() if key.startswith("cat")}
+    best = max(scores, key=scores.get, default=None)
+    if not best or scores[best] == 0:
+        for key, entries in classes.items():
+            print(f"  {key}: {[e.get('@name') for e in entries[:8]]}", file=sys.stderr)
+        raise SystemExit(f"Could not find the item dimension among {list(classes)}")
+    return best
+
+
+def resolve_filters(meta: dict, config: dict) -> dict:
+    """Turn configured areas/items into e-Stat code filters so we download only what we chart."""
+    classes = class_objects(meta)
+    item_dim = find_item_dimension(classes, config["items"])
+    areas = [e["@code"] for e in classes.get("area", [])
+             if any(a["match"] in e.get("@name", "") for a in config["areas"])]
+    items = [hit["@code"] for i in config["items"] if (hit := match_item(i, classes[item_dim]))]
+    filters = {"cd" + item_dim.capitalize(): ",".join(items)}
+    if areas:
+        filters["cdArea"] = ",".join(areas)
+    return filters
 
 
 def match_item(item: dict, entries: list[dict]) -> dict | None:
     if item.get("code"):
         return next((e for e in entries if e["@code"] == item["code"]), None)
-    hits = [e for e in entries if all(w in e.get("@name", "") for w in item["match"])]
+    hits = [e for e in entries
+            if all(w in e.get("@name", "") for w in item["match"])
+            and not any(x in e.get("@name", "") for x in item.get("exclude", []))]
     return hits[0] if hits else None
 
 
 def build_dataset(stat: dict, config: dict) -> dict:
     classes = class_objects(stat)
-    item_dim = find_item_dimension(classes)
+    item_dim = find_item_dimension(classes, config["items"])
     area_entries = classes.get("area", [])
 
     area_codes = {}
@@ -187,7 +215,9 @@ def main() -> None:
         raise SystemExit("Set ESTAT_APP_ID (free from https://www.e-stat.go.jp/api/)")
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     table_id = config.get("stats_data_id") or find_table(app_id, config["survey_stats_code"])
-    stat = fetch_table(app_id, table_id)
+    filters = resolve_filters(fetch_meta(app_id, table_id), config)
+    print(f"Filters: {filters}")
+    stat = fetch_table(app_id, table_id, filters)
     dataset = build_dataset(stat, config)
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(json.dumps(dataset, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
