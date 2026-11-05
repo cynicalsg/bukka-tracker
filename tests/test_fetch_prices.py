@@ -10,6 +10,8 @@ import fetch_prices as fp  # noqa: E402
 
 FIXTURE = json.loads((ROOT / "tests" / "fixtures" / "stats_data_sample.json").read_text(encoding="utf-8"))
 CONFIG = json.loads((ROOT / "fetch" / "items.json").read_text(encoding="utf-8"))
+# Tests also cover a second comparison city, which the live config may not use.
+CONFIG["areas"].append({"id": "tokyo", "match": "東京都区部", "name_ja": "東京都区部", "name_en": "Tokyo"})
 
 
 class ParseHelpers(unittest.TestCase):
@@ -35,9 +37,15 @@ class BuildDataset(unittest.TestCase):
     def test_rice_picks_koshihikari_monthly_sorted(self):
         rice = self.items["rice"]
         self.assertEqual(rice["estat_code"], "01001")
-        self.assertEqual(rice["unit"], "円/5kg")
+        self.assertEqual((rice["unit_ja"], rice["unit_en"]), ("5kg", "5 kg"))
         self.assertEqual(rice["series"]["nagoya"], [["2024-01", 2400.0], ["2024-02", 2450.0]])
         self.assertEqual(rice["series"]["tokyo"], [["2024-01", 2500.0]])
+
+    def test_items_json_milk_skips_discontinued_bottle(self):
+        entries = [{"@code": "01301", "@name": "1301 牛乳(配達,瓶入り)【2021年12月調査終了】"},
+                   {"@code": "01303", "@name": "1303 牛乳(紙パック入り)"}]
+        milk = next(i for i in CONFIG["items"] if i["id"] == "milk")
+        self.assertEqual(fp.match_item(milk, entries)["@code"], "01303")
 
     def test_missing_values_skipped(self):
         self.assertEqual(self.items["milk"]["series"]["nagoya"], [["2024-01", 250.0]])
@@ -50,6 +58,11 @@ class BuildDataset(unittest.TestCase):
         config["items"] = [{"id": "rice2", "code": "01002", "match": ["x"], "name_ja": "米", "name_en": "Rice"}]
         ds = fp.build_dataset(json.loads(json.dumps(FIXTURE)), config)
         self.assertEqual(ds["items"][0]["series"]["nagoya"], [["2024-01", 2100.0]])
+
+    def test_resolve_filters_requests_only_needed_codes(self):
+        filters = fp.resolve_filters(json.loads(json.dumps(FIXTURE)), CONFIG)
+        self.assertEqual(filters["cdArea"], "13100,23100")  # Osaka left out
+        self.assertEqual(filters["cdCat01"], "01001,03001,04001")  # non-Koshihikari rice left out
 
 
 if __name__ == "__main__":
