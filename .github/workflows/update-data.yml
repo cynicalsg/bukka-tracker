@@ -24,6 +24,11 @@ jobs:
         env:
           ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
         run: python fetch/fetch_prices.py
+      - name: Discover CPI tables (temporary)
+        continue-on-error: true
+        env:
+          ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
+        run: python fetch/discover_cpi.py
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
