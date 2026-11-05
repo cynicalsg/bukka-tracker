@@ -35,7 +35,9 @@ def pick_codes(meta: dict, config: dict) -> dict:
     if area is None:
         raise SystemExit(f"Area {config['area_match']} not in CPI table")
     tab = next((e for e in classes.get("tab", []) if e.get("@name") == "指数"), None)
-    cats = {bare_name(e.get("@name", "")): e for e in classes.get("cat01", [])}
+    cats = {}
+    for e in classes.get("cat01", []):  # keep the first entry when a name repeats (e.g. 総合 0001 and 0201)
+        cats.setdefault(bare_name(e.get("@name", "")), e)
     series = {}
     for s in config["series"]:
         hit = next((cats[c] for c in s["candidates"] if c in cats), None)

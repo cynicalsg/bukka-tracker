@@ -13,7 +13,8 @@ CONFIG = json.loads((ROOT / "fetch" / "cpi.json").read_text(encoding="utf-8"))
 META = {"CLASS_INF": {"CLASS_OBJ": [
     {"@id": "tab", "CLASS": [{"@code": "1", "@name": "指数"}, {"@code": "3", "@name": "前年同月比"}]},
     {"@id": "cat01", "CLASS": [{"@code": "0001", "@name": "0001 総合"}, {"@code": "0002", "@name": "0002 食料"},
-                               {"@code": "0042", "@name": "0042 外食"}]},
+                               {"@code": "0042", "@name": "0042 外食"},
+                               {"@code": "0201", "@name": "0201 総合"}]},  # same name, different breakdown
     {"@id": "area", "CLASS": [{"@code": "13100", "@name": "13100 東京都区部"}, {"@code": "23100", "@name": "23100 名古屋市"}]},
 ]}}
 
