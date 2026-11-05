@@ -19,6 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = ROOT / "fetch" / "items.json"
 OUTPUT_PATH = ROOT / "docs" / "data" / "prices.json"
+CATALOG_PATH = ROOT / "docs" / "data" / "catalog.json"
 API = "https://api.e-stat.go.jp/rest/3.0/app/json"
 
 # e-Stat monthly time codes look like 2024000909 (year, "00", month, month).
@@ -207,6 +208,15 @@ def build_dataset(stat: dict, config: dict) -> dict:
     }
 
 
+def write_catalog(meta: dict) -> None:
+    """Save every dimension of the table except time, so items and cities can be chosen by hand."""
+    catalog = {key: [{k.lstrip("@"): v for k, v in e.items()} for e in entries]
+               for key, entries in class_objects(meta).items() if key != "time"}
+    CATALOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    CATALOG_PATH.write_text(json.dumps(catalog, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"Wrote table catalog ({', '.join(f'{k}: {len(v)}' for k, v in catalog.items())}) to {CATALOG_PATH.relative_to(ROOT)}")
+
+
 # ---------------------------------------------------------------- main
 
 def main() -> None:
@@ -215,7 +225,9 @@ def main() -> None:
         raise SystemExit("Set ESTAT_APP_ID (free from https://www.e-stat.go.jp/api/)")
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     table_id = config.get("stats_data_id") or find_table(app_id, config["survey_stats_code"])
-    filters = resolve_filters(fetch_meta(app_id, table_id), config)
+    meta = fetch_meta(app_id, table_id)
+    write_catalog(meta)
+    filters = resolve_filters(meta, config)
     print(f"Filters: {filters}")
     stat = fetch_table(app_id, table_id, filters)
     dataset = build_dataset(stat, config)
