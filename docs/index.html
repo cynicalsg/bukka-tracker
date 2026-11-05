@@ -18,10 +18,33 @@
   body { margin: 0; background: var(--bg); color: var(--text);
          font: 15px/1.5 system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; }
   header, main, footer { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
-  header { padding-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; align-items: end; justify-content: space-between; }
+  /* sticky top bar + menu */
+  .topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar-inner { max-width: 1100px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 8px; }
+  .brand { margin: 0; font-size: 1.05rem; font-weight: 700; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden;
+           text-overflow: ellipsis; background: none; border: 0; padding: 4px 0; text-align: left; color: var(--text); cursor: pointer; }
+  .menu-btn[aria-expanded="true"] { border-color: var(--nagoya); color: var(--nagoya); }
+  header.intro { padding-top: 20px; }
   h1 { margin: 0; font-size: 1.6rem; }
   .sub { margin: 4px 0 0; color: var(--muted); }
-  .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+  .menu { position: absolute; right: max(16px, calc((100vw - 1100px) / 2 + 16px)); top: calc(100% + 6px); width: 340px;
+          max-height: calc(100vh - 80px); overflow: auto; background: var(--card); border: 1px solid var(--line);
+          border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, .18); padding: 6px 14px 14px; }
+  .menu[hidden] { display: none; }
+  @media (max-width: 560px) { .menu { left: 8px; right: 8px; width: auto; } }
+  .menu h3 { margin: 12px 0 6px; font-size: .78rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .menu .jump { display: grid; gap: 2px; }
+  .menu .jump a, .menu .tool { display: block; padding: 7px 8px; border-radius: 8px; color: var(--text); text-decoration: none;
+                               background: none; border: 0; text-align: left; font: inherit; cursor: pointer; width: 100%; }
+  .menu .jump a:hover, .menu .tool:hover, .menu .jump a:focus-visible, .menu .tool:focus-visible { background: var(--bg); }
+  .menu .jump a.sub-link { padding-left: 22px; font-size: .9rem; color: var(--muted); }
+  .menu .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .menu .seg button { flex: 1; font-size: .85rem; padding: 6px 8px; }
+  .menu-head { display: flex; justify-content: space-between; align-items: center; position: sticky; top: -6px;
+               background: var(--card); padding-top: 6px; }
+  .menu-head h3 { margin: 6px 0; }
+  #summary, #basket-slot, #movers, #guide, #wages, #items, .cat-title, #basket-editor, #checker { scroll-margin-top: 64px; }
   button { font: inherit; color: var(--text); background: var(--card); border: 1px solid var(--line);
            border-radius: 8px; padding: 6px 12px; cursor: pointer; }
   button[aria-pressed="true"] { border-color: var(--nagoya); color: var(--nagoya); font-weight: 600; }
@@ -110,6 +133,7 @@
   details { margin-top: 10px; font-size: .9rem; }
   summary { cursor: pointer; color: var(--muted); }
   table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  details { overflow-x: auto; }
   td, th { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: right; }
   td:first-child, th:first-child { text-align: left; }
   th { color: var(--muted); font-weight: 500; }
@@ -128,16 +152,29 @@
 </style>
 </head>
 <body>
-<header>
-  <div>
-    <h1 data-i18n="title"></h1>
-    <p class="sub" data-i18n="subtitle"></p>
-  </div>
-  <div class="controls">
-    <button data-range="24"></button><button data-range="60"></button><button data-range="all"></button>
+<div class="topbar">
+  <div class="topbar-inner">
+    <button class="brand" id="to-top" data-i18n="title"></button>
     <button id="check-btn" aria-expanded="false"></button>
-    <button id="lang">English</button>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu"></button>
   </div>
+  <nav class="menu" id="menu" hidden>
+    <div class="menu-head"><h3 data-i18n="menuJump"></h3><button class="btn-sm" id="menu-close" data-i18n="close"></button></div>
+    <div class="jump" id="menu-jump"></div>
+    <h3 data-i18n="menuTools"></h3>
+    <button class="tool" data-tool="check" data-i18n="check"></button>
+    <button class="tool" data-tool="edit" data-i18n="edit"></button>
+    <h3 data-i18n="menuRange"></h3>
+    <div class="seg"><button data-range="24"></button><button data-range="60"></button><button data-range="all"></button></div>
+    <h3 data-i18n="menuSort"></h3>
+    <div class="seg"><button data-sort="category"></button><button data-sort="up"></button><button data-sort="down"></button></div>
+    <h3 data-i18n="menuLang"></h3>
+    <div class="seg"><button data-lang="ja">日本語</button><button data-lang="en">English</button></div>
+  </nav>
+</div>
+<header class="intro">
+  <h1 data-i18n="title"></h1>
+  <p class="sub" data-i18n="subtitle"></p>
 </header>
 <main>
   <section class="card checker" id="checker" hidden></section>
@@ -145,7 +182,7 @@
   <section class="card editor" id="basket-editor" hidden></section>
   <section class="card wide" id="guide" hidden></section>
   <section class="card wide" id="wages" hidden></section>
-  <div class="section-head">
+  <div class="section-head" id="items">
     <h2 class="section-title" data-i18n="allItems"></h2>
     <div class="sorts"><button data-sort="category"></button><button data-sort="up"></button><button data-sort="down"></button></div>
   </div>
@@ -161,9 +198,10 @@ const T = {
         source: "出典", updated: "更新", toggle: "English",
         sort_category: "分類別", sort_up: "値上がり順", sort_down: "値下がり順", other: "その他",
         allItems: "品目別の価格", mom: "前月比", y1: "1年前比", y5: "5年前比", inBasket: "かごの中身",
-        item: "品目", amount: "量", cost: "金額", share: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
+        item: "品目", amount: "量", cost: "金額", shareCol: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
         movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
         noMoves: "変動なし",
+        menu: "☰ メニュー", menuJump: "移動", menuTools: "ツール", menuRange: "グラフの期間", menuSort: "品目の並び順", menuLang: "言語 / Language",
         check: "値段チェック", checkTitle: "この値段はお得?", checkItem: "品目", checkPrice: "店頭価格", checkQty: "量",
         checkPer: u => `${u}あたり`, avgLabel: m => `名古屋の平均(${m})`, lowLabel: "過去1年の最安", highLabel: "過去1年の最高",
         youLabel: "この値段",
@@ -177,7 +215,7 @@ const T = {
         nowVsUsual: (m, p) => `季節要因を除くと、${m}の価格は過去1年の平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`,
         nowUsual: m => `季節要因を除くと、${m}の価格はほぼ平年並み`,
         myBasket: "あなたのかご", edit: "かごを編集", close: "閉じる", reset: "初期設定に戻す",
-        share: "リンクをコピー", copied: "コピーしました", adults: "大人", children: "子ども",
+        copyLink: "リンクをコピー", copied: "コピーしました", adults: "大人", children: "子ども",
         childNote: "子どもは大人の0.6人分として計算",
         amountsNote: "量は世帯全体の1か月分です。人数を変えると自動で調整されます。価格は最新月のものです。",
         household: (a, c) => `大人${a}人${c ? `・子ども${c}人` : ""}`,
@@ -186,7 +224,7 @@ const T = {
         wagesTitle: "物価と賃金", wagesSub: (a, b) => `${a}年〜${b}年の変化(${a}年=100)`,
         pay: "愛知県の平均賃金", basketLine: "あなたのかご", cpiAllLine: "名古屋市の総合CPI", cpiFoodLine: "名古屋市の食料CPI",
         realPay: p => `物価を考慮した実質賃金は${Math.abs(p).toFixed(1)}%${p < 0 ? "減少" : "増加"}`,
-        share: (pct, y) => `あなたのかごの1か月分は、愛知県の平均月給(${y}年)の約${pct.toFixed(0)}%`,
+        payShare: (pct, y) => `あなたのかごの1か月分は、愛知県の平均月給(${y}年)の約${pct.toFixed(0)}%`,
         wagesNote: y => `賃金は厚生労働省「賃金構造基本統計調査」の愛知県・一般労働者(企業規模10人以上・産業計)の所定内給与額(残業代・賞与を除く)。年1回の調査で、最新は${y}年。2020年に推計方法が変わっています。物価は各年の平均。`,
         cpiRef: k => k === "all" ? "総合CPI" : "食料CPI", ifCpi: k => `${k === "all" ? "総合CPI" : "食料CPI"}と同じ率で上がった場合`, baseline: "食料CPI",
         cpiNote: (k, n) => `CPI(消費者物価指数)は名古屋市の「${n}」指数${k === "all" ? "(全品目・サービス)" : "(外食を含む)"}で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。`,
@@ -196,9 +234,10 @@ const T = {
         source: "Source", updated: "Updated", toggle: "日本語",
         sort_category: "By category", sort_up: "Biggest rise", sort_down: "Biggest fall", other: "Other",
         allItems: "Prices by item", mom: "1 mo", y1: "1 yr", y5: "5 yrs", inBasket: "What's in the basket",
-        item: "Item", amount: "Amount", cost: "Cost", share: "Share", basketSub: n => `${n} staples at Nagoya retail prices`,
+        item: "Item", amount: "Amount", cost: "Cost", shareCol: "Share", basketSub: n => `${n} staples at Nagoya retail prices`,
         movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
         noMoves: "No change",
+        menu: "☰ Menu", menuJump: "Jump to", menuTools: "Tools", menuRange: "Chart range", menuSort: "Sort items", menuLang: "Language / 言語",
         check: "Price check", checkTitle: "Is this a good price?", checkItem: "Item", checkPrice: "Shelf price", checkQty: "Amount",
         checkPer: u => `per ${u}`, avgLabel: m => `Nagoya avg (${m})`, lowLabel: "12-mo low", highLabel: "12-mo high",
         youLabel: "This price",
@@ -212,7 +251,7 @@ const T = {
         nowVsUsual: (m, p) => `Seasonally adjusted, the ${m} price is ${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} its past-year average`,
         nowUsual: m => `Seasonally adjusted, the ${m} price is about normal`,
         myBasket: "Your basket", edit: "Edit basket", close: "Close", reset: "Reset to default",
-        share: "Copy link", copied: "Copied", adults: "Adults", children: "Children",
+        copyLink: "Copy link", copied: "Copied", adults: "Adults", children: "Children",
         childNote: "A child counts as 0.6 of an adult",
         amountsNote: "Amounts are monthly totals for your household and scale when you change the number of people. Costs use the latest month's prices.",
         household: (a, c) => `${a} adult${a === 1 ? "" : "s"}${c ? `, ${c} child${c === 1 ? "" : "ren"}` : ""}`,
@@ -221,7 +260,7 @@ const T = {
         wagesTitle: "Prices and pay", wagesSub: (a, b) => `Change ${a}–${b} (${a} = 100)`,
         pay: "Aichi average pay", basketLine: "Your basket", cpiAllLine: "Nagoya overall CPI", cpiFoodLine: "Nagoya food CPI",
         realPay: p => `Adjusted for prices, pay ${p < 0 ? "fell" : "rose"} ${Math.abs(p).toFixed(1)}%`,
-        share: (pct, y) => `A month of your basket is about ${pct.toFixed(0)}% of Aichi's average monthly pay (${y})`,
+        payShare: (pct, y) => `A month of your basket is about ${pct.toFixed(0)}% of Aichi's average monthly pay (${y})`,
         wagesNote: y => `Pay is average scheduled monthly earnings (所定内給与額, excluding overtime and bonuses) of full-time workers in Aichi at companies with 10+ employees, from the Basic Survey on Wage Structure. It's surveyed once a year; the latest is ${y}. The survey changed its estimation method in 2020. Prices are yearly averages.`,
         cpiRef: k => k === "all" ? "Overall CPI" : "Food CPI", ifCpi: k => `If it had risen with ${k === "all" ? "overall" : "food"} CPI`, baseline: "Food CPI",
         cpiNote: (k, n) => `CPI (consumer price index) here is Nagoya's ${k === "all" ? "overall index (総合, all goods and services)" : `food index (${n}), which includes eating out`}. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.`,
@@ -404,7 +443,7 @@ function renderBasket(t) {
       ${cpiIdx(kind) ? `<div class="key"><span><i></i>${esc(title)}</span><span><i class="dash"></i>${t.ifCpi(kind)}</span></div>
       <p class="note">${t.cpiNote(kind, esc(cpi.series[kind].estat_name))}</p>` : ""}
       <details><summary>${t.inBasket}</summary>
-        <table><thead><tr><th>${t.item}</th><th>${t.amount}</th><th>${t.cost}</th><th>${t.share}</th></tr></thead>
+        <table><thead><tr><th>${t.item}</th><th>${t.amount}</th><th>${t.cost}</th><th>${t.shareCol}</th></tr></thead>
         <tbody>${rows.map(({ p, cost }) => `<tr><td>${esc(p.item["name_" + lang])}${p.carried.has(m) ? " *" : ""}</td>
           <td>${fmtQty(p.amount)} ${esc(basket.items[p.item.id]["input_" + lang])}</td><td>${yen(cost)}</td>
           <td>${(cost / now * 100).toFixed(0)}%</td></tr>`).join("")}</tbody></table>
@@ -449,7 +488,7 @@ function renderEditor() {
   const costOf = (i, amount) => { const pr = latestPrice(i); return pr == null ? "–" : yen(amount * basket.items[i.id].per * pr); };
   ed.innerHTML = `<div class="card-head"><h2>${t.edit}</h2>
       <div class="editor-actions"><button class="btn-sm" id="ed-reset">${t.reset}</button>
-      <button class="btn-sm" id="ed-share">${t.share}</button><button class="btn-sm" id="ed-close">${t.close}</button></div></div>
+      <button class="btn-sm" id="ed-share">${t.copyLink}</button><button class="btn-sm" id="ed-close">${t.close}</button></div></div>
     <div class="people">
       ${["adults", "children"].map(k => `<span class="stepper"><span>${t[k]}</span>
         <button data-step="${k}" data-d="-1" aria-label="${t[k]} −">−</button><output>${myBasket[k]}</output>
@@ -472,8 +511,8 @@ function renderEditor() {
   ed.querySelector("#ed-share").onclick = async e => {
     const btn = e.currentTarget;  // currentTarget is cleared once the handler awaits
     const url = `${location.origin}${location.pathname}#b=${b64url(JSON.stringify(myBasket))}`;
-    try { await navigator.clipboard.writeText(url); } catch { window.prompt(t.share, url); return; }
-    btn.textContent = t.copied; setTimeout(() => { btn.textContent = t.share; }, 1500);
+    try { await navigator.clipboard.writeText(url); } catch { window.prompt(t.copyLink, url); return; }
+    btn.textContent = t.copied; setTimeout(() => { btn.textContent = t.copyLink; }, 1500);
   };
   ed.querySelectorAll("[data-step]").forEach(b => b.onclick = () => {
     const k = b.dataset.step, min = k === "adults" ? 1 : 0;
@@ -580,7 +619,7 @@ function renderWages(t) {
         : pctSpan(map.get(y1), map.get(y0))}</div>`).join("")}</div>
     <div class="chart tall"><canvas></canvas></div>
     ${real != null ? `<p style="margin:8px 0 0"><b class="chg ${real < 0 ? "up" : "down"}" style="font-size:1rem">${t.realPay(real)}</b></p>` : ""}
-    ${latestBasket ? `<p class="unit" style="margin:4px 0 0">${t.share(latestBasket / (pay.get(wy) * 1000) * 100, wy)}</p>` : ""}
+    ${latestBasket ? `<p class="unit" style="margin:4px 0 0">${t.payShare(latestBasket / (pay.get(wy) * 1000) * 100, wy)}</p>` : ""}
     <p class="note">${t.wagesNote(wy)}</p>`;
   box.hidden = false;
   wageCharts.push(new Chart(box.querySelector("canvas"), {
@@ -597,6 +636,49 @@ function renderWages(t) {
     },
   }));
 }
+
+// ---------- Menu
+function renderMenu(t) {
+  const links = [];
+  const add = (id, label, sub) => { if (document.getElementById(id) && !document.getElementById(id).hidden) links.push(
+    `<a href="#${id}" class="${sub ? "sub-link" : ""}" data-jump="${id}">${esc(label)}</a>`); };
+  if (basket && myBasket) add("basket-slot", sameAsDefault() && !sharedView ? basket["name_" + lang] : t.myBasket);
+  add("movers", t.movers);
+  add("guide", document.querySelector("#guide h2")?.textContent || "");
+  add("wages", t.wagesTitle);
+  add("items", t.allItems);
+  if (sortBy === "category") for (const c of data?.categories || []) add(`cat-${c.id}`, c["name_" + lang], true);
+  document.getElementById("menu-jump").innerHTML = links.join("");
+}
+function toggleMenu(open) {
+  const menu = document.getElementById("menu"), btn = document.getElementById("menu-btn");
+  menu.hidden = open === undefined ? !menu.hidden : !open;
+  btn.setAttribute("aria-expanded", String(!menu.hidden));
+  if (!menu.hidden) menu.querySelector("a, button")?.focus({ preventScroll: true });
+}
+document.getElementById("menu-btn").onclick = e => { e.stopPropagation(); toggleMenu(); };
+document.getElementById("menu-close").onclick = () => { toggleMenu(false); document.getElementById("menu-btn").focus(); };
+document.getElementById("menu").addEventListener("click", e => {
+  e.stopPropagation();
+  const jump = e.target.closest("[data-jump]");
+  if (jump) {
+    e.preventDefault();
+    toggleMenu(false);
+    document.getElementById(jump.dataset.jump)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+  const tool = e.target.closest("[data-tool]");
+  if (tool) {
+    toggleMenu(false);
+    if (tool.dataset.tool === "check") { toggleChecker(true); document.getElementById("checker").scrollIntoView({ behavior: "smooth", block: "start" }); }
+    else toggleEditor(true);
+  }
+});
+document.addEventListener("click", () => { if (!document.getElementById("menu").hidden) toggleMenu(false); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !document.getElementById("menu").hidden) { toggleMenu(false); document.getElementById("menu-btn").focus(); }
+});
+document.getElementById("to-top").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
 // ---------- Price checker
 const CHECK_KEY = "check.v1";
@@ -705,6 +787,7 @@ function renderSummary(t) {
   };
   const movers = document.createElement("section");
   movers.className = "card movers";
+  movers.id = "movers";
   movers.innerHTML = `<h2>${t.movers}</h2><div class="unit">${latest}</div>
     ${block(t.sinceMonth, 1)}${block(t.sinceYear, 12)}`;
   box.appendChild(movers);
@@ -718,7 +801,8 @@ function render() {
     b.textContent = t["r" + b.dataset.range];
     b.setAttribute("aria-pressed", b.dataset.range === range);
   });
-  document.getElementById("lang").textContent = t.toggle;
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  document.getElementById("menu-btn").textContent = t.menu;
   charts.splice(0).forEach(c => c.destroy());
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
@@ -769,6 +853,7 @@ function render() {
       const c = cats.find(c => c.id === currentCat);
       const h = document.createElement("h3");
       h.className = "cat-title";
+      h.id = `cat-${currentCat}`;
       h.textContent = c ? c["name_" + lang] : t.other;
       grid.appendChild(h);
     }
@@ -817,6 +902,7 @@ function render() {
   const s = data.source;
   document.getElementById("footer").innerHTML =
     `${t.source}: ${s["name_" + lang]}${cpi ? "; " + cpi.source["name_" + lang] : ""} (<a href="https://www.e-stat.go.jp/">e-Stat</a>) · ${t.updated}: ${data.updated.slice(0, 10)}`;
+  renderMenu(t);  // last, so the category headings exist
 }
 
 document.querySelectorAll("[data-range]").forEach(b => b.onclick = () => { range = b.dataset.range; render(); });
@@ -825,13 +911,17 @@ document.querySelectorAll("[data-sort]").forEach(b => b.onclick = () => {
   try { localStorage.setItem("sortBy", sortBy); } catch {}
   render();
 });
-document.getElementById("lang").onclick = () => {
-  lang = lang === "ja" ? "en" : "ja";
+document.querySelectorAll("[data-lang]").forEach(b => b.onclick = () => {
+  lang = b.dataset.lang;
   try { localStorage.setItem("lang", lang); } catch {}
   render();
-};
+});
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
-document.getElementById("check-btn").onclick = () => toggleChecker();
+document.getElementById("check-btn").onclick = () => {
+  toggleChecker();
+  const box = document.getElementById("checker");
+  if (!box.hidden) box.scrollIntoView({ behavior: "smooth", block: "start" });
+};
 
 const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
 Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json")])
