@@ -8,6 +8,7 @@ Track and visualize changes in essential food prices in Japan over time, startin
 - **Automation:** `.github/workflows/update-data.yml` runs the fetch on the 26th of each month (after the survey is published) and commits any new data. It can also be started by hand from the Actions tab.
 - **Site:** `docs/index.html` is a static page (Chart.js) served by GitHub Pages, in Japanese or English. It shows:
   - **A household basket:** the monthly cost of the staples for a two-person household, with its change over 1 month, 1 year and 5 years. The quantities are estimates in `docs/basket.json`. Edit them to match your own shopping, and the page recalculates.
+  - **Comparison with official inflation:** Nagoya's food CPI (消費者物価指数, 食料, which includes eating out) over the same 1-month, 1-year and 5-year windows, plus a dashed line on every chart showing where the price would be had it risen with food CPI. `fetch/fetch_cpi.py` fetches it from the 2025-base CPI table on e-Stat.
   - **Biggest changes:** the items that rose or fell the most since last month and since last year.
   - **One chart per item** (36 staples in 7 categories), with the latest price and the change from a year earlier. Items can be grouped by category or sorted by biggest rise or fall.
 
