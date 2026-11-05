@@ -152,6 +152,21 @@ def match_item(item: dict, entries: list[dict]) -> dict | None:
     return hits[0] if hits else None
 
 
+def adjust_series(points: list, item: dict) -> list:
+    """Apply an item's "since" (drop months before a product-definition change) and "rescale"
+    ([{"before": "YYYY-MM", "factor": f}] converts older prices to the current unit, e.g. per 100 g -> per 1 kg)."""
+    since = item.get("since")
+    out = []
+    for month, price in points:
+        if since and month < since:
+            continue
+        for r in item.get("rescale", []):
+            if month < r["before"]:
+                price = round(price * r["factor"], 1)
+        out.append([month, price])
+    return out
+
+
 def build_dataset(stat: dict, config: dict) -> dict:
     classes = class_objects(stat)
     item_dim = find_item_dimension(classes, config["items"])
@@ -191,9 +206,10 @@ def build_dataset(stat: dict, config: dict) -> dict:
         if entry and area_id and month and price is not None:
             entry["series"][area_id].append([month, price])
 
+    cfg_by_id = {i["id"]: i for i in config["items"]}
     for entry in items_out:
-        for points in entry["series"].values():
-            points.sort()
+        for area_id, points in entry["series"].items():
+            entry["series"][area_id] = adjust_series(sorted(points), cfg_by_id[entry["id"]])
 
     table = stat.get("TABLE_INF", {})
     return {
