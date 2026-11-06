@@ -4,32 +4,28 @@
   "per_item": 4,
   "cause_words": ["高騰", "値上がり", "値上げ", "値下がり", "値下げ", "下落", "上昇", "不作", "豊作", "天候", "猛暑", "高温", "長雨", "台風", "干ばつ", "円安", "円高", "鳥インフル", "品薄", "供給", "出荷", "入荷", "原料", "輸入", "需要", "補助", "コスト"],
   "overrides": {
-    "rice":        {"query": "コメ 価格", "must": ["コメ", "米価", "新米", "備蓄米", "お米"]},
-    "eggs":        {"query": "卵 価格", "must": ["卵"]},
-    "pork":        {"query": "豚肉 価格", "must": ["豚肉", "豚"]},
-    "beef":        {"query": "牛肉 価格", "must": ["牛肉"]},
-    "salmon":      {"query": "サケ 価格", "must": ["サケ", "さけ", "鮭", "サーモン"]},
-    "mackerel":    {"query": "サバ 価格", "must": ["サバ", "さば", "鯖"]},
-    "mikan":       {"query": "みかん 価格", "must": ["みかん", "ミカン"]},
-    "apple":       {"query": "りんご 価格", "must": ["りんご", "リンゴ"]},
-    "negi":        {"query": "ねぎ 価格", "must": ["ねぎ", "ネギ"]},
-    "moyashi":     {"query": "もやし 価格", "must": ["もやし"]},
-    "coffee":      {"query": "コーヒー 価格", "must": ["コーヒー"]},
-    "greentea":    {"query": "緑茶 価格", "must": ["緑茶", "茶葉", "お茶", "抹茶"]},
-    "oil":         {"query": "食用油 価格", "must": ["食用油", "油"]},
+    "rice": {"query": "コメ 価格", "must": ["コメ", "米価", "新米", "備蓄米", "お米"]},
+    "eggs": {"query": "卵 価格", "must": ["卵"]},
+    "pork": {"query": "豚肉 価格", "must": ["豚肉", "豚"]},
+    "beef": {"query": "牛肉 価格", "must": ["牛肉"]},
+    "salmon": {"query": "サケ 価格", "must": ["サケ", "さけ", "鮭", "サーモン"]},
+    "mackerel": {"query": "サバ 価格", "must": ["サバ", "さば", "鯖"]},
+    "mikan": {"query": "みかん 価格", "must": ["みかん", "ミカン"]},
+    "apple": {"query": "りんご 価格", "must": ["りんご", "リンゴ"]},
+    "negi": {"query": "ねぎ 価格", "must": ["ねぎ", "ネギ"]},
+    "moyashi": {"query": "もやし 価格", "must": ["もやし"]},
+    "coffee": {"query": "コーヒー 価格", "must": ["コーヒー"]},
+    "greentea": {"query": "緑茶 価格", "must": ["緑茶", "茶葉", "お茶", "抹茶"]},
+    "oil": {"query": "食用油 価格", "must": ["食用油", "油"]},
     "electricity": {"query": "電気代", "must": ["電気代", "電気料金"]},
-    "citygas":     {"query": "ガス料金", "must": ["ガス代", "ガス料金", "都市ガス"]},
-    "water":       {"query": "水道料金", "must": ["水道料金", "水道代"]},
-    "gasoline":    {"query": "ガソリン 価格", "must": ["ガソリン"]},
-    "kerosene":    {"query": "灯油 価格", "must": ["灯油"]},
+    "citygas": {"query": "ガス料金", "must": ["ガス代", "ガス料金", "都市ガス"]},
+    "water": {"query": "水道料金", "must": ["水道料金", "水道代"]},
+    "gasoline": {"query": "ガソリン 価格", "must": ["ガソリン"]},
+    "kerosene": {"query": "灯油 価格", "must": ["灯油"]},
     "toiletpaper": {"query": "トイレットペーパー 値上げ", "must": ["トイレットペーパー"]},
-    "tissue":      {"query": "ティッシュ 値上げ", "must": ["ティッシュ", "ティシュ"]}
+    "tissue": {"query": "ティッシュ 値上げ", "must": ["ティッシュ", "ティシュ"]}
   },
-  "official": {
-    "categories": ["veg", "fruit"],
-    "links": [
-      {"title_ja": "農林水産省「野菜の需給・価格動向」", "title_en": "MAFF: vegetable supply and price trends (Japanese)",
-       "urls": ["https://www.maff.go.jp/j/seisan/ryutu/yasai/", "https://www.maff.go.jp/j/seisan/ryutu/yasai/index.html"]}
-    ]
-  }
+  "official": {"categories": ["veg"], "links": [{"title_ja": "農林水産省「野菜の需給・価格動向」", "title_en": "MAFF: vegetable supply and price trends (Japanese)", "urls": ["https://www.maff.go.jp/j/seisan/ryutu/yasai/", "https://www.maff.go.jp/j/seisan/ryutu/yasai/index.html"]}]},
+  "price_words": ["価格", "値上げ", "値上がり", "値下げ", "値下がり", "高騰", "高値", "安値", "下落", "上昇", "相場", "円", "割高", "割安", "物価"],
+  "exclude_words": ["ランキング", "おすすめ", "オススメ", "セール", "レシピ", "コストコ", "クーポン", "使い方", "比較", "通販", "楽天", "Amazon", "ふるさと納税"]
 }

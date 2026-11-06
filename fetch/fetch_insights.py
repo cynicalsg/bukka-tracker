@@ -80,12 +80,19 @@ def parse_feed(xml_bytes: bytes) -> list[dict]:
     return out
 
 
-def pick_headlines(entries: list[dict], must: list[str], cause_words: list[str], n: int) -> list[dict]:
-    """Keep headlines that name the item; put ones mentioning a likely cause first; drop near-duplicates."""
+def pick_headlines(entries: list[dict], must: list[str], cause_words: list[str], n: int,
+                   price_words: list[str] | None = None, exclude_words: list[str] | None = None) -> list[dict]:
+    """Keep headlines that name the item and talk about price, minus shopping noise (rankings, sales,
+    recipes); put ones mentioning a likely cause first; drop near-duplicates."""
     seen, kept = set(), []
     for e in entries:
-        key = re.sub(r"\W", "", e["title"])[:24]
-        if key in seen or not any(w in e["title"] for w in must):
+        t = e["title"]
+        key = re.sub(r"\W", "", t)[:24]
+        if key in seen or not any(w in t for w in must):
+            continue
+        if price_words and not any(w in t for w in price_words):
+            continue
+        if exclude_words and any(w in t for w in exclude_words):
             continue
         seen.add(key)
         kept.append(e)
@@ -133,7 +140,8 @@ def main() -> None:
         except Exception as exc:  # noqa: BLE001 - one failed search shouldn't drop the rest
             print(f"  {item_id}: search failed ({exc})")
             entries = []
-        headlines = pick_headlines(entries, must, config["cause_words"], config["per_item"])
+        headlines = pick_headlines(entries, must, config["cause_words"], config["per_item"],
+                                   config.get("price_words"), config.get("exclude_words"))
         print(f"  {item_id:<12} {query!r}: {len(entries)} results, kept {len(headlines)}"
               + (f" e.g. {headlines[0]['title'][:50]}" if headlines else ""))
         items[item_id] = {

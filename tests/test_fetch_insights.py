@@ -50,6 +50,16 @@ class Insights(unittest.TestCase):
         self.assertEqual(titles[-1], "キャベツのおいしいレシピ")             # no cause word: last
         self.assertEqual(len(fi.pick_headlines(fi.parse_feed(FEED), ["キャベツ"], CONFIG["cause_words"], 1)), 1)
 
+    def test_pick_headlines_needs_price_words_and_skips_noise(self):
+        entries = [{"title": t, "source": "s", "url": "https://x/" + str(i), "date": ""} for i, t in enumerate([
+            "歯磨き粉おすすめランキング 価格比較",   # noise word
+            "歯磨きの正しい使い方",                  # no price word
+            "歯磨き粉が値上げ 原材料高で",            # keep
+        ])]
+        picked = fi.pick_headlines(entries, ["歯磨き"], CONFIG["cause_words"], 4,
+                                   CONFIG["price_words"], CONFIG["exclude_words"])
+        self.assertEqual([e["title"] for e in picked], ["歯磨き粉が値上げ 原材料高で"])
+
     def test_mover_changes_match_page(self):
         def it(id_, pts):
             return {"id": id_, "name_en": id_, "name_ja": id_, "series": {"nagoya": pts}}
