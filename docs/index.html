@@ -150,6 +150,7 @@
   .news a { color: var(--text); }
   .news .meta { color: var(--muted); font-size: .75rem; }
   .card details.news-box { margin-top: 8px; font-size: .85rem; }
+  .explain { margin: 8px 0 4px; font-size: .88rem; line-height: 1.55; background: var(--bg); border-radius: 8px; padding: 8px 10px; }
   .section-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin: 28px 0 0; }
   .section-title { margin: 0; font-size: 1.1rem; }
   .sorts { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -237,6 +238,8 @@ const T = {
         wagesNote: y => `賃金は厚生労働省「賃金構造基本統計調査」の愛知県・一般労働者(企業規模10人以上・産業計)の所定内給与額(残業代・賞与を除く)。年1回の調査で、最新は${y}年。2020年に推計方法が変わっています。物価は各年の平均。`,
         why: "なぜ?", relatedNews: n => `関連ニュース(${n})`,
         newsNote: "自動で集めた見出しです。値動きの理由を示すとは限りません。", official: "公式情報",
+        explainLabel: "考えられる理由(下の見出しをもとにAIが作成)",
+        explainNote: "説明はAIがニュース見出しから作成したもので、全国の報道にもとづきます。名古屋の値動きの理由と一致するとは限りません。",
         cpiRef: k => k === "all" ? "総合CPI" : "食料CPI", ifCpi: k => `${k === "all" ? "総合CPI" : "食料CPI"}と同じ率で上がった場合`, baseline: "食料CPI",
         cpiNote: (k, n) => `CPI(消費者物価指数)は名古屋市の「${n}」指数${k === "all" ? "(全品目・サービス)" : "(外食を含む)"}で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。`,
         vsNational: p => `全国平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`, sameNational: "全国平均とほぼ同じ", cpiLegend: "CPIと同じ率で上がった場合(食品は食料CPI、その他は総合CPI)" },
@@ -275,6 +278,8 @@ const T = {
         wagesNote: y => `Pay is average scheduled monthly earnings (所定内給与額, excluding overtime and bonuses) of full-time workers in Aichi at companies with 10+ employees, from the Basic Survey on Wage Structure. It's surveyed once a year; the latest is ${y}. The survey changed its estimation method in 2020. Prices are yearly averages.`,
         why: "Why?", relatedNews: n => `Related news (${n})`,
         newsNote: "Headlines collected automatically (in Japanese); they may not explain the change.", official: "Official",
+        explainLabel: "Possible reasons (written by AI from the headlines below)",
+        explainNote: "The explanation was written by AI from news headlines and reflects national coverage; Nagoya's prices may have moved for other reasons. English titles are translations.",
         cpiRef: k => k === "all" ? "Overall CPI" : "Food CPI", ifCpi: k => `If it had risen with ${k === "all" ? "overall" : "food"} CPI`, baseline: "Food CPI",
         cpiNote: (k, n) => `CPI (consumer price index) here is Nagoya's ${k === "all" ? "overall index (総合, all goods and services)" : `food index (${n}), which includes eating out`}. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.`,
         vsNational: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the national average`, sameNational: "About the national average", cpiLegend: "If it had risen with CPI (food CPI for food, overall CPI otherwise)" },
@@ -608,16 +613,19 @@ function newsFor(itemId) {
   if (!insights || !data) return null;
   const latest = data.items.map(seriesOf).filter(s => s.length).map(s => s[s.length - 1][0]).sort().pop();
   const info = insights.month === latest ? insights.items?.[itemId] : null;
-  return info && ((info.headlines || []).length || (info.official || []).length) ? info : null;
+  const visible = (info?.headlines || []).filter(h => !h.hide).length;
+  return info && (visible || (info.official || []).length || info["summary_" + lang]) ? info : null;
 }
 function newsList(info, t) {
-  const summary = info["summary_" + lang];  // written by the AI version, if enabled
+  const summary = info["summary_" + lang];  // written by the monthly explainer, if it has run
   const safeUrl = u => /^https:\/\//.test(u) ? esc(u) : "#";
-  return `${summary ? `<p style="margin:6px 0">${esc(summary)}</p>` : ""}<ul class="news">
-    ${(info.headlines || []).map(h => `<li><a href="${safeUrl(h.url)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a>
-      <span class="meta"> · ${esc(h.source)}${h.date ? " · " + esc(h.date) : ""}</span></li>`).join("")}
+  const items = (info.headlines || []).map((h, k) => h.hide ? "" :  // numbers match the [n] in the explanation
+    `<li><span class="meta">[${k + 1}]</span> <a href="${safeUrl(h.url)}" target="_blank" rel="noopener noreferrer">${esc(lang === "en" && h.title_en ? h.title_en : h.title)}</a>
+      <span class="meta"> · ${esc(h.source)}${h.date ? " · " + esc(h.date) : ""}${lang === "en" && h.title_en ? `<br>${esc(h.title)}` : ""}</span></li>`).join("");
+  return `${summary ? `<p class="explain"><span class="meta">${t.explainLabel}</span><br>${esc(summary)}</p>` : ""}
+    <ul class="news">${items}
     ${(info.official || []).map(o => `<li><span class="meta">${t.official}: </span><a href="${safeUrl(o.url)}" target="_blank" rel="noopener noreferrer">${esc(o["title_" + lang])}</a></li>`).join("")}
-  </ul><p class="note" style="margin:0 0 6px">${t.newsNote}</p>`;
+  </ul><p class="note" style="margin:0 0 6px">${summary ? t.explainNote : t.newsNote}</p>`;
 }
 
 // ---------- Prices and pay

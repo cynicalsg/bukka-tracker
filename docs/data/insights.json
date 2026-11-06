@@ -1,7 +1,7 @@
 {
  "month": "2026-09",
  "method": "headlines",
- "generated": "2026-11-06T01:48:15Z",
+ "generated": "2026-11-06T02:09:23Z",
  "news_window": [
   "2026-08-01",
   "2026-11-01"
@@ -14,26 +14,30 @@
     {
      "title": "トマト１割安 入荷不安定見越し売り込み消極的",
      "source": "日本農業新聞",
-     "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE44UDk0V2xES2dtNnNPcnU0eE1ReUVPWlJkSWFad3hDWm9QbUg4cGtEYVotMlk0YnpaN1QyYlBOZndkai0xY0t4cEk5c0NVUUhwNEY2Z01LcXdrcTQ?oc=5",
-     "date": "2026-10-06"
+     "url": "https://www.agrinews.co.jp/economy/index/410809",
+     "date": "2026-10-06",
+     "title_en": "Tomatoes 10% cheaper; sellers hold back as unstable arrivals expected"
     },
     {
      "title": "レタス２４％上昇、トマトは１０００円強に 野菜小売価格",
      "source": "日本農業新聞",
-     "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE80cVFTdnE4OGhhZVVkZ3dkd1B6SUZZZWFJMlM0M3Fqc1JKVG5CZUttOF9Xem53QWY2MTN2RXlVLUxwbDhkeENJMUs2M01ZVWJSSVhEN0J4TjYxUnM?oc=5",
-     "date": "2026-09-30"
+     "url": "https://www.agrinews.co.jp/economy/index/409573",
+     "date": "2026-09-30",
+     "title_en": "Vegetable retail prices: lettuce up 24%, tomatoes over ¥1,000"
     },
     {
      "title": "長引く雨による記録的な日照不足で苗が植えられない… レタスが2倍、トマトは3倍と野菜の価格高騰も（2026年9月17日掲載）",
      "source": "日テレNEWS NNN",
-     "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNTThQbUJVS2hrNFd3UERxb1RoVGNQeVk1WHdFMTdNRGpkU2xtb2x3UUZwNmVMZFMyM1VaSDlubmNvaHNjbXljNmdlMDhGMFgzQXJraDdiV1BuVHRTbUdxRVg5Njk1aGFNNXlHN08xcGFLYm1KbXhSUnU3enNnVEoxakhidjVRUXc?oc=5",
-     "date": "2026-09-17"
+     "url": "https://news.ntv.co.jp/n/ctv/category/society/ct890bfe30139c43e2be3c355f2bd73ebf",
+     "date": "2026-09-17",
+     "title_en": "Record lack of sunshine from prolonged rain keeps seedlings from being planted; lettuce doubles, tomatoes triple in price (Sept 17, 2026)"
     },
     {
      "title": "キュウリやトマト…夏野菜が高騰！農家を救う「0℃保存」新冷蔵技術とは：ガイアの夜明け",
      "source": "テレビ東京",
-     "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFA1d2E5ZkotcE5VZUdUTldvYTNnLXJSSUVCSTZKNE5YU1Q2V3pyVWYzNGpCdUFPLXdHaUhqOXRycmxUZ3BpRTRCalZhZUV1RGp0SzNYUlZBaTI2YllGeF9EZzA1MUxJeEJvZ2VDSm5LSTNPQQ?oc=5",
-     "date": "2026-08-14"
+     "url": "https://www.tv-tokyo.co.jp/plus/business/entry/202608/19784.html",
+     "date": "2026-08-14",
+     "title_en": "Cucumbers, tomatoes… summer vegetables soar; the new 0°C storage technology helping farmers (Gaia no Yoake)"
     }
    ],
    "official": [
@@ -43,8 +47,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "8〜9月の長雨による記録的な日照不足で植え付けや生育が遅れ、トマトなど野菜の価格が大きく上がったと報じられています[2][3]。10月にも入荷の不安定さが伝えられています[1]。",
+   "summary_en": "Reports point to record low sunshine from prolonged rain in August–September, which delayed planting and growth and pushed up vegetable prices including tomatoes [2][3]. Unstable supply was still being reported in October [1]."
   },
   "toothpaste": {
    "mom": 17.4,
@@ -69,31 +73,37 @@
     {
      "title": "去年産りんご過去２番目の高値取引 県内取引価格は319円 冬の雪害と夏の猛暑で去年産りんごの収穫量が少なかった",
      "source": "日テレNEWS NNN",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9sUDAxYWNFeGNEOUJnQnFsemJoNHFVUmlqbENoTklYT0RSaGdKUUdtNlNCMjV6aVNWWG9lRV94ZGFLeGIwUUlBdVZub2laSHZOdU5WVzNXcE55T3RvREdJUHFTV0dqVVFBTGoxM0VZQzcxMlQyWld5WFgzNUQ5OTA?oc=5",
-     "date": "2026-10-09"
+     "url": "https://news.ntv.co.jp/category/society/ra6c4424c4d2fd474fa005abd09b9ced2b",
+     "date": "2026-10-09",
+     "title_en": "Last season's apples traded at second-highest price on record, ¥319 in the prefecture; snow damage in winter and summer heat cut the harvest"
     },
     {
      "title": "【倒産情報】負債８２００万円 創業1948年の老舗リンゴ移出業者が事業停止 ピーク時は年売上高約3億3000万円も約１億3800万円に減少…不作や海外輸出の需要増による市場価格高騰で仕入れ苦戦…価格競争も",
      "source": "TBS NEWS DIG",
-     "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE82ZHBKakVQeTZFYTVLTElva3o0UVF3V1U3QUpQN201S1l4OFl4QmZvN21HdHVzeFcxMVA2S2RJQkVPNVRIVnZnSkJMNVNvdElSV0xMSjVFTQ?oc=5",
-     "date": "2026-08-17"
+     "url": "https://newsdig.tbs.co.jp/articles/-/2877612",
+     "date": "2026-08-17",
+     "title_en": "Bankruptcy: long-established apple shipper founded in 1948 halts business with ¥82 million debt, citing poor harvests and higher prices",
+     "hide": true
     },
     {
      "title": "群馬県産りんごを贅沢に使用 「吹割りんごの手作りアップルパイ」を「ＪＡタウン」で特別価格販売",
      "source": "沖縄タイムス社",
-     "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBvMkhWN056Sl9kc1NBbkxMUV9Lc2g4djlYUjNHczRJbm5iTUZTVmEwYjkzcFdqZHVsR1JzTmNFU3ZVQjRWcHRNQUxPOFFOb2RYRkZUdzZfQnY3MmlrMWc?oc=5",
-     "date": "2026-10-30"
+     "url": "https://www.okinawatimes.co.jp/articles/-/1956059",
+     "date": "2026-10-30",
+     "title_en": "Apple pie made with Gunma apples on sale at a special price on JA Town",
+     "hide": true
     },
     {
      "title": "消費地価格キロ462円、過去4番目の高さ／25年産青森県産リンゴ（陸奥新報）",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFA3WkRsREdhMGpQVzNoSkJKa3h0eElIWXNTXzlYRFZLM05fNEJ0YTgzZU5iNXdLMnplOGtmU2NYT0YxeUxFb011Q2MyUmE2Q0VEZlVVc3czcGU2MVBiX19vaHhMYmNMUDFadEMtWkNOUHBwMFRCTDVnVnJRMFRSaFk?oc=5",
-     "date": "2026-10-08"
+     "url": "https://news.yahoo.co.jp/articles/9c2abe3b51ab5a8e8e279a94fe5fa31756e1ce10",
+     "date": "2026-10-08",
+     "title_en": "2025 Aomori apples: consumer-market price ¥462/kg, fourth-highest on record"
     }
    ],
    "official": [],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "見出しは主に前シーズン(2025年産)が雪害と猛暑で不作となり高値だったことを伝えています[1][4]。9月の値下がりそのものの理由は、これらの見出しからは分かりません。",
+   "summary_en": "The headlines mainly describe last season's (2025) small, expensive crop after winter snow damage and summer heat [1][4]. They don't explain the September drop itself."
   },
   "potato": {
    "mom": -22.4,
@@ -102,20 +112,24 @@
     {
      "title": "玉川徹氏、\"白菜1玉1000円超\" 野菜の高騰対策を提案「玉ねぎとかじゃがいもを食べて防衛を」（エンタメNEXT）",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE01MEV6cXFxWWRaaGFLUGN3VjhiNVd2cWtBaTJRR19wZTNlR2o1QU0yMTZDRk5XYk9qa2QzOER1elQ4N0dFcHR0X01WME52NmpzZUNVV3lnSFNlTmxxQUVhQXNGQ2E5b2E1TW9rS2x2cGRDTS05MXg4NWNVeEt5amc?oc=5",
-     "date": "2026-10-09"
+     "url": "https://news.yahoo.co.jp/articles/68c6cf1abad6d17e3a33646e1aa1de2b5d998491",
+     "date": "2026-10-09",
+     "title_en": "Toru Tamakawa suggests defending against high vegetable prices (Chinese cabbage over ¥1,000) by eating onions and potatoes",
+     "hide": true
     },
     {
      "title": "【9月の野菜価格】平年並みの野菜多く じゃがいも・たまねぎは特にお買い得に（ウェザーマップ）",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE14U1Z3QWN5REppS1N4MEpEU0toVURJOFM3UENmN2pXSkNQcTZ0YTZsNmx0aEtoN1puM3FxVG1DN09IODhzOU5xQjZJVG1jdGlqaENwWmZfdVpiMGlUSnBZMWNsSHBxazhNaDZ2bEwtbXNTeHFvWFdkSHlBTjRjXzg?oc=5",
-     "date": "2026-08-31"
+     "url": "https://news.yahoo.co.jp/articles/b2eee414af4d137011eb1f799a6a406b5ba7c70a",
+     "date": "2026-08-31",
+     "title_en": "September vegetable prices: many at normal levels; potatoes and onions especially good value"
     },
     {
      "title": "野菜の相場予測 だいこん、はくさいは高値に じゃがいもは安値続く(気象予報士 星野 朋美 2026年08月07日)",
      "source": "tenki.jp",
-     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE4xSXh6d3V4VnlkRlNURTFCNzdNMUZpRXdGZzc0eXdGb2NPdXk2MHh1OWJWNS05clhGMFR6bmdsaVFXa21xdVQ5RXYyTnFpSVg4R0d5dVpRQm5iZm9sWm5tT2o4ZXVrNjBkdk1N?oc=5",
-     "date": "2026-08-07"
+     "url": "https://tenki.jp/forecaster/t_hoshino/2026/08/07/40034.html",
+     "date": "2026-08-07",
+     "title_en": "Vegetable price outlook: daikon and Chinese cabbage high, potatoes to stay cheap (Aug 7, 2026)"
     }
    ],
    "official": [
@@ -125,8 +139,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "9月はじゃがいも・たまねぎが特にお買い得と伝えられ[2]、8月の相場予測でもじゃがいもは安値が続く見通しとされていました[3]。",
+   "summary_en": "Potatoes and onions were reported as especially good value in September [2], and an August price outlook expected potatoes to stay cheap [3]."
   },
   "cabbage": {
    "mom": -22.1,
@@ -135,26 +149,30 @@
     {
      "title": "【中継】ハクサイとキャベツ 平年並みの価格まで下がる キノコ類は値上がり…「寒さで需要が増加」",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9QSDBXclZNX0JON1dFX2FwNk1adk9ranhzVW1ab1RUUW1TcEtSZzRpekFhVkoxdlYtckpqYWttZW5jd3JoU2V3c1lzUWMxT1g2NWVVR0dNdEM3cFdOemltQTNCc3hHMzUxV1J2QVNmYTViS1hDUUQ5UEhmYjNjZXM?oc=5",
-     "date": "2026-10-28"
+     "url": "https://news.yahoo.co.jp/articles/edc6d28ca8b5fb93691262e476a34ba4937b82c2",
+     "date": "2026-10-28",
+     "title_en": "Live: Chinese cabbage and cabbage fall back to normal prices; mushrooms rise as cold boosts demand"
     },
     {
      "title": "レタス160円 ハクサイ・キャベツは100円 天候に恵まれ野菜の価格大幅値下がり（テレビ愛知）",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBiZzZqbnFvWHJPMXNLY01iTUNoTlo1bEpFamxBT2EzSV8yaTJRQXNlLTJmZHRlV3BIaDJ3X0VCNG1JZ2hWUlJJc0tGZDYtcU5CXzU4UjRUZ3E4MFl6TEROeFB1U2YzbC1BdVRSbFhQZGpPYjRud2tXdXRBWFlSRDA?oc=5",
-     "date": "2026-10-23"
+     "url": "https://news.yahoo.co.jp/articles/9f18e52b2a96373251b9357b24c3ac049293d5b9",
+     "date": "2026-10-23",
+     "title_en": "Lettuce ¥160, Chinese cabbage and cabbage ¥100: good weather brings big vegetable price drops (TV Aichi)"
     },
     {
      "title": "葉物野菜価格高騰続く キャベツが欠かせない松山のご当地メニュー人気店は様々な工夫【愛媛】",
      "source": "日テレNEWS NNN",
-     "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOcVFBc0VwQTNRa3g4cFlkNmJpVWVFQ3RuWEdSbTVJNm5XMkloUTVtMHFtR0VSRDlMTEExdkdPMDJaVWJIVk95UFM4UE5SVkJKOTBjWlpzVWE1UE55bURYejBRN0xmZ05Vd3N5dnJIVVZJdXR1LVpGUngyeXZlLU1vbXlEOUF3eDQ?oc=5",
-     "date": "2026-10-21"
+     "url": "https://news.ntv.co.jp/n/rnb/category/economy/rb554f4842ef6b4223ba08c9ec7793572e",
+     "date": "2026-10-21",
+     "title_en": "Leafy vegetable prices stay high; Matsuyama restaurants built around cabbage find ways to cope (Ehime)"
     },
     {
      "title": "長雨や台風の影響で葉物野菜の価格高騰 キャベツ１玉が600円超（沖縄テレビOTV）",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5uTXZmcmViVlF4SzU4TjZjdVNwSGVpZXVmRDZqeHpWaDNnNUhUSDZHNUZfNER6UnJobFltdVhvYV9JYnQ3OXpTcy14QjYxaF9mY0pjSkoyOGFPOFI4WFFTcU80d1l2QjhSejZnUnBKTDE4Z2lzdVBhQnJlck9hOTQ?oc=5",
-     "date": "2026-10-16"
+     "url": "https://news.yahoo.co.jp/articles/a61785255617bee417aeb0fa2c16bef84bb2448c",
+     "date": "2026-10-16",
+     "title_en": "Long rains and typhoons push up leafy vegetable prices; a head of cabbage tops ¥600 (Okinawa TV)"
     }
    ],
    "official": [
@@ -164,8 +182,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "天候に恵まれてキャベツなどの価格が大きく下がり、平年並みに戻ったと報じられています[1][2]。一方、沖縄や愛媛では長雨や台風で葉物野菜の高値が続いたとも伝えられています[3][4]。",
+   "summary_en": "Reports say good weather brought cabbage and other vegetable prices down sharply, back to normal levels [1][2]. Leafy greens stayed expensive in some regions, such as Okinawa and Ehime, after long rains and typhoons [3][4]."
   },
   "dishsoap": {
    "mom": null,
@@ -182,31 +200,35 @@
     {
      "title": "マヨネーズ20～30円値上げ 抹茶ブームで緑茶飲料も…11月から1469品目値上げ 前年の約10倍",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9VTko2VGxIUUdaVktLcl9zaGo2OFU1LTJHeloyQW1lWkdRQXBzTFhRQTUtbHE4MjIwM3d5QUlESTJPMmJPRXF0RW9sSUdoLW9Gak44cWRQVER1eFlPTk9YbDVIcEZ1VldlVGZlaVJ3Yk9ndDdRTjU5dHJycldNbkk?oc=5",
-     "date": "2026-10-29"
+     "url": "https://news.yahoo.co.jp/articles/e13e1eff5e0d43725b97244bc600c1cdc3afab81",
+     "date": "2026-10-29",
+     "title_en": "Mayonnaise up ¥20–30; green tea drinks too amid matcha boom… 1,469 items rise in November, about 10 times last year"
     },
     {
      "title": "緑茶飲料、輸入原料が急増 国産の流通量減少、価格高騰で（共同通信）",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9aWHJvV0pBZU50N2pqYm50MjFxZ0NzQ1ozMWxTMzVTM0pCcEpfVVplUS1LeGhqYWU1akFTR3RXbjZZM1Qtd0RNb3EyWWdicFFqbW9na3FmbGU5Z25XWVExaHRWV2UwNHgyWUxqQ3hydENVdXlQeUE2TGJBSzVkLTQ?oc=5",
-     "date": "2026-10-28"
+     "url": "https://news.yahoo.co.jp/articles/1fe819b0c2775abb4d0f6d4f68beef11600b4005",
+     "date": "2026-10-28",
+     "title_en": "Green tea drinks: imported raw material surges as domestic supply falls and prices soar (Kyodo)"
     },
     {
      "title": "世界的な抹茶ブームで「いつものお茶」が値上がり…嬉野の玉緑茶は取引価格ほぼ2倍に【佐賀県】｜佐賀のニュース",
      "source": "サガテレビ",
-     "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBIN1F6bHQ3b0lLMlY4emtZampOVUN3eTd3TTRzX2xkX2V1M1RyM1VUVnRqYWUxWnhKX3I4S3NXNk5DZERpMVZmODVIWTRjS3VVOVhXdEc1ZnpKQ3hWNXJfSFBR?oc=5",
-     "date": "2026-10-22"
+     "url": "https://www.sagatv.co.jp/news/archives/2026102224761",
+     "date": "2026-10-22",
+     "title_en": "Global matcha boom pushes up everyday tea: Ureshino tamaryokucha trades at nearly double (Saga)"
     },
     {
      "title": "値上げの秋「気軽におにぎりも買えないよ」 光熱費も、緑茶も、加熱式たばこも、発泡酒も…",
      "source": "中日新聞Web",
-     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE04cktlTFUybG1rUTFRckc3R0RVNjNWajlNejJqV09zRVNYRjRCWkpXbnZkQlM0OWxIR3FKYjhQUWpPVG5jeTMyMXAwWGdDN3dud2JxNA?oc=5",
-     "date": "2026-10-01"
+     "url": "https://www.chunichi.co.jp/article/1319365",
+     "date": "2026-10-01",
+     "title_en": "Autumn of price rises: utilities, green tea, heated tobacco, low-malt beer…"
     }
    ],
    "official": [],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "世界的な抹茶ブームで国産茶葉の取引価格が大きく上がり、国産の流通量が減っていると報じられています[2][3]。緑茶飲料などの値上げも伝えられています[1][4]。",
+   "summary_en": "Reports point to a global matcha boom that has driven up domestic tea leaf prices and reduced domestic supply [2][3]. Price rises for green tea products have also been reported [1][4]."
   },
   "rice": {
    "mom": null,
@@ -215,31 +237,35 @@
     {
      "title": "高騰から一転「暴落」のコメ 報じられない「作り続けられる価格」の議論 #エキスパートトピ（松平尚也） - エキスパート",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQRWs5UHYta3Vwb1dhODYwTE9OZTN1Slg4UDJqb1ZfY3dfOWZ2cEVTQjlvNjVmSm04SGl0NXNnQ0pVN19DcHh6cDViazNKTjNCSldWUzRMMlF0YVY2UkdIWVg4MVFuVHNNdUNGajFsY25OSERQMW9YNWhSaUFhTmlQVjNXQXNNaUp2?oc=5",
-     "date": "2026-10-31"
+     "url": "https://news.yahoo.co.jp/expert/articles/1808d21af08b95e2439a03a2c92101d96218c3d4",
+     "date": "2026-10-31",
+     "title_en": "Rice goes from surge to 'crash': the missing debate on a price farmers can keep growing at"
     },
     {
      "title": "コメの平均小売価格が11週連続値下がり 政府は備蓄米10万トンの買戻しを検討 関係者「価格に大きな影響はない規模」",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1MeERBVzA5Q0xvcVIySmhOT1kxbDFfaEdSM3lQN0oxVjVZdFJtLUNNM1BBUEgwOUtHcGV6X2k0RDI2R1dlNUFrQnpZRWY3NHBWZmVlaHNFMkc0NS1rdkpsZVg3VmgwNDgxTzRUeVdzUVc1ODYxTS0wSU1kNHZ5VVk?oc=5",
-     "date": "2026-10-30"
+     "url": "https://news.yahoo.co.jp/articles/ee63076337432a3733af478cf121da65692c3919",
+     "date": "2026-10-30",
+     "title_en": "Average retail rice price falls for 11th straight week; government considers buying back 100,000 t of stockpiled rice"
     },
     {
      "title": "コメ価格11週連続値下がり 過剰在庫で値下がり続く",
      "source": "NHKニュース",
-     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE80NkUzWnRfMnY2eGFCYlExck5vSlk1WnppVnBYMlNEaWQwcWVMT2tOMVJ6R2lValhhTlV2NDNvMGo1c2wzSnhneEN3ektqblM0VmpZN3ItQzVtVnZIREMw?oc=5",
-     "date": "2026-10-30"
+     "url": "https://news.web.nhk/newsweb/na/nd-20261030de68670",
+     "date": "2026-10-30",
+     "title_en": "Rice prices fall for 11th straight week as excess inventory weighs (NHK)"
     },
     {
      "title": "コメ小売り価格が11週連続値下がり 「ほっともっと」は期間限定ご飯大盛り無料 「ほっかほっか亭」大盛り値下げ",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5kanFGenoxaXBuOW10bWpIQUpCbUFWdy00aGpGeW9hV0d5VHpWeV9CUjhucU9yRDVwWndjeHBJRE1PWjlFWGlDdFNzZHVuTjZzWmFlNlVRd1M4c2FwSmFiSDU0SnMwQWxHejlGSUpxbzdONHBZaDhCWXMtRTg0N1U?oc=5",
-     "date": "2026-10-30"
+     "url": "https://news.yahoo.co.jp/articles/e75f1306ec3a28b14fccb7c3e69e55afdea4f5e4",
+     "date": "2026-10-30",
+     "title_en": "Rice retail prices down 11 weeks running; restaurant chains offer free or cheaper large portions"
     }
    ],
    "official": [],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "昨年の高騰から一転し、過剰在庫によりコメの小売価格が11週連続で下がっていると報じられています[2][3]。政府による備蓄米の買い戻しの検討も伝えられています[2]。",
+   "summary_en": "Reports say rice retail prices have fallen for 11 straight weeks, reversing last year's surge, as excess inventory weighs on the market [2][3]. The government is also reported to be considering buying back stockpiled rice [2]."
   },
   "carrot": {
    "mom": null,
@@ -248,8 +274,9 @@
     {
      "title": "高いのは葉物だけ？だいこん・にんじん・たまねぎは平年並みで3種1061円（LIMO）",
      "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9aMDNRMlZKTEpwbXZyTWl1NjktVC1sYzk2T1BveW8tWGRxLTZWMDBCY2lJX0RQTldEYkNEWHBCRUFwZHFGM1VvOE02S3FObXEtSUdhZmpoNkN4ZmpNX1ZMYTQySlktLWJwTDNVT216NnM5Y00wNVpsR2R4eEJzLWM?oc=5",
-     "date": "2026-10-21"
+     "url": "https://news.yahoo.co.jp/articles/06d606efb61cab05be8d70486980144182ca4eb5",
+     "date": "2026-10-21",
+     "title_en": "Only leafy greens are expensive? Daikon, carrots and onions at normal prices, ¥1,061 for the three"
     }
    ],
    "official": [
@@ -259,8 +286,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "10月時点でにんじんは平年並みの価格と伝えられています[1]。前年より安い理由は、この見出しからは分かりません。",
+   "summary_en": "Carrots were reported at around normal prices in October [1]. The headline doesn't say why they're cheaper than a year ago."
   },
   "mikan": {
    "mom": null,
@@ -269,19 +296,28 @@
     {
      "title": "値段は5割高くても「足りないくらい売れている」全国から注文が相次ぐブランドみかん「南国の陽蜜」人気の理由",
      "source": "TBS NEWS DIG",
-     "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE93cng0VS1YYWpzcWlkcGtkMGwzMm5JVnFKQjNKVnVobjR6S1lxVEZKRVhFanRSaGF1QlN5eUlTVkVUa29aOHg5cWFaMjJ0VW44SDFGdjlDVnpjTDJiMVRsR3A5MA?oc=5",
-     "date": "2026-10-05"
+     "url": "https://newsdig.tbs.co.jp/articles/mrt/2986370?page=3",
+     "date": "2026-10-05",
+     "title_en": "Brand mandarin 'Nangoku no Hamitsu' sells out despite 50% higher price",
+     "hide": true
     },
     {
      "title": "みかんたっぷりで385円！ ラーメンに「ミニパフェ」がいいね",
      "source": "ASCII.jp",
-     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE90QkZ4TmpuZC1zNVY4ZklkOHpvNmtpQnRZWUpBVjQtNURiTzlkMnIxellVWEg2MXhpV3d2bTgxeXQtUGFsU0FtM2NMR2NUbDFJVnh3bw?oc=5",
-     "date": "2026-09-13"
+     "url": "https://ascii.jp/elem/000/004/434/4434210/",
+     "date": "2026-09-13",
+     "title_en": "A ramen 'mini parfait' loaded with mandarins for ¥385",
+     "hide": true
     }
    ],
    "official": [],
    "summary_ja": null,
    "summary_en": null
   }
+ },
+ "explained": {
+  "month": "2026-09",
+  "by": "monthly explainer (dry run)",
+  "date": "2026-11-06"
  }
 }
