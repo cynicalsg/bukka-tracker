@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- head:start (managed by fetch/build_pages.py) -->
+<base href="../">
+<script>window.PRESET_CITY = "matsue";</script>
+<title>松江 物価トラッカー | Matsue Price Tracker</title>
+<meta name="description" content="松江市の食品・日用品・光熱費の小売価格を毎月更新。値上がり・値下がりした品目、旬の安い野菜、家計のかごの費用、全国平均との比較。Monthly retail prices of food and essentials in Matsue, Japan.">
+<link rel="canonical" href="https://cynicalsg.github.io/bukka-tracker/matsue/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="物価トラッカー | Price Tracker">
+<meta property="og:title" content="松江 物価トラッカー | Matsue Price Tracker">
+<meta property="og:description" content="松江市の食品・日用品・光熱費の小売価格を毎月更新。値上がり・値下がりした品目、旬の安い野菜、家計のかごの費用、全国平均との比較。Monthly retail prices of food and essentials in Matsue, Japan.">
+<meta property="og:url" content="https://cynicalsg.github.io/bukka-tracker/matsue/">
+<meta property="og:image" content="https://cynicalsg.github.io/bukka-tracker/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<!-- head:end -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f6f3; --card: #ffffff; --text: #1d1d1f; --muted: #6b6b70; --line: #e4e2dc;
+    --nagoya: #c2410c; --tokyo: #64748b; --up: #b91c1c; --down: #15803d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #151517; --card: #1f1f22; --text: #ececee; --muted: #9b9ba1; --line: #2e2e33;
+            --nagoya: #fb923c; --tokyo: #94a3b8; --up: #f87171; --down: #4ade80; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.5 system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; }
+  header, main, footer { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+  /* sticky top bar + menu */
+  .topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .topbar-inner { max-width: 1100px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 8px; }
+  .brand { margin: 0; font-size: 1.05rem; font-weight: 700; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden;
+           text-overflow: ellipsis; background: none; border: 0; padding: 4px 0; text-align: left; color: var(--text); cursor: pointer; }
+  .menu-btn[aria-expanded="true"] { border-color: var(--nagoya); color: var(--nagoya); }
+  header.intro { padding-top: 20px; }
+  h1 { margin: 0; font-size: 1.6rem; }
+  .sub { margin: 4px 0 0; color: var(--muted); }
+  .city-pick { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; color: var(--muted); font-size: .9rem; }
+  .city-pick select { font: inherit; font-size: 1rem; color: var(--text); background: var(--card); border: 1px solid var(--line);
+                      border-radius: 8px; padding: 6px 8px; max-width: 70vw; }
+  .menu { position: absolute; right: max(16px, calc((100vw - 1100px) / 2 + 16px)); top: calc(100% + 6px); width: 340px;
+          max-height: calc(100vh - 80px); overflow: auto; background: var(--card); border: 1px solid var(--line);
+          border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, .18); padding: 6px 14px 14px; }
+  .menu[hidden] { display: none; }
+  @media (max-width: 560px) { .menu { left: 8px; right: 8px; width: auto; } }
+  .menu h3 { margin: 12px 0 6px; font-size: .78rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .menu .jump { display: grid; gap: 2px; }
+  .menu .jump a, .menu .tool { display: block; padding: 7px 8px; border-radius: 8px; color: var(--text); text-decoration: none;
+                               background: none; border: 0; text-align: left; font: inherit; cursor: pointer; width: 100%; }
+  .menu .jump a:hover, .menu .tool:hover, .menu .jump a:focus-visible, .menu .tool:focus-visible { background: var(--bg); }
+  .menu .jump a.sub-link { padding-left: 22px; font-size: .9rem; color: var(--muted); }
+  .menu .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .menu .seg button { flex: 1; font-size: .85rem; padding: 6px 8px; }
+  .menu-head { display: flex; justify-content: space-between; align-items: center; position: sticky; top: -6px;
+               background: var(--card); padding-top: 6px; }
+  .menu-head h3 { margin: 6px 0; }
+  #summary, #basket-slot, #movers, #guide, #wages, #items, .cat-title, #basket-editor, #checker { scroll-margin-top: 64px; }
+  button { font: inherit; color: var(--text); background: var(--card); border: 1px solid var(--line);
+           border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  button[aria-pressed="true"] { border-color: var(--nagoya); color: var(--nagoya); font-weight: 600; }
+  .legend { display: flex; gap: 16px; margin: 20px 0 8px; color: var(--muted); font-size: .9rem; }
+  .swatch { display: inline-block; width: 12px; height: 3px; vertical-align: middle; margin-right: 6px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .card h2 { margin: 0; font-size: 1.05rem; }
+  .unit { color: var(--muted); font-size: .8rem; }
+  .price { display: flex; align-items: baseline; gap: 10px; margin: 6px 0 4px; }
+  .price strong { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+  .chg { font-size: .85rem; font-variant-numeric: tabular-nums; }
+  .chg.up { color: var(--up); } .chg.down { color: var(--down); }
+  .chart { height: 150px; }
+  .empty { background: var(--card); border: 1px dashed var(--line); border-radius: 12px; padding: 24px; color: var(--muted); }
+  .summary { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 14px; margin-top: 20px; }
+  @media (max-width: 760px) { .summary { grid-template-columns: minmax(0, 1fr); } }
+  .big { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 10px; }
+  .chip { border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: .85rem; font-variant-numeric: tabular-nums; }
+  .chip span { color: var(--muted); margin-right: 6px; }
+  .chart.tall { height: 190px; }
+  .chips.cpi { margin-top: -2px; }
+  .chips.cpi .chip { border-style: dashed; }
+  .key { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--muted); font-size: .8rem; margin: 6px 0 0; }
+  .key i { display: inline-block; width: 16px; height: 0; border-top: 2px solid var(--nagoya); vertical-align: middle; margin-right: 6px; }
+  .key i.dash { border-top: 2px dashed var(--muted); }
+  .note { color: var(--muted); font-size: .78rem; margin: 6px 0 0; }
+  .card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: 8px; }
+  .card-head h2 { margin: 0; white-space: nowrap; }
+  .btn-sm { font-size: .82rem; padding: 4px 10px; white-space: nowrap; }
+  .banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: var(--bg); border: 1px dashed var(--nagoya);
+            border-radius: 8px; padding: 8px 10px; margin: 10px 0 4px; font-size: .85rem; }
+  .editor { margin-top: 14px; }
+  .editor[hidden] { display: none; }
+  .editor-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+  .people { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; margin: 12px 0 4px; }
+  .stepper { display: inline-flex; align-items: center; gap: 8px; }
+  .stepper button { width: 32px; height: 32px; padding: 0; font-size: 1.1rem; }
+  .stepper output { min-width: 1.5em; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .ed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 4px 32px; }
+  .ed-cat { grid-column: 1 / -1; margin: 14px 0 2px; font-size: .9rem; color: var(--muted); font-weight: 600; }
+  .ed-row { display: grid; grid-template-columns: minmax(0, 1fr) 72px 44px 58px; gap: 6px; align-items: center;
+            padding: 4px 0; border-bottom: 1px solid var(--line); font-size: .9rem; }
+  .ed-row label { display: flex; gap: 8px; align-items: center; min-width: 0; }
+  .ed-row label span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ed-row input[type=number] { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line);
+                               border-radius: 6px; padding: 3px 6px; text-align: right; }
+  .ed-row input[type=number]:disabled { opacity: .4; }
+  .ed-row .u { color: var(--muted); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ed-row .c { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+  /* seasonal strip on item cards */
+  .season { margin-top: 8px; }
+  .bars { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; align-items: end; height: 30px; }
+  .bars span { display: block; background: var(--line); border-radius: 2px 2px 0 0; min-height: 3px; }
+  .bars span.lo { background: var(--down); opacity: .75; }
+  .bars span.hi { background: var(--up); opacity: .65; }
+  .bars span.now { outline: 2px solid var(--text); outline-offset: 1px; }
+  .bars span.na { background: none; border-bottom: 1px dashed var(--line); }
+  .bar-labels { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; font-size: .62rem; color: var(--muted); text-align: center; margin-top: 2px; }
+  .season p { margin: 4px 0 0; font-size: .8rem; color: var(--muted); }
+  /* seasonal guide + price checker cards */
+  .wide { margin-top: 14px; }
+  .guide-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 0 32px; }
+  .guide-cols h3 { margin: 12px 0 4px; font-size: .9rem; color: var(--muted); font-weight: 500; }
+  .guide-cols ol { list-style: none; margin: 0; padding: 0; }
+  .guide-cols li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+  .checker[hidden] { display: none; }
+  .checker { margin-top: 20px; border-color: var(--nagoya); }
+  .check-form { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1.3fr); gap: 10px; margin-top: 10px; }
+  @media (max-width: 560px) { .check-form { grid-template-columns: 1fr 1fr; } .check-form .f-item { grid-column: 1 / -1; } }
+  .check-form label { display: flex; flex-direction: column; gap: 4px; font-size: .8rem; color: var(--muted); }
+  .check-form select, .check-form input { font: inherit; font-size: 1rem; color: var(--text); background: var(--bg);
+                                           border: 1px solid var(--line); border-radius: 8px; padding: 8px; width: 100%; }
+  .with-unit { display: flex; align-items: center; gap: 6px; }
+  .with-unit span { color: var(--muted); white-space: nowrap; }
+  .verdict { margin-top: 14px; }
+  .verdict .v { font-size: 1.25rem; font-weight: 700; }
+  .verdict .v.good { color: var(--down); } .verdict .v.bad { color: var(--up); }
+  .range { position: relative; height: 8px; background: var(--line); border-radius: 4px; margin: 26px 6px 22px; }
+  .range .avg { position: absolute; top: -4px; width: 2px; height: 16px; background: var(--muted); }
+  .range .you { position: absolute; top: -6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%;
+                background: var(--nagoya); border: 2px solid var(--card); }
+  .range .lbl { position: absolute; top: 14px; font-size: .72rem; color: var(--muted); white-space: nowrap; transform: translateX(-50%); }
+  .range .lbl.top { top: -22px; }
+  details { margin-top: 10px; font-size: .9rem; }
+  summary { cursor: pointer; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  details { overflow-x: auto; }
+  td, th { padding: 4px 6px; border-bottom: 1px solid var(--line); text-align: right; }
+  td:first-child, th:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 500; }
+  .movers h3 { margin: 12px 0 4px; font-size: .9rem; color: var(--muted); font-weight: 500; }
+  .movers h3:first-of-type { margin-top: 8px; }
+  .movers ol { list-style: none; margin: 0; padding: 0; }
+  .movers li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+  .movers li.has-news { display: block; }
+  .movers li.has-news > details > summary { display: flex; justify-content: space-between; gap: 8px; list-style: none; cursor: pointer; color: var(--text); }
+  .movers li.has-news > details > summary::-webkit-details-marker { display: none; }
+  .why { font-size: .72rem; color: var(--nagoya); border: 1px solid currentColor; border-radius: 999px; padding: 0 6px; margin-left: 6px; white-space: nowrap; }
+  .news { margin: 6px 0 8px; padding: 0; list-style: none; font-size: .82rem; }
+  .news li { display: block !important; border: 0 !important; padding: 3px 0 !important; }
+  .news a { color: var(--text); }
+  .news .meta { color: var(--muted); font-size: .75rem; }
+  .card details.news-box { margin-top: 8px; font-size: .85rem; }
+  /* make it last (preserving guides) */
+  #make-it-last, #outlook { scroll-margin-top: 64px; }
+  .ol-row { border-bottom: 1px solid var(--line); padding: 4px 0; }
+  .ol-row > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 8px; color: var(--text); }
+  .ol-row > summary::-webkit-details-marker { display: none; }
+  .ol-row p { margin: 4px 0 6px; font-size: .85rem; line-height: 1.55; }
+  .keep-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 8px 24px; margin-top: 6px; }
+  .keep { border-bottom: 1px solid var(--line); padding: 4px 0; }
+  .keep > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; color: var(--text); }
+  .keep > summary::-webkit-details-marker { display: none; }
+  .keep > summary b { font-weight: 600; }
+  .badge { font-size: .7rem; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 7px; white-space: nowrap; }
+  .keep-body { font-size: .86rem; line-height: 1.55; padding: 4px 0 8px; }
+  .keep-body ol { margin: 4px 0; padding-left: 1.3em; }
+  .keep-body p { margin: 4px 0; }
+  .keep-body .lbl { color: var(--muted); font-size: .78rem; }
+  .card details.keep-box { margin-top: 8px; font-size: .85rem; }
+  .explain { margin: 8px 0 4px; font-size: .88rem; line-height: 1.55; background: var(--bg); border-radius: 8px; padding: 8px 10px; }
+  .section-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin: 28px 0 0; }
+  .section-title { margin: 0; font-size: 1.1rem; }
+  .sorts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sorts button { font-size: .85rem; padding: 4px 10px; }
+  .cat-title { grid-column: 1 / -1; margin: 14px 0 -4px; font-size: .95rem; color: var(--muted); font-weight: 600; }
+  .cat-title:first-child { margin-top: 0; }
+  footer { color: var(--muted); font-size: .8rem; padding-top: 24px; padding-bottom: 32px; }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <button class="brand" id="to-top" data-i18n="title"></button>
+    <button id="check-btn" aria-expanded="false"></button>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu"></button>
+  </div>
+  <nav class="menu" id="menu" hidden>
+    <div class="menu-head"><h3 data-i18n="menuJump"></h3><button class="btn-sm" id="menu-close" data-i18n="close"></button></div>
+    <div class="jump" id="menu-jump"></div>
+    <h3 data-i18n="menuTools"></h3>
+    <button class="tool" data-tool="check" data-i18n="check"></button>
+    <button class="tool" data-tool="edit" data-i18n="edit"></button>
+    <h3 data-i18n="menuRange"></h3>
+    <div class="seg"><button data-range="24"></button><button data-range="60"></button><button data-range="all"></button></div>
+    <h3 data-i18n="menuSort"></h3>
+    <div class="seg"><button data-sort="category"></button><button data-sort="up"></button><button data-sort="down"></button></div>
+    <h3 data-i18n="cityLabel"></h3>
+    <div class="seg"><select data-city-select style="width:100%;font:inherit;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)"></select></div>
+    <h3 data-i18n="menuLang"></h3>
+    <div class="seg"><button data-lang="ja">日本語</button><button data-lang="en">English</button></div>
+  </nav>
+</div>
+<header class="intro">
+  <h1 data-i18n="title"></h1>
+  <p class="sub" data-i18n="subtitle"></p>
+  <label class="city-pick"><span data-i18n="cityLabel"></span> <select id="city-select" data-city-select></select></label>
+</header>
+<main>
+  <section class="card checker" id="checker" hidden></section>
+  <div class="summary" id="summary"></div>
+  <section class="card editor" id="basket-editor" hidden></section>
+  <section class="card wide" id="guide" hidden></section>
+  <section class="card wide" id="outlook" hidden></section>
+  <section class="card wide" id="wages" hidden></section>
+  <div class="section-head" id="items">
+    <h2 class="section-title" data-i18n="allItems"></h2>
+    <div class="sorts"><button data-sort="category"></button><button data-sort="up"></button><button data-sort="down"></button></div>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="grid" id="grid"></div>
+</main>
+<footer id="footer"></footer>
+
+<script>
+const T = {
+  ja: { get title() { return `${cityShortJa()} 物価トラッカー`; }, get subtitle() { return `${cur.name_ja}の生活必需品の小売価格の推移(月次)`; }, per: "あたり",
+        cityLabel: "都市", loadingCity: "読み込み中…",
+        r24: "2年", r60: "5年", rall: "全期間", yoy: "前年同月比", noData: "データはまだありません。GitHub Action の初回実行後に表示されます。",
+        source: "出典", updated: "更新", toggle: "English",
+        sort_category: "分類別", sort_up: "値上がり順", sort_down: "値下がり順", other: "その他",
+        allItems: "品目別の価格", mom: "前月比", y1: "1年前比", y5: "5年前比", inBasket: "かごの中身",
+        item: "品目", amount: "量", cost: "金額", shareCol: "割合", basketSub: n => `${n}品目・${cur.name_ja}の小売価格で計算`,
+        movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
+        noMoves: "変動なし",
+        menu: "☰ メニュー", menuJump: "移動", menuTools: "ツール", menuRange: "グラフの期間", menuSort: "品目の並び順", menuLang: "言語 / Language",
+        check: "値段チェック", checkTitle: "この値段はお得?", checkItem: "品目", checkPrice: "店頭価格", checkQty: "量",
+        checkPer: u => `${u}あたり`, avgLabel: m => `${cityShortJa()}の平均(${m})`, lowLabel: "過去1年の最安", highLabel: "過去1年の最高",
+        youLabel: "この値段",
+        vLow: "過去1年で最も安い水準です", vGood: "お得です", vAvg: "ほぼ平均的な値段です", vHigh: "平均より高めです", vTop: "過去1年で最も高い水準です",
+        vsAvg: p => `${cityShortJa()}の平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`,
+        checkNote: "調査価格は特定の銘柄(例:国産豚バラ)の平均です。同じような商品同士で比べてください。",
+        guide: m => `旬ガイド:${m}月`, guideCheap: "例年この時期は安い", guideDear: "例年この時期は高い",
+        get guideNote() { return `過去10年の${cityShortJa()}の価格から、各月の価格を年平均と比べた目安です。`; }, vsYear: "年平均比",
+        cheapest: "例年安い", dearest: "例年高い", monthNames: ["1","2","3","4","5","6","7","8","9","10","11","12"],
+        monthFull: m => `${m + 1}月`,
+        nowVsUsual: (m, p) => `季節要因を除くと、${m}の価格は過去1年の平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`,
+        nowUsual: m => `季節要因を除くと、${m}の価格はほぼ平年並み`,
+        myBasket: "あなたのかご", edit: "かごを編集", close: "閉じる", reset: "初期設定に戻す",
+        copyLink: "リンクをコピー", copied: "コピーしました", adults: "大人", children: "子ども",
+        childNote: "子どもは大人の0.6人分として計算",
+        amountsNote: "量は世帯全体の1か月分です。人数を変えると自動で調整されます。価格は最新月のものです。",
+        household: (a, c) => `大人${a}人${c ? `・子ども${c}人` : ""}`,
+        shared: "共有されたかごを表示しています。", saveMine: "自分のかごとして保存", backMine: "自分のかごに戻る",
+        carried: "* 旬以外の月は直近の旬の価格で計算", empty: "品目が選ばれていません。「かごを編集」から追加してください。",
+        wagesTitle: "物価と賃金", wagesSub: (a, b) => `${a}年〜${b}年の変化(${a}年=100)`,
+        get pay() { return `${cur.pref}の平均賃金`; }, basketLine: "あなたのかご",
+        get cpiAllLine() { return `${cpiPlaceJa()}の総合CPI`; }, get cpiFoodLine() { return `${cpiPlaceJa()}の食料CPI`; },
+        realPay: p => `物価を考慮した実質賃金は${Math.abs(p).toFixed(1)}%${p < 0 ? "減少" : "増加"}`,
+        payShare: (pct, y) => `あなたのかごの1か月分は、${cur.pref}の平均月給(${y}年)の約${pct.toFixed(0)}%`,
+        wagesNote: y => `賃金は厚生労働省「賃金構造基本統計調査」の${cur.pref}・一般労働者(企業規模10人以上・産業計)の所定内給与額(残業代・賞与を除く)。年1回の調査で、最新は${y}年。2020年に推計方法が変わっています。物価は各年の平均。`,
+        outlookTitle: m => `今後の見通し:${m}`, outlookSub: "農林水産省「野菜の生育状況及び価格見通し」(東京の卸売市場、平年=過去5年平均との比較)",
+        likelyUp: "高くなりそう", likelyDown: "安くなりそう", nearNormal: "ほぼ平年並み",
+        basketImpact: v => `この見通しどおりなら、あなたのかごは平年より月に約${yen(Math.abs(v))}${v > 0 ? "高く" : "安く"}なる計算です(実績の中央値から概算)。`,
+        trackRecord: tr => `これまでの実績:${tr.since.slice(0, 4)}年${+tr.since.slice(5)}月以降、「高くなる/安くなる」と予想した${tr.calls}回のうち${Math.round(tr.same_direction * 100)}%で、名古屋の小売価格も同じ方向に動きました(物価上昇分を除く。上昇予想${Math.round(tr.up.same_direction * 100)}%、下落予想${Math.round(tr.down.same_direction * 100)}%)。小売価格の動きは卸売より小さく、中央値は${pctTxt(tr.up.median_change)}/${pctTxt(tr.down.median_change)}でした。`,
+        get outlookNote() { return `全国の卸売市場の見通しで、${cityShortJa()}の店頭価格の予想ではありません。実績は名古屋の小売価格で計算しています。理由は農林水産省の発表の要約です。`; },
+        reasonJaOnly: "",
+        makeItLast: "保存のコツ", makeItLastSub: "今月安くなりやすい野菜・果物を長持ちさせる方法",
+        youNeed: "材料", keeps: "保存の目安", caution: "注意", veranda: "ベランダ活用",
+        safetyTitle: "安全に保存するために", sourceLbl: "参考",
+        usuallyCheaper: p => `例年この時期は年平均より${p}%安い`, keepCount: n => `保存のコツ(${n})`,
+        why: "なぜ?", relatedNews: n => `関連ニュース(${n})`,
+        newsNote: "自動で集めた見出しです。値動きの理由を示すとは限りません。", official: "公式情報",
+        explainLabel: "考えられる理由(下の見出しをもとにAIが作成)",
+        explainNote: "説明はAIがニュース見出しから作成したもので、全国の報道にもとづきます。名古屋の値動きの理由と一致するとは限りません。",
+        cpiRef: k => k === "all" ? "総合CPI" : "食料CPI", ifCpi: k => `${k === "all" ? "総合CPI" : "食料CPI"}と同じ率で上がった場合`, baseline: "食料CPI",
+        cpiNote: (k, n) => `CPI(消費者物価指数)は${cpiPlaceJa()}の「${n}」指数${k === "all" ? "(全品目・サービス)" : "(外食を含む)"}で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。`,
+        vsNational: p => `全国平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`, sameNational: "全国平均とほぼ同じ", cpiLegend: "CPIと同じ率で上がった場合(食品は食料CPI、その他は総合CPI)" },
+  en: { get title() { return `${cur.name_en} Price Tracker`; }, get subtitle() { return `Monthly retail prices of everyday essentials in ${cur.name_en}`; }, per: "per",
+        cityLabel: "City", loadingCity: "Loading…",
+        r24: "2 yrs", r60: "5 yrs", rall: "All", yoy: "vs. last year", noData: "No data yet. It will appear after the first GitHub Action run.",
+        source: "Source", updated: "Updated", toggle: "日本語",
+        sort_category: "By category", sort_up: "Biggest rise", sort_down: "Biggest fall", other: "Other",
+        allItems: "Prices by item", mom: "1 mo", y1: "1 yr", y5: "5 yrs", inBasket: "What's in the basket",
+        item: "Item", amount: "Amount", cost: "Cost", shareCol: "Share", basketSub: n => `${n} staples at ${cur.name_en} retail prices`,
+        movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
+        noMoves: "No change",
+        menu: "☰ Menu", menuJump: "Jump to", menuTools: "Tools", menuRange: "Chart range", menuSort: "Sort items", menuLang: "Language / 言語",
+        check: "Price check", checkTitle: "Is this a good price?", checkItem: "Item", checkPrice: "Shelf price", checkQty: "Amount",
+        checkPer: u => `per ${u}`, avgLabel: m => `${cur.name_en} avg (${m})`, lowLabel: "12-mo low", highLabel: "12-mo high",
+        youLabel: "This price",
+        vLow: "Cheaper than any month in the past year", vGood: "Good price", vAvg: "About average", vHigh: "Above average", vTop: "Higher than any month in the past year",
+        vsAvg: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the ${cur.name_en} average`,
+        checkNote: "Survey prices are averages for a specific product (e.g. domestic pork belly), so compare like with like.",
+        guide: m => `Seasonal guide: ${m}`, guideCheap: "Usually cheap this month", guideDear: "Usually expensive this month",
+        get guideNote() { return `Based on ${cur.name_en} prices over the past 10 years: each month's typical price compared with the yearly average.`; }, vsYear: "vs. yearly avg",
+        cheapest: "Usually cheapest", dearest: "priciest", monthNames: ["J","F","M","A","M","J","J","A","S","O","N","D"],
+        monthFull: m => ["January","February","March","April","May","June","July","August","September","October","November","December"][m],
+        nowVsUsual: (m, p) => `Seasonally adjusted, the ${m} price is ${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} its past-year average`,
+        nowUsual: m => `Seasonally adjusted, the ${m} price is about normal`,
+        myBasket: "Your basket", edit: "Edit basket", close: "Close", reset: "Reset to default",
+        copyLink: "Copy link", copied: "Copied", adults: "Adults", children: "Children",
+        childNote: "A child counts as 0.6 of an adult",
+        amountsNote: "Amounts are monthly totals for your household and scale when you change the number of people. Costs use the latest month's prices.",
+        household: (a, c) => `${a} adult${a === 1 ? "" : "s"}${c ? `, ${c} child${c === 1 ? "" : "ren"}` : ""}`,
+        shared: "You're viewing a shared basket.", saveMine: "Save as my basket", backMine: "Back to my basket",
+        carried: "* Out of season: last in-season price used", empty: "No items selected. Use “Edit basket” to add some.",
+        wagesTitle: "Prices and pay", wagesSub: (a, b) => `Change ${a}–${b} (${a} = 100)`,
+        get pay() { return `${prefEn()} average pay`; }, basketLine: "Your basket",
+        get cpiAllLine() { return `${cpiPlaceEn()} overall CPI`; }, get cpiFoodLine() { return `${cpiPlaceEn()} food CPI`; },
+        realPay: p => `Adjusted for prices, pay ${p < 0 ? "fell" : "rose"} ${Math.abs(p).toFixed(1)}%`,
+        payShare: (pct, y) => `A month of your basket is about ${pct.toFixed(0)}% of ${prefEn()}'s average monthly pay (${y})`,
+        wagesNote: y => `Pay is average scheduled monthly earnings (所定内給与額, excluding overtime and bonuses) of full-time workers in ${prefEn()} at companies with 10+ employees, from the Basic Survey on Wage Structure. It's surveyed once a year; the latest is ${y}. The survey changed its estimation method in 2020. Prices are yearly averages.`,
+        outlookTitle: m => `Coming up: ${m}`, outlookSub: "From MAFF's monthly vegetable outlook (Tokyo wholesale markets, compared with the 5-year average for the month)",
+        likelyUp: "Likely higher", likelyDown: "Likely lower", nearNormal: "About normal",
+        basketImpact: v => `If the outlook holds, your basket would cost about ${yen(Math.abs(v))} a month ${v > 0 ? "more" : "less"} than usual (rough estimate from the track record).`,
+        trackRecord: tr => `Track record: since ${tr.since}, when the outlook said prices would be higher or lower (${tr.calls} times), Nagoya's retail prices moved the same way ${Math.round(tr.same_direction * 100)}% of the time, with inflation removed (higher: ${Math.round(tr.up.same_direction * 100)}%, lower: ${Math.round(tr.down.same_direction * 100)}%). Retail moves were smaller than wholesale: typically ${pctTxt(tr.up.median_change)} / ${pctTxt(tr.down.median_change)}.`,
+        get outlookNote() { return `This is an outlook for national wholesale markets, not a forecast of ${cur.name_en} shop prices. The track record is measured against Nagoya's retail prices. Reasons are from the ministry's report.`; },
+        reasonJaOnly: " (Japanese; translation pending)",
+        makeItLast: "Make it last", makeItLastSub: "Ways to keep the produce that's usually cheap this month",
+        youNeed: "You need", keeps: "Keeps", caution: "Note", veranda: "Veranda tip",
+        safetyTitle: "Storing food safely", sourceLbl: "Reference",
+        usuallyCheaper: p => `usually ${p}% below its yearly average this month`, keepCount: n => `Make it last (${n})`,
+        why: "Why?", relatedNews: n => `Related news (${n})`,
+        newsNote: "Headlines collected automatically (in Japanese); they may not explain the change.", official: "Official",
+        explainLabel: "Possible reasons (written by AI from the headlines below)",
+        explainNote: "The explanation was written by AI from news headlines and reflects national coverage; Nagoya's prices may have moved for other reasons. English titles are translations.",
+        cpiRef: k => k === "all" ? "Overall CPI" : "Food CPI", ifCpi: k => `If it had risen with ${k === "all" ? "overall" : "food"} CPI`, baseline: "Food CPI",
+        cpiNote: (k, n) => `CPI (consumer price index) here is ${cpiPlaceEn()}'s ${k === "all" ? "overall index (総合, all goods and services)" : `food index (${n}), which includes eating out`}. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.`,
+        vsNational: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the national average`, sameNational: "About the national average", cpiLegend: "If it had risen with CPI (food CPI for food, overall CPI otherwise)" },
+};
+let lang = (() => { try { return localStorage.getItem("lang"); } catch { return null; } })()
+  || (navigator.language.startsWith("ja") ? "ja" : "en");
+let range = "60";
+let data = null;
+let basket = null;      // defaults from basket.json
+let myBasket = null;    // { adults, children, items: { id: amount per adult, in input units } }
+let sharedView = false; // basket came from a share link and isn't saved
+const basketCharts = [];
+const BASKET_KEY = "basket.v1";
+let cpi = null;
+let wages = null;
+let insights = null;
+let preserve = null;
+let outlook = null;
+// ---------- Cities
+const DEFAULT_CITY = { id: "nagoya", name_ja: "名古屋市", name_en: "Nagoya", pref: "愛知県", region: "tk" };
+let cityIndex = null;   // docs/data/cities.json
+let cur = DEFAULT_CITY; // the selected city
+let cityData = null;    // docs/data/cities/<id>.json for cities other than the default
+let cpiBase = null;     // Nagoya CPI from data/cpi.json
+const cityShortJa = () => cur.name_ja.replace(/市$/, "");
+const PREF_EN = {"北海道":"Hokkaido","青森県":"Aomori","岩手県":"Iwate","宮城県":"Miyagi","秋田県":"Akita","山形県":"Yamagata","福島県":"Fukushima",
+  "茨城県":"Ibaraki","栃木県":"Tochigi","群馬県":"Gunma","埼玉県":"Saitama","千葉県":"Chiba","東京都":"Tokyo","神奈川県":"Kanagawa",
+  "新潟県":"Niigata","富山県":"Toyama","石川県":"Ishikawa","福井県":"Fukui","山梨県":"Yamanashi","長野県":"Nagano","岐阜県":"Gifu",
+  "静岡県":"Shizuoka","愛知県":"Aichi","三重県":"Mie","滋賀県":"Shiga","京都府":"Kyoto","大阪府":"Osaka","兵庫県":"Hyogo","奈良県":"Nara",
+  "和歌山県":"Wakayama","鳥取県":"Tottori","島根県":"Shimane","岡山県":"Okayama","広島県":"Hiroshima","山口県":"Yamaguchi","徳島県":"Tokushima",
+  "香川県":"Kagawa","愛媛県":"Ehime","高知県":"Kochi","福岡県":"Fukuoka","佐賀県":"Saga","長崎県":"Nagasaki","熊本県":"Kumamoto",
+  "大分県":"Oita","宮崎県":"Miyazaki","鹿児島県":"Kagoshima","沖縄県":"Okinawa"};
+const prefEn = () => PREF_EN[cur.pref] || cur.pref;
+const cpiNational = () => cur.id !== DEFAULT_CITY.id && cityData?.cpi?.source === "national";
+const cpiPlaceJa = () => cpiNational() ? "全国" : cur.name_ja;
+const cpiPlaceEn = () => cpiNational() ? "National" : cur.name_en;
+
+// Point every card at the selected city's data: item.series.local, item.seasonal and cpi.
+function applyCity() {
+  const isDefault = cur.id === DEFAULT_CITY.id;
+  for (const item of data.items) {
+    if (!("_seasonal" in item)) item._seasonal = item.seasonal ?? null;
+    item.series.local = isDefault ? (item.series.nagoya || []) : (cityData?.series?.[item.id] || []);
+    item.seasonal = isDefault ? item._seasonal : (cityData?.seasonal?.[item.id] ?? null);
+  }
+  if (isDefault || !cityData?.cpi) cpi = isDefault ? cpiBase : null;
+  else cpi = { source: cpiBase?.source, series: {
+    food: { points: cityData.cpi.food || [], estat_name: "食料" },
+    all: { points: cityData.cpi.all || [], estat_name: "総合" } } };
+}
+function chartAreas() {
+  return [{ id: "local", name_ja: cur.name_ja, name_en: cur.name_en }, ...(data.areas || []).filter(a => a.id !== "nagoya")];
+}
+function renderCityPickers() {
+  const regions = cityIndex?.regions || [];
+  const cities = cityIndex?.cities || [DEFAULT_CITY];
+  const groups = regions.length ? regions.map(r => [r, cities.filter(c => c.region === r.id)]).filter(([, cs]) => cs.length)
+                                : [[{ name_ja: "", name_en: "" }, cities]];
+  const html = groups.map(([r, cs]) => `<optgroup label="${esc(r["name_" + lang])}">${cs.map(c =>
+    `<option value="${esc(c.id)}" ${c.id === cur.id ? "selected" : ""}>${esc(c["name_" + lang])}</option>`).join("")}</optgroup>`).join("");
+  document.querySelectorAll("[data-city-select]").forEach(sel => { sel.innerHTML = html; sel.value = cur.id; });
+}
+async function selectCity(id, { remember = true } = {}) {
+  const meta = cityIndex?.cities?.find(c => c.id === id);
+  if (!meta) return;
+  if (meta.id !== DEFAULT_CITY.id) {
+    const body = await fetch(`data/cities/${encodeURIComponent(meta.id)}.json`, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
+    if (!body) return;  // keep the current city if the file can't be loaded
+    cityData = body;
+  } else {
+    cityData = null;
+  }
+  cur = { ...DEFAULT_CITY, ...meta };
+  if (remember && !window.PRESET_CITY) {
+    try { localStorage.setItem("city", cur.id); } catch {}
+    const url = new URL(location.href);
+    if (cur.id === DEFAULT_CITY.id) url.searchParams.delete("city"); else url.searchParams.set("city", cur.id);
+    history.replaceState(null, "", url);
+  }
+  applyCity();
+  render();
+}
+const pctTxt = v => `${v > 0 ? "+" : "−"}${Math.abs(v * 100).toFixed(0)}%`;
+const wageCharts = [];
+let sortBy = (() => { try { return localStorage.getItem("sortBy"); } catch { return null; } })() || "category";
+const charts = [];
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const yen = v => "¥" + Math.round(v).toLocaleString();
+const esc = v => String(v).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+// "2026-09" shifted back n months -> "2025-09" for n = 12
+function monthsBack(m, n) {
+  const total = +m.slice(0, 4) * 12 + (+m.slice(5, 7) - 1) - n;
+  return `${Math.floor(total / 12)}-${String(total % 12 + 1).padStart(2, "0")}`;
+}
+function pctSpan(now, before, label = "") {
+  if (before == null || !before) return "";
+  const pct = (now / before - 1) * 100;
+  const cls = pct > 0.05 ? "up" : pct < -0.05 ? "down" : "";
+  return `<span class="chg ${cls}">${pct > 0 ? "+" : ""}${pct.toFixed(1)}%${label ? " " + label : ""}</span>`;
+}
+const seriesOf = item => item.series.local || item.series.nagoya || Object.values(item.series)[0] || [];
+
+// ---------- Custom basket
+function defaultBasket() {
+  return { adults: basket.household.adults, children: basket.household.children,
+           items: Object.fromEntries(Object.entries(basket.items).filter(([, v]) => v.default != null).map(([k, v]) => [k, v.default])) };
+}
+// Accept only known items and sane numbers from storage or a share link.
+function cleanBasket(b) {
+  if (!b || typeof b !== "object") return null;
+  const int = (v, lo, hi) => Number.isInteger(v) && v >= lo && v <= hi ? v : null;
+  const adults = int(b.adults, 0, 20), children = int(b.children, 0, 20);
+  if (adults == null || children == null || !b.items || typeof b.items !== "object") return null;
+  const items = {};
+  for (const [k, v] of Object.entries(b.items)) {
+    if (basket.items[k] && typeof v === "number" && Number.isFinite(v) && v > 0 && v < 1e6) items[k] = v;
+  }
+  return { adults, children, items };
+}
+const b64url = str => btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const unb64url = str => atob(str.replace(/-/g, "+").replace(/_/g, "/"));
+function loadBasket() {
+  const h = location.hash.match(/[#&]b=([A-Za-z0-9_-]+)/);
+  if (h) {
+    try { const b = cleanBasket(JSON.parse(unb64url(h[1]))); if (b) { sharedView = true; return b; } } catch {}
+  }
+  try { const b = cleanBasket(JSON.parse(localStorage.getItem(BASKET_KEY))); if (b) return b; } catch {}
+  return defaultBasket();
+}
+function saveBasket() {
+  if (sharedView) return;
+  try { localStorage.setItem(BASKET_KEY, JSON.stringify(myBasket)); } catch {}
+}
+const multiplier = () => myBasket.adults + basket.child_factor * myBasket.children;
+// Household amount = stored amount x people, except per-household items (utility bills, fuel).
+const scaleOf = id => basket.items[id]?.fixed ? 1 : (multiplier() || 1);
+const sameAsDefault = () => JSON.stringify(cleanBasket(myBasket)) === JSON.stringify(cleanBasket(defaultBasket()));
+const fmtQty = v => v >= 100 ? String(Math.round(v)) : String(Math.round(v * 100) / 100);
+const latestPrice = item => { const s = seriesOf(item); return s.length ? s[s.length - 1][1] : null; };
+
+// Monthly cost of the custom basket. Seasonal items reuse their last in-season price for up to 11 months;
+// months before an item's series starts are left out.
+function basketSeries() {
+  const mult = multiplier();
+  // items this city doesn't survey are left out
+  const parts = data.items.filter(i => basket.items[i.id] && myBasket.items[i.id] > 0 && seriesOf(i).length).map(i => ({
+    item: i, amount: myBasket.items[i.id] * scaleOf(i.id), units: myBasket.items[i.id] * scaleOf(i.id) * basket.items[i.id].per,
+    own: new Map(seriesOf(i)), prices: new Map(), carried: new Set(),
+  }));
+  if (!parts.length || mult <= 0) return { parts, points: [] };
+  const months = [...new Set(parts.flatMap(p => [...p.own.keys()]))].sort();
+  for (const p of parts) {
+    let last = null, lastK = -99;
+    months.forEach((m, k) => {
+      if (p.own.has(m)) { last = p.own.get(m); lastK = k; p.prices.set(m, last); }
+      else if (last != null && k - lastK <= 11) { p.prices.set(m, last); p.carried.add(m); }
+    });
+  }
+  const points = [];
+  for (const m of months) {
+    if (parts.every(p => p.prices.has(m))) points.push([m, parts.reduce((sum, p) => sum + p.units * p.prices.get(m), 0)]);
+  }
+  return { parts, points };
+}
+
+const cpiIdx = (kind = "food") => cpi?.series?.[kind]?.points?.length ? new Map(cpi.series[kind].points) : null;
+const cpiFood = () => cpiIdx("food");
+// Food items are compared with food CPI; utilities and household goods with overall CPI.
+const NON_FOOD = new Set(["utilities", "household"]);
+const cpiKindForItem = item => NON_FOOD.has(item.category) && cpiIdx("all") ? "all" : "food";
+const cpiKindForBasket = () => cpiIdx("all") && data.items.some(i => NON_FOOD.has(i.category) && myBasket.items[i.id] > 0) ? "all" : "food";
+
+// Where a price would be if it had moved with CPI since the first shown month that has both values.
+function cpiPath(labels, values, kind) {
+  const idx = cpiIdx(kind);
+  if (!idx) return null;
+  const k = labels.findIndex((m, i) => values[i] != null && idx.has(m));
+  if (k < 0) return null;
+  const base = values[k] / idx.get(labels[k]);
+  return labels.map((m, i) => i < k || !idx.has(m) ? null : base * idx.get(m));
+}
+const refDataset = (labels, values, label, kind) => {
+  const path = cpiPath(labels, values, kind);
+  return path ? [{ label, data: path, borderColor: css("--muted"), borderWidth: 1.25, borderDash: [4, 4],
+                   pointRadius: 0, spanGaps: true, tension: 0.2 }] : [];
+};
+
+function lineChart(canvas, labels, values, label, refLabel, kind) {
+  return new Chart(canvas, {
+    type: "line",
+    data: { labels, datasets: [{ label, data: values, borderColor: css("--nagoya"), borderWidth: 2,
+                                 pointRadius: 0, spanGaps: true, tension: 0.2 },
+                               ...(refLabel ? refDataset(labels, values, refLabel, kind) : [])] },
+    options: {
+      maintainAspectRatio: false, animation: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: { legend: { display: false },
+                 tooltip: { callbacks: { label: c => `${c.dataset.label}: ${yen(c.parsed.y)}` } } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 5, color: css("--muted") }, grid: { display: false } },
+        y: { ticks: { maxTicksLimit: 4, color: css("--muted"), callback: v => yen(v) }, grid: { color: css("--line") } },
+      },
+    },
+  });
+}
+
+// CPI change over the same windows as the basket chips, ending in the same month.
+function cpiChips(m, t, kind) {
+  const idx = cpiIdx(kind);
+  if (!idx || !idx.has(m)) return "";
+  const c = (label, n) => idx.has(monthsBack(m, n))
+    ? `<div class="chip"><span>${label}</span>${pctSpan(idx.get(m), idx.get(monthsBack(m, n)))}</div>` : "";
+  return `<div class="chips cpi"><div class="chip" style="border:none;padding-left:0"><span>${t.cpiRef(kind)}</span></div>${c(t.mom, 1)}${c(t.y1, 12)}${c(t.y5, 60)}</div>`;
+}
+
+function renderBasket(t) {
+  const slot = document.getElementById("basket-slot");
+  if (!slot) return;
+  basketCharts.splice(0).forEach(c => c.destroy());
+  const { parts, points } = basketSeries();
+  const kind = cpiKindForBasket();
+  const title = sameAsDefault() && !sharedView ? basket["name_" + lang] : t.myBasket;
+  const card = document.createElement("section");
+  card.className = "card";
+  const head = `<div class="card-head"><h2>${esc(title)}</h2>
+      <button class="btn-sm" id="edit-basket" aria-expanded="${!document.getElementById("basket-editor").hidden}">${t.edit}</button></div>
+    <div class="unit">${t.household(myBasket.adults, myBasket.children)} · ${t.basketSub(parts.length)}</div>
+    ${sharedView ? `<div class="banner"><span>${t.shared}</span><button class="btn-sm" id="save-shared">${t.saveMine}</button>
+      <button class="btn-sm" id="drop-shared">${t.backMine}</button></div>` : ""}`;
+  if (!points.length) {
+    card.innerHTML = head + `<p class="unit" style="margin-top:12px">${t.empty}</p>`;
+  } else {
+    const map = new Map(points);
+    const [m, now] = points[points.length - 1];
+    const chip = (label, n) => {
+      const before = map.get(monthsBack(m, n));
+      return before == null ? "" :
+        `<div class="chip"><span>${label}</span>${pctSpan(now, before)} <span>(${now >= before ? "+" : "−"}${yen(Math.abs(now - before))})</span></div>`;
+    };
+    const rows = parts.map(p => ({ p, cost: p.units * p.prices.get(m) })).sort((a, b) => b.cost - a.cost);
+    const anyCarried = rows.some(({ p }) => p.carried.has(m));
+    card.innerHTML = head + `
+      <div class="price"><span class="big">${yen(now)}</span><span class="unit">${m}</span></div>
+      <div class="chips">${chip(t.mom, 1)}${chip(t.y1, 12)}${chip(t.y5, 60)}</div>
+      ${cpiChips(m, t, kind)}
+      <div class="chart tall"><canvas></canvas></div>
+      ${cpiIdx(kind) ? `<div class="key"><span><i></i>${esc(title)}</span><span><i class="dash"></i>${t.ifCpi(kind)}</span></div>
+      <p class="note">${t.cpiNote(kind, esc(cpi.series[kind].estat_name))}</p>` : ""}
+      <details><summary>${t.inBasket}</summary>
+        <table><thead><tr><th>${t.item}</th><th>${t.amount}</th><th>${t.cost}</th><th>${t.shareCol}</th></tr></thead>
+        <tbody>${rows.map(({ p, cost }) => `<tr><td>${esc(p.item["name_" + lang])}${p.carried.has(m) ? " *" : ""}</td>
+          <td>${fmtQty(p.amount)} ${esc(basket.items[p.item.id]["input_" + lang])}</td><td>${yen(cost)}</td>
+          <td>${(cost / now * 100).toFixed(0)}%</td></tr>`).join("")}</tbody></table>
+        ${anyCarried ? `<p class="note">${t.carried}</p>` : ""}
+      </details>`;
+    const shown = range === "all" ? points : points.slice(-Number(range));
+    slot.replaceChildren(card);
+    basketCharts.push(lineChart(card.querySelector("canvas"), shown.map(p => p[0]), shown.map(p => p[1]), title, t.ifCpi(kind), kind));
+  }
+  if (!points.length) slot.replaceChildren(card);
+  card.querySelector("#edit-basket").onclick = () => toggleEditor();
+  if (sharedView) {
+    card.querySelector("#save-shared").onclick = () => { sharedView = false; clearHash(); saveBasket(); renderBasket(T[lang]); renderEditor(); };
+    card.querySelector("#drop-shared").onclick = () => { sharedView = false; clearHash(); myBasket = loadBasket(); renderBasket(T[lang]); renderEditor(); };
+  }
+}
+const clearHash = () => history.replaceState(null, "", location.pathname + location.search);
+
+// ---------- Basket editor
+function toggleEditor(open) {
+  const ed = document.getElementById("basket-editor");
+  ed.hidden = open === undefined ? !ed.hidden : !open;
+  document.getElementById("edit-basket")?.setAttribute("aria-expanded", String(!ed.hidden));
+  if (!ed.hidden) { renderEditor(); ed.scrollIntoView({ behavior: "smooth", block: "start" }); }
+}
+let basketTimer;
+function basketChanged(rerenderEditor) {
+  saveBasket();
+  if (rerenderEditor) renderEditor();
+  clearTimeout(basketTimer);
+  basketTimer = setTimeout(() => { renderBasket(T[lang]); renderOutlook(T[lang]); renderWages(T[lang]); }, 120);
+}
+function renderEditor() {
+  const ed = document.getElementById("basket-editor");
+  if (ed.hidden || !data || !basket) return;
+  const t = T[lang];
+  const mult = multiplier();
+  const cats = data.categories || [];
+  const byCat = id => data.items.filter(i => basket.items[i.id] && (i.category || "") === id);
+  const groups = [...cats.map(c => [c, byCat(c.id)]), [{ ["name_" + lang]: t.other }, data.items.filter(i => basket.items[i.id] && !cats.some(c => c.id === i.category))]]
+    .filter(([, list]) => list.length);
+  const costOf = (i, amount) => { const pr = latestPrice(i); return pr == null ? "–" : yen(amount * basket.items[i.id].per * pr); };
+  ed.innerHTML = `<div class="card-head"><h2>${t.edit}</h2>
+      <div class="editor-actions"><button class="btn-sm" id="ed-reset">${t.reset}</button>
+      <button class="btn-sm" id="ed-share">${t.copyLink}</button><button class="btn-sm" id="ed-close">${t.close}</button></div></div>
+    <div class="people">
+      ${["adults", "children"].map(k => `<span class="stepper"><span>${t[k]}</span>
+        <button data-step="${k}" data-d="-1" aria-label="${t[k]} −">−</button><output>${myBasket[k]}</output>
+        <button data-step="${k}" data-d="1" aria-label="${t[k]} +">+</button></span>`).join("")}
+      <span class="note" style="margin:0">${t.childNote}</span>
+    </div>
+    <p class="note">${t.amountsNote}</p>
+    <div class="ed-grid">${groups.map(([c, list]) => `<h3 class="ed-cat">${esc(c["name_" + lang])}</h3>` + list.map(i => {
+      const spec = basket.items[i.id], on = myBasket.items[i.id] > 0;
+      const amount = (on ? myBasket.items[i.id] : spec.suggest) * scaleOf(i.id);
+      return `<div class="ed-row" data-id="${i.id}">
+        <label><input type="checkbox" ${on ? "checked" : ""}><span>${esc(i["name_" + lang])}</span></label>
+        <input type="number" min="0" step="${spec.step}" value="${fmtQty(amount)}" ${on ? "" : "disabled"} aria-label="${esc(i["name_" + lang])}">
+        <span class="u">${esc(spec["input_" + lang])}</span>
+        <span class="c">${on ? costOf(i, amount) : ""}</span></div>`;
+    }).join("")).join("")}</div>`;
+
+  ed.querySelector("#ed-close").onclick = () => toggleEditor(false);
+  ed.querySelector("#ed-reset").onclick = () => { myBasket = defaultBasket(); basketChanged(true); };
+  ed.querySelector("#ed-share").onclick = async e => {
+    const btn = e.currentTarget;  // currentTarget is cleared once the handler awaits
+    const url = `${location.origin}${location.pathname}${location.search}#b=${b64url(JSON.stringify(myBasket))}`;
+    try { await navigator.clipboard.writeText(url); } catch { window.prompt(t.copyLink, url); return; }
+    btn.textContent = t.copied; setTimeout(() => { btn.textContent = t.copyLink; }, 1500);
+  };
+  ed.querySelectorAll("[data-step]").forEach(b => b.onclick = () => {
+    const k = b.dataset.step, min = k === "adults" ? 1 : 0;
+    myBasket[k] = Math.max(min, Math.min(20, myBasket[k] + Number(b.dataset.d)));
+    basketChanged(true);
+  });
+  ed.querySelectorAll(".ed-row").forEach(row => {
+    const id = row.dataset.id, item = data.items.find(i => i.id === id), spec = basket.items[id];
+    const box = row.querySelector("input[type=checkbox]"), num = row.querySelector("input[type=number]"), cost = row.querySelector(".c");
+    box.onchange = () => {
+      if (box.checked) myBasket.items[id] = (Number(num.value) || spec.suggest * scaleOf(id)) / scaleOf(id);
+      else delete myBasket.items[id];
+      num.disabled = !box.checked;
+      cost.textContent = box.checked ? costOf(item, myBasket.items[id] * scaleOf(id)) : "";
+      basketChanged(false);
+    };
+    num.oninput = () => {
+      const v = Number(num.value);
+      if (!Number.isFinite(v) || v < 0) return;
+      if (v === 0) delete myBasket.items[id]; else myBasket.items[id] = v / scaleOf(id);
+      cost.textContent = v > 0 ? costOf(item, v) : "";
+      basketChanged(false);
+    };
+  });
+}
+
+// ---------- Seasonal patterns (factors per calendar month from prices.json)
+const SEASON_MIN = 0.10;  // only show patterns with at least a 10% swing
+const seasonal = item => item.seasonal && item.seasonal.amplitude >= SEASON_MIN ? item.seasonal.factors : null;
+const thisMonth0 = () => Number(new Intl.DateTimeFormat("en", { timeZone: "Asia/Tokyo", month: "numeric" }).format(new Date())) - 1;
+const shortMonth = (m, t) => lang === "ja" ? `${+m.slice(5)}月` : t.monthFull(+m.slice(5) - 1).slice(0, 3);
+const joinMonths = (ks, t) => ks.map(k => lang === "ja" ? `${k + 1}月` : t.monthFull(k).slice(0, 3)).join(lang === "ja" ? "・" : ", ");
+
+function seasonStrip(item, main, t) {
+  const f = seasonal(item);
+  if (!f) return "";
+  const vals = f.filter(v => v != null), lo = Math.min(...vals), hi = Math.max(...vals);
+  const now0 = thisMonth0();
+  const bars = f.map((v, k) => v == null ? `<span class="na" title="—"></span>` :
+    `<span class="${v <= 0.95 ? "lo" : v >= 1.05 ? "hi" : ""}${k === now0 ? " now" : ""}" style="height:${(4 + 26 * (v - lo) / (hi - lo || 1)).toFixed(0)}px"
+      title="${lang === "ja" ? `${k + 1}月` : t.monthFull(k)}: ${v >= 1 ? "+" : ""}${((v - 1) * 100).toFixed(0)}%"></span>`).join("");
+  const cheap = f.map((v, k) => [v, k]).filter(([v]) => v != null && v <= lo + 0.03).map(([, k]) => k).slice(0, 3);
+  const dear = f.map((v, k) => [v, k]).filter(([v]) => v != null && v >= hi - 0.03).map(([, k]) => k).slice(0, 3);
+  // Latest price with the season removed, against the average of the previous 12 months, also deseasonalised.
+  let nowLine = "";
+  const de = main.map(([m, v]) => [m, f[+m.slice(5) - 1] ? v / f[+m.slice(5) - 1] : null]).filter(([, v]) => v != null);
+  if (de.length > 12) {
+    const [mNow, vNow] = de[de.length - 1];
+    const prev = de.slice(-13, -1).map(([, v]) => v);
+    const dev = (vNow / (prev.reduce((a, b) => a + b, 0) / prev.length) - 1) * 100;
+    nowLine = Math.abs(dev) < 3 ? t.nowUsual(shortMonth(mNow, t)) : t.nowVsUsual(shortMonth(mNow, t), dev);
+  }
+  return `<div class="season"><div class="bars">${bars}</div>
+    <div class="bar-labels">${t.monthNames.map(n => `<span>${n}</span>`).join("")}</div>
+    <p>${t.cheapest}: ${joinMonths(cheap, t)} · ${t.dearest}: ${joinMonths(dear, t)}</p>
+    ${nowLine ? `<p>${nowLine}</p>` : ""}</div>`;
+}
+
+// ---------- Coming up (docs/data/outlook.json, MAFF vegetable outlook)
+function verdictText(v) {
+  if (lang === "ja") return v.verdict_ja;
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return v.verdict_ja
+    .replace(/(\d+)月前半/g, (_, m) => `early ${months[m - 1]}`).replace(/(\d+)月後半/g, (_, m) => `late ${months[m - 1]}`)
+    .replace(/やや平年を上回って推移/g, "slightly above normal").replace(/平年を上回って推移/g, "above normal")
+    .replace(/やや平年を下回って推移/g, "slightly below normal").replace(/平年を下回って推移/g, "below normal")
+    .replace(/平年並みで推移/g, "normal");
+}
+function renderOutlook(t) {
+  const box = document.getElementById("outlook");
+  const items = Object.entries(outlook?.items || {}).map(([id, v]) => ({ id, v, item: data.items.find(i => i.id === id) })).filter(r => r.item);
+  if (!items.length) { box.hidden = true; return; }
+  const m = outlook.edition, mo = +m.slice(5);
+  const title = lang === "ja" ? `${m.slice(0, 4)}年${mo}月` : `${t.monthFull(mo - 1)} ${m.slice(0, 4)}`;
+  const up = items.filter(r => r.v.score >= 0.5).sort((a, b) => b.v.score - a.v.score);
+  const down = items.filter(r => r.v.score <= -0.5).sort((a, b) => a.v.score - b.v.score);
+  const normal = items.filter(r => Math.abs(r.v.score) < 0.5);
+  const row = (r, cls) => `<details class="ol-row"><summary><span>${esc(r.item["name_" + lang])}</span>
+      <span class="chg ${cls}">${esc(verdictText(r.v))}</span></summary>
+      <p>${esc(lang === "en" && r.v.reason_en ? r.v.reason_en : r.v.reason_ja)}${lang === "en" && !r.v.reason_en ? `<span class="unit">${t.reasonJaOnly}</span>` : ""}</p></details>`;
+  // Rough basket effect: scale the track record's median retail move by the strength of the call.
+  const tr = outlook.track_record || {};
+  let impact = 0;
+  if (basket && myBasket && tr.up?.median_change != null && tr.down?.median_change != null) {
+    for (const r of [...up, ...down]) {
+      const amount = myBasket.items[r.id];
+      const last = latestPrice(r.item);
+      if (!amount || last == null) continue;
+      const cost = amount * scaleOf(r.id) * basket.items[r.id].per * last;
+      impact += cost * (r.v.score > 0 ? tr.up.median_change : -tr.down.median_change) * Math.min(Math.abs(r.v.score), 2) / 2 * Math.sign(r.v.score);
+    }
+  }
+  const safe = /^https:\/\//.test(outlook.source_url || "") ? esc(outlook.source_url) : "#";
+  box.innerHTML = `<h2>${t.outlookTitle(title)}</h2><div class="unit">${t.outlookSub}</div>
+    <div class="guide-cols">
+      <div><h3>${t.likelyUp}</h3>${up.length ? up.map(r => row(r, "up")).join("") : "<p class='unit'>–</p>"}</div>
+      <div><h3>${t.likelyDown}</h3>${down.length ? down.map(r => row(r, "down")).join("") : "<p class='unit'>–</p>"}</div>
+    </div>
+    ${normal.length ? `<p class="unit" style="margin:10px 0 0">${t.nearNormal}: ${normal.map(r => esc(r.item["name_" + lang])).join(lang === "ja" ? "、" : ", ")}</p>` : ""}
+    ${Math.abs(impact) >= 10 ? `<p style="margin:10px 0 0">${t.basketImpact(Math.round(impact / 10) * 10)}</p>` : ""}
+    ${tr.calls ? `<p class="note">${t.trackRecord(tr)}</p>` : ""}
+    <p class="note">${t.outlookNote} <a href="${safe}" target="_blank" rel="noopener noreferrer">${t.sourceLbl}</a></p>`;
+  box.hidden = false;
+}
+
+// ---------- Make it last (docs/preserve.json)
+const guidesFor = itemId => (preserve?.guides || []).filter(g => g.items.includes(itemId));
+function keepHtml(g, t, extra = "") {
+  const L = k => esc(g[`${k}_${lang}`] || "");
+  return `<details class="keep"><summary><span><b>${L("title")}</b>${extra}</span>
+      <span class="badge">${esc(preserve.methods[g.method]?.[lang] || g.method)}</span></summary>
+    <div class="keep-body">
+      <p><span class="lbl">${t.youNeed}:</span> ${L("needs")}</p>
+      <ol>${g["steps_" + lang].map(st => `<li>${esc(st)}</li>`).join("")}</ol>
+      <p><span class="lbl">${t.keeps}:</span> ${L("keeps")}</p>
+      ${g["note_" + lang] ? `<p><span class="lbl">${t.caution}:</span> ${L("note")}</p>` : ""}
+      ${g.veranda ? `<p><span class="lbl">${t.veranda}:</span> ${L("veranda")}</p>` : ""}
+    </div></details>`;
+}
+function safetyHtml(t) {
+  const s = preserve?.safety;
+  if (!s) return "";
+  return `<details class="keep"><summary><span><b>${t.safetyTitle}</b></span></summary><div class="keep-body">
+    <ul style="margin:4px 0;padding-left:1.2em">${s[lang].map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+    <p><span class="lbl">${t.sourceLbl}:</span> <a href="${/^https:\/\//.test(s.source.url) ? esc(s.source.url) : "#"}" target="_blank" rel="noopener noreferrer">${esc(s.source["title_" + lang])}</a></p>
+  </div></details>`;
+}
+
+function renderGuide(t) {
+  const box = document.getElementById("guide");
+  const k = thisMonth0();
+  const rows = data.items.map(i => ({ i, f: seasonal(i)?.[k] })).filter(r => r.f != null);
+  const cheap = rows.filter(r => r.f <= 0.95).sort((a, b) => a.f - b.f);
+  const dear = rows.filter(r => r.f >= 1.05).sort((a, b) => b.f - a.f);
+  if (!cheap.length && !dear.length) { box.hidden = true; return; }
+  const list = (rs, cls) => `<ol>${rs.map(r => `<li><span>${esc(r.i["name_" + lang])}</span>
+      <span class="chg ${cls}">${r.f > 1 ? "+" : ""}${((r.f - 1) * 100).toFixed(0)}% <span class="unit">${t.vsYear}</span></span></li>`).join("")}</ol>`;
+  box.innerHTML = `<h2>${t.guide(lang === "ja" ? k + 1 : t.monthFull(k))}</h2>
+    <div class="guide-cols">
+      <div><h3>${t.guideCheap}</h3>${cheap.length ? list(cheap, "down") : "<p class='unit'>–</p>"}</div>
+      <div><h3>${t.guideDear}</h3>${dear.length ? list(dear, "up") : "<p class='unit'>–</p>"}</div>
+    </div>
+    <p class="note">${t.guideNote}</p>
+    ${(() => {
+      const keep = cheap.flatMap(r => guidesFor(r.i.id).map(g => ({ g, r })));
+      if (!keep.length) return "";
+      return `<h3 id="make-it-last" style="margin:18px 0 2px;font-size:1rem;color:var(--text)">${t.makeItLast}</h3>
+        <p class="unit" style="margin:0">${t.makeItLastSub}</p>
+        <div class="keep-list">${keep.map(({ g, r }) => keepHtml(g, t,
+          `<br><span class="unit">${esc(r.i["name_" + lang])} · ${t.usuallyCheaper(((1 - r.f) * 100).toFixed(0))}</span>`)).join("")}
+          ${safetyHtml(t)}</div>`;
+    })()}`;
+  box.hidden = false;
+}
+
+// ---------- Related news (docs/data/insights.json)
+function newsFor(itemId) {
+  if (!insights || !data || cur.id !== DEFAULT_CITY.id) return null;  // news and explanations are written for Nagoya
+  const latest = data.items.map(seriesOf).filter(s => s.length).map(s => s[s.length - 1][0]).sort().pop();
+  const info = insights.month === latest ? insights.items?.[itemId] : null;
+  const visible = (info?.headlines || []).filter(h => !h.hide).length;
+  return info && (visible || (info.official || []).length || info["summary_" + lang]) ? info : null;
+}
+function newsList(info, t) {
+  const summary = info["summary_" + lang];  // written by the monthly explainer, if it has run
+  const safeUrl = u => /^https:\/\//.test(u) ? esc(u) : "#";
+  const items = (info.headlines || []).map((h, k) => h.hide ? "" :  // numbers match the [n] in the explanation
+    `<li><span class="meta">[${k + 1}]</span> <a href="${safeUrl(h.url)}" target="_blank" rel="noopener noreferrer">${esc(lang === "en" && h.title_en ? h.title_en : h.title)}</a>
+      <span class="meta"> · ${esc(h.source)}${h.date ? " · " + esc(h.date) : ""}${lang === "en" && h.title_en ? `<br>${esc(h.title)}` : ""}</span></li>`).join("");
+  return `${summary ? `<p class="explain"><span class="meta">${t.explainLabel}</span><br>${esc(summary)}</p>` : ""}
+    <ul class="news">${items}
+    ${(info.official || []).map(o => `<li><span class="meta">${t.official}: </span><a href="${safeUrl(o.url)}" target="_blank" rel="noopener noreferrer">${esc(o["title_" + lang])}</a></li>`).join("")}
+  </ul><p class="note" style="margin:0 0 6px">${summary ? t.explainNote : t.newsNote}</p>`;
+}
+
+// ---------- Prices and pay
+// Yearly average of monthly points, for years with at least 10 months.
+function yearlyAvg(points) {
+  const by = new Map();
+  for (const [m, v] of points) { const y = +m.slice(0, 4); (by.get(y) || by.set(y, []).get(y)).push(v); }
+  return new Map([...by].filter(([, vs]) => vs.length >= 10).map(([y, vs]) => [y, vs.reduce((a, b) => a + b, 0) / vs.length]));
+}
+function renderWages(t) {
+  const box = document.getElementById("wages");
+  wageCharts.splice(0).forEach(c => c.destroy());
+  const prefPoints = wages?.prefs?.[cur.pref] || (cur.pref === "愛知県" ? wages?.points : null);
+  const pay = new Map(prefPoints || []);
+  const all = yearlyAvg(cpi?.series?.all?.points || []), food = yearlyAvg(cpi?.series?.food?.points || []);
+  const bpts = basket && myBasket ? basketSeries().points : [];
+  const bask = yearlyAvg(bpts);
+  const years = [...pay.keys()].filter(y => y >= 2015 && all.has(y)).sort();
+  if (years.length < 2) { box.hidden = true; return; }
+  const y0 = years[0], y1 = years[years.length - 1];
+  const idx = (map, y) => map.has(y) && map.has(y0) ? map.get(y) / map.get(y0) * 100 : null;
+  const pct = map => map.has(y1) && map.has(y0) ? (map.get(y1) / map.get(y0) - 1) * 100 : null;
+  const rows = [[t.pay, pay, css("--down")], [t.basketLine, bask, css("--nagoya")], [t.cpiAllLine, all, css("--muted")], [t.cpiFoodLine, food, css("--tokyo")]];
+  const real = pct(pay) != null && pct(all) != null ? ((1 + pct(pay) / 100) / (1 + pct(all) / 100) - 1) * 100 : null;
+  const latestBasket = bpts.length ? bpts[bpts.length - 1][1] : null;
+  const wy = Math.max(...pay.keys());
+  box.innerHTML = `<h2>${t.wagesTitle}</h2><div class="unit">${t.wagesSub(y0, y1)}</div>
+    <div class="chips" style="margin-top:10px">${rows.map(([label, map]) => pct(map) == null ? "" :
+      `<div class="chip"><span>${label}</span>${map === pay  // for pay, a rise is good news: swap the colours
+        ? pctSpan(map.get(y1), map.get(y0)).replace(/chg (up|down)/, (_, c) => `chg ${c === "up" ? "down" : "up"}`)
+        : pctSpan(map.get(y1), map.get(y0))}</div>`).join("")}</div>
+    <div class="chart tall"><canvas></canvas></div>
+    ${real != null ? `<p style="margin:8px 0 0"><b class="chg ${real < 0 ? "up" : "down"}" style="font-size:1rem">${t.realPay(real)}</b></p>` : ""}
+    ${latestBasket ? `<p class="unit" style="margin:4px 0 0">${t.payShare(latestBasket / (pay.get(wy) * 1000) * 100, wy)}</p>` : ""}
+    <p class="note">${t.wagesNote(wy)}</p>`;
+  box.hidden = false;
+  wageCharts.push(new Chart(box.querySelector("canvas"), {
+    type: "line",
+    data: { labels: years, datasets: rows.filter(([, map]) => map.has(y0)).map(([label, map, color], k) => ({
+      label, data: years.map(y => idx(map, y)), borderColor: color, borderWidth: k < 2 ? 2.25 : 1.25,
+      borderDash: k === 2 ? [4, 4] : k === 3 ? [2, 3] : [], pointRadius: k === 0 ? 3 : 0, spanGaps: true, tension: 0.15 })) },
+    options: {
+      maintainAspectRatio: false, animation: false, interaction: { mode: "index", intersect: false },
+      plugins: { legend: { display: true, position: "bottom", labels: { color: css("--muted"), boxWidth: 14, boxHeight: 2 } },
+                 tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.parsed.y?.toFixed(1)}` } } },
+      scales: { x: { ticks: { color: css("--muted") }, grid: { display: false } },
+                y: { ticks: { color: css("--muted"), maxTicksLimit: 5 }, grid: { color: css("--line") } } },
+    },
+  }));
+}
+
+// ---------- Menu
+function renderMenu(t) {
+  const links = [];
+  const add = (id, label, sub) => { if (document.getElementById(id) && !document.getElementById(id).hidden) links.push(
+    `<a href="#${id}" class="${sub ? "sub-link" : ""}" data-jump="${id}">${esc(label)}</a>`); };
+  if (basket && myBasket) add("basket-slot", sameAsDefault() && !sharedView ? basket["name_" + lang] : t.myBasket);
+  add("movers", t.movers);
+  add("guide", document.querySelector("#guide h2")?.textContent || "");
+  if (document.getElementById("make-it-last")) add("make-it-last", t.makeItLast, true);
+  add("outlook", document.querySelector("#outlook h2")?.textContent || "");
+  add("wages", t.wagesTitle);
+  add("items", t.allItems);
+  if (sortBy === "category") for (const c of data?.categories || []) add(`cat-${c.id}`, c["name_" + lang], true);
+  document.getElementById("menu-jump").innerHTML = links.join("");
+}
+function toggleMenu(open) {
+  const menu = document.getElementById("menu"), btn = document.getElementById("menu-btn");
+  menu.hidden = open === undefined ? !menu.hidden : !open;
+  btn.setAttribute("aria-expanded", String(!menu.hidden));
+  if (!menu.hidden) menu.querySelector("a, button")?.focus({ preventScroll: true });
+}
+document.getElementById("menu-btn").onclick = e => { e.stopPropagation(); toggleMenu(); };
+document.getElementById("menu-close").onclick = () => { toggleMenu(false); document.getElementById("menu-btn").focus(); };
+document.getElementById("menu").addEventListener("click", e => {
+  e.stopPropagation();
+  const jump = e.target.closest("[data-jump]");
+  if (jump) {
+    e.preventDefault();
+    toggleMenu(false);
+    document.getElementById(jump.dataset.jump)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+  const tool = e.target.closest("[data-tool]");
+  if (tool) {
+    toggleMenu(false);
+    if (tool.dataset.tool === "check") { toggleChecker(true); document.getElementById("checker").scrollIntoView({ behavior: "smooth", block: "start" }); }
+    else toggleEditor(true);
+  }
+});
+document.addEventListener("click", () => { if (!document.getElementById("menu").hidden) toggleMenu(false); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !document.getElementById("menu").hidden) { toggleMenu(false); document.getElementById("menu-btn").focus(); }
+});
+document.getElementById("to-top").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+// ---------- Price checker
+const CHECK_KEY = "check.v1";
+function toggleChecker(open) {
+  const box = document.getElementById("checker");
+  box.hidden = open === undefined ? !box.hidden : !open;
+  document.getElementById("check-btn").setAttribute("aria-expanded", String(!box.hidden));
+  if (!box.hidden) { renderChecker(); box.querySelector("#ck-price")?.focus(); }
+}
+function renderChecker() {
+  const box = document.getElementById("checker");
+  if (box.hidden || !data || !basket) return;
+  const t = T[lang];
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(CHECK_KEY)) || {}; } catch {}
+  const items = data.items.filter(i => basket.items[i.id] && seriesOf(i).length);
+  const cur = items.find(i => i.id === saved.id) || items.find(i => i.id === "eggs") || items[0];
+  const cats = data.categories || [];
+  const opts = cats.map(c => {
+    const list = items.filter(i => i.category === c.id);
+    return list.length ? `<optgroup label="${esc(c["name_" + lang])}">${list.map(i =>
+      `<option value="${i.id}" ${i === cur ? "selected" : ""}>${esc(i["name_" + lang])}</option>`).join("")}</optgroup>` : "";
+  }).join("");
+  box.innerHTML = `<div class="card-head"><h2>${t.checkTitle}</h2><button class="btn-sm" id="ck-close">${t.close}</button></div>
+    <div class="check-form">
+      <label class="f-item">${t.checkItem}<select id="ck-item">${opts}</select></label>
+      <label>${t.checkPrice}<span class="with-unit"><span>¥</span><input id="ck-price" type="number" inputmode="decimal" min="0" step="1"></span></label>
+      <label>${t.checkQty}<span class="with-unit"><input id="ck-qty" type="number" inputmode="decimal" min="0"><span id="ck-unit"></span></span></label>
+    </div>
+    <div id="ck-result"></div>`;
+  const sel = box.querySelector("#ck-item"), price = box.querySelector("#ck-price"), qty = box.querySelector("#ck-qty");
+  const setItem = (keepQty) => {
+    const item = data.items.find(i => i.id === sel.value), spec = basket.items[item.id];
+    box.querySelector("#ck-unit").textContent = spec["input_" + lang];
+    qty.step = spec.step;
+    if (!keepQty) qty.value = fmtQty(1 / spec.per);  // one survey unit, e.g. 10 eggs or 5 kg of rice
+    update();
+  };
+  const update = () => {
+    const item = data.items.find(i => i.id === sel.value), spec = basket.items[item.id];
+    try { localStorage.setItem(CHECK_KEY, JSON.stringify({ id: item.id })); } catch {}
+    const out = box.querySelector("#ck-result");
+    const pr = Number(price.value), q = Number(qty.value);
+    const s = seriesOf(item), [m, avg] = s[s.length - 1];
+    const last12 = s.slice(-12).map(p => p[1]), lo = Math.min(...last12), hi = Math.max(...last12);
+    const unitName = item["unit_" + lang] || spec["input_" + lang];
+    if (!(pr > 0 && q > 0)) {
+      out.innerHTML = `<p class="note" style="margin-top:12px">${t.avgLabel(m)}: <b>${yen(avg)}</b> ${t.checkPer(esc(unitName))} ·
+        ${t.lowLabel} ${yen(lo)} · ${t.highLabel} ${yen(hi)}</p><p class="note">${t.checkNote}</p>`;
+      return;
+    }
+    const yours = pr / (q * spec.per);  // price per survey unit
+    const diff = (yours / avg - 1) * 100;
+    const [cls, verdict] = yours < lo ? ["good", t.vLow] : diff <= -5 ? ["good", t.vGood] : diff < 5 ? ["", t.vAvg]
+                         : yours > hi ? ["bad", t.vTop] : ["bad", t.vHigh];
+    const a = Math.min(lo, yours, avg) * 0.97, b = Math.max(hi, yours, avg) * 1.03;
+    const x = v => `${((v - a) / (b - a) * 100).toFixed(1)}%`;
+    out.innerHTML = `<div class="verdict"><div class="v ${cls}">${verdict}</div>
+        <div>${yen(yours)} ${t.checkPer(esc(unitName))} · ${t.vsAvg(diff)}</div></div>
+      <div class="range" aria-hidden="true">
+        <div style="position:absolute;left:${x(lo)};width:calc(${x(hi)} - ${x(lo)});height:100%;background:var(--muted);opacity:.35;border-radius:4px"></div>
+        <div class="avg" style="left:${x(avg)}"></div><span class="lbl top" style="left:${x(avg)}">${t.avgLabel(m)} ${yen(avg)}</span>
+        <div class="you" style="left:${x(yours)}"></div>
+        <span class="lbl" style="left:${x(lo)}">${yen(lo)}</span><span class="lbl" style="left:${x(hi)}">${yen(hi)}</span>
+      </div>
+      <p class="note">${t.lowLabel} ${yen(lo)} – ${t.highLabel} ${yen(hi)}. ${t.checkNote}</p>`;
+  };
+  sel.onchange = () => setItem(false);
+  price.oninput = update;
+  qty.oninput = update;
+  box.querySelector("#ck-close").onclick = () => toggleChecker(false);
+  setItem(false);
+}
+
+function renderSummary(t) {
+  const box = document.getElementById("summary");
+  box.innerHTML = "";
+  if (!data || !data.items.length) return;
+
+  // ---- Basket card (rendered separately so editing doesn't redraw every chart)
+  if (basket && myBasket) {
+    const slot = document.createElement("div");
+    slot.id = "basket-slot";
+    box.appendChild(slot);
+    renderBasket(t);
+  }
+
+  // ---- Biggest changes card
+  const latest = data.items.map(seriesOf).filter(s => s.length).map(s => s[s.length - 1][0]).sort().pop();
+  const changes = n => data.items.map(i => {
+    const m = new Map(seriesOf(i));
+    const now = m.get(latest), before = m.get(monthsBack(latest, n));
+    return now != null && before ? { i, now, before, pct: (now / before - 1) * 100 } : null;
+  }).filter(Boolean);
+  const list = (rows, label) => rows.length ? `<h3>${label}</h3><ol>${rows.map(r => {
+      const info = newsFor(r.i.id);
+      return info
+        ? `<li class="has-news"><details><summary><span>${esc(r.i["name_" + lang])}<span class="why">${t.why}</span></span>${pctSpan(r.now, r.before)}</summary>${newsList(info, t)}</details></li>`
+        : `<li><span>${esc(r.i["name_" + lang])}</span>${pctSpan(r.now, r.before)}</li>`;
+    }).join("")}</ol>` : "";
+  const block = (title, n) => {
+    const c = changes(n).sort((a, b) => b.pct - a.pct);
+    const ups = c.filter(r => r.pct > 0.05).slice(0, 3);
+    const downs = c.filter(r => r.pct < -0.05).reverse().slice(0, 3);
+    const idx = cpiFood();
+    const base = idx && idx.has(latest) && idx.has(monthsBack(latest, n))
+      ? ` <span class="unit" style="font-weight:400">(${t.baseline} ${pctSpan(idx.get(latest), idx.get(monthsBack(latest, n)))})</span>` : "";
+    return `<h3 style="color:var(--text);font-weight:600">${title}${base}</h3>` +
+      (ups.length || downs.length ? list(ups, t.up) + list(downs, t.down) : `<p class="unit">${t.noMoves}</p>`);
+  };
+  const movers = document.createElement("section");
+  movers.className = "card movers";
+  movers.id = "movers";
+  movers.innerHTML = `<h2>${t.movers}</h2><div class="unit">${latest}</div>
+    ${block(t.sinceMonth, 1)}${block(t.sinceYear, 12)}`;
+  box.appendChild(movers);
+}
+
+function render() {
+  document.title = `${T.ja.title} | ${T.en.title}`;
+  renderCityPickers();
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
+  document.querySelectorAll("[data-range]").forEach(b => {
+    b.textContent = t["r" + b.dataset.range];
+    b.setAttribute("aria-pressed", b.dataset.range === range);
+  });
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang === lang));
+  document.getElementById("menu-btn").textContent = t.menu;
+  charts.splice(0).forEach(c => c.destroy());
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  document.getElementById("check-btn").textContent = t.check;
+  renderSummary(t);
+  renderEditor();
+
+  if (!data || !data.items.length) {
+    document.getElementById("legend").innerHTML = "";
+    grid.innerHTML = `<div class="empty">${t.noData}</div>`;
+    document.getElementById("footer").textContent = "";
+    return;
+  }
+  renderGuide(t);
+  renderOutlook(t);
+  renderWages(t);
+  renderChecker();
+
+  const color = id => css(id === "local" ? "--nagoya" : "--tokyo");
+  document.getElementById("legend").innerHTML = (chartAreas().length < 2 ? "" : chartAreas().map(a =>
+    `<span><span class="swatch" style="background:${color(a.id)}"></span>${a["name_" + lang]}</span>`).join("")) +
+    (cpiFood() ? `<span><span class="swatch" style="background:none;border-top:2px dashed var(--muted);height:0"></span>${t.cpiLegend}</span>` : "");
+
+  document.querySelectorAll("[data-sort]").forEach(b => {
+    b.textContent = t["sort_" + b.dataset.sort];
+    b.setAttribute("aria-pressed", b.dataset.sort === sortBy);
+  });
+
+  // Latest price and year-on-year change for each item, then order them.
+  const rows = data.items.map(item => {
+    const main = seriesOf(item);
+    if (!main.length) return null;
+    const [lastMonth, last] = main[main.length - 1];
+    const before = new Map(main).get(monthsBack(lastMonth, 12));
+    return { item, main, lastMonth, last, before, pct: before ? last / before - 1 : null };
+  }).filter(Boolean);
+  const cats = data.categories || [];
+  const catIndex = id => { const i = cats.findIndex(c => c.id === id); return i < 0 ? cats.length : i; };
+  if (sortBy === "category") rows.sort((a, b) => catIndex(a.item.category) - catIndex(b.item.category));
+  else {
+    const dir = sortBy === "up" ? -1 : 1;
+    rows.sort((a, b) => (a.pct == null) - (b.pct == null) || dir * (a.pct - b.pct));
+  }
+
+  let currentCat;
+  for (const { item, main, lastMonth, last, before } of rows) {
+    if (sortBy === "category" && item.category !== currentCat) {
+      currentCat = item.category;
+      const c = cats.find(c => c.id === currentCat);
+      const h = document.createElement("h3");
+      h.className = "cat-title";
+      h.id = `cat-${currentCat}`;
+      h.textContent = c ? c["name_" + lang] : t.other;
+      grid.appendChild(h);
+    }
+    const chg = pctSpan(last, before, t.yoy);
+    const nat = item.series.national ? new Map(item.series.national).get(lastMonth) : null;
+    const natDiff = nat ? (last / nat - 1) * 100 : null;
+    const natLine = natDiff == null ? "" : Math.abs(natDiff) < 2 ? t.sameNational : t.vsNational(natDiff);
+    const unit = item["unit_" + lang] ? (lang === "ja" ? `${item.unit_ja}${t.per}` : `${t.per} ${item.unit_en}`) : "";
+    const sub = [unit, item["note_" + lang]].filter(Boolean).join(" · ");
+
+    const card = document.createElement("section");
+    card.className = "card";
+    card.innerHTML = `<h2>${item["name_" + lang]}</h2>
+      <div class="unit">${sub || "&nbsp;"}</div>
+      <div class="price"><strong>${yen(last)}</strong>${chg}</div>
+      <div class="unit">${lastMonth}${natLine ? ` · ${natLine}` : ""}</div>
+      <div class="chart"><canvas></canvas></div>
+      ${seasonStrip(item, main, t)}
+      ${(info => info ? `<details class="news-box"><summary>${t.relatedNews((info.headlines || []).length)}</summary>${newsList(info, t)}</details>` : "")(newsFor(item.id))}
+      ${(gs => gs.length ? `<details class="keep-box"><summary>${t.keepCount(gs.length)}</summary>${gs.map(g => keepHtml(g, t)).join("")}${safetyHtml(t)}</details>` : "")(guidesFor(item.id))}`;
+    grid.appendChild(card);
+
+    const months = [...new Set(Object.values(item.series).flat().map(p => p[0]))].sort();
+    const shown = range === "all" ? months : months.slice(-Number(range));
+    charts.push(new Chart(card.querySelector("canvas"), {
+      type: "line",
+      data: {
+        labels: shown,
+        datasets: [...chartAreas().filter(a => item.series[a.id]).map(a => {
+          const m = new Map(item.series[a.id]);
+          return { label: a["name_" + lang], data: shown.map(x => m.get(x) ?? null),
+                   borderColor: color(a.id), borderWidth: a.id === "local" ? 2 : 1.25,
+                   pointRadius: 0, spanGaps: true, tension: 0.2 };
+        }), ...refDataset(shown, shown.map(x => new Map(main).get(x) ?? null), t.ifCpi(cpiKindForItem(item)), cpiKindForItem(item))],
+      },
+      options: {
+        maintainAspectRatio: false, animation: false,
+        interaction: { mode: "index", intersect: false },
+        plugins: { legend: { display: false },
+                   tooltip: { callbacks: { label: c => `${c.dataset.label}: ${yen(c.parsed.y)}` } } },
+        scales: {
+          x: { ticks: { maxTicksLimit: 5, color: css("--muted") }, grid: { display: false } },
+          y: { ticks: { maxTicksLimit: 4, color: css("--muted"), callback: v => yen(v) }, grid: { color: css("--line") } },
+        },
+      },
+    }));
+  }
+  const s = data.source;
+  document.getElementById("footer").innerHTML =
+    `${t.source}: ${s["name_" + lang]}${cpi ? "; " + cpi.source["name_" + lang] : ""} (<a href="https://www.e-stat.go.jp/">e-Stat</a>) · ${t.updated}: ${data.updated.slice(0, 10)}`;
+  renderMenu(t);  // last, so the category headings exist
+}
+
+document.querySelectorAll("[data-range]").forEach(b => b.onclick = () => { range = b.dataset.range; render(); });
+document.querySelectorAll("[data-sort]").forEach(b => b.onclick = () => {
+  sortBy = b.dataset.sort;
+  try { localStorage.setItem("sortBy", sortBy); } catch {}
+  render();
+});
+document.querySelectorAll("[data-lang]").forEach(b => b.onclick = () => {
+  lang = b.dataset.lang;
+  try { localStorage.setItem("lang", lang); } catch {}
+  render();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+document.getElementById("check-btn").onclick = () => {
+  toggleChecker();
+  const box = document.getElementById("checker");
+  if (!box.hidden) box.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
+const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
+// Each city has its own page (docs/<id>/index.html, built by fetch/build_pages.py); choosing a city goes there.
+const cityPageUrl = id => new URL(id === DEFAULT_CITY.id ? "./" : `${encodeURIComponent(id)}/`, document.baseURI).href;
+document.querySelectorAll("[data-city-select]").forEach(sel => sel.onchange = () => {
+  toggleMenu(false);
+  try { localStorage.setItem("city", sel.value); } catch {}
+  location.href = cityPageUrl(sel.value) + location.hash.replace(/^#b=.*/, "");
+});
+Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json"), load("data/insights.json"), load("preserve.json"), load("data/outlook.json"), load("data/cities.json")])
+  .then(async ([d, b, c, w, ins, pr, ol, ci]) => {
+    data = d; basket = b; cpi = cpiBase = c; wages = w; insights = ins; preserve = pr; outlook = ol; cityIndex = ci;
+    if (basket) myBasket = loadBasket();
+    if (data) applyCity();
+    // A city page's preset wins, then ?city=osaka in the link (older links), then the last city used here
+    let want = window.PRESET_CITY || new URL(location.href).searchParams.get("city");
+    if (!want) { try { want = localStorage.getItem("city"); } catch {} }
+    if (data && want && want !== DEFAULT_CITY.id && cityIndex?.cities?.some(c => c.id === want)) await selectCity(want, { remember: false });
+    else render();
+    if (/[#&]check\b/.test(location.hash)) toggleChecker(true);  // bookmarkable: .../#check
+  });
+</script>
+</body>
+</html>
