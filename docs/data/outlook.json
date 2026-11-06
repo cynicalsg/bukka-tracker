@@ -1,0 +1,117 @@
+{
+ "edition": "2026-11",
+ "source_url": "https://www.maff.go.jp/j/seisan/ryutu/yasai_zyukyu/attach/pdf/index-172.pdf",
+ "generated": "2026-11-06T04:38:27Z",
+ "baseline": "5-year average for the month, Tokyo central wholesale markets",
+ "items": {
+  "daikon": {
+   "score": 2,
+   "verdict_ja": "平年を上回って推移",
+   "reason_ja": "北海道産・青森県産の出荷が減少し、千葉県産・神奈川県産中心の出荷に切り替わる。千葉県産・神奈川県産は9月の長雨や台風の影響で播種ができなかった圃場がみられるほか、生育遅れや生理障害が発生しており、11月の出荷数量は平年を下回り、価格は平年を上回って推移する見込み。",
+   "reason_en": "Shipments shift from Hokkaido and Aomori to Chiba and Kanagawa. In Chiba and Kanagawa, some fields couldn't be sown because of September's long rains and typhoon, and growth is delayed with some physiological damage, so November shipments are expected to be below normal and prices above normal."
+  },
+  "carrot": {
+   "score": 1,
+   "verdict_ja": "11月前半: 平年並みで推移 / 11月後半: 平年を上回って推移",
+   "reason_ja": "北海道産中心の出荷から、千葉県産中心の出荷へと切り替わる。北海道産・青森県産は11月中旬に出荷が終了する見込み。千葉県産は8月の豪雨や9月の台風による再播種、また9月の長雨や日照不足の影響により生育遅れや肥大の鈍化がみられており、出荷数量は平年を下回る見込み。全体として、11月前半の出荷数量・価格は平年並みで推移し、11月後半の出荷数量は平年を下回り、価格は平年を上回って推移する見込み。",
+   "reason_en": "Shipments shift from Hokkaido to Chiba; Hokkaido and Aomori finish in mid-November. In Chiba, replanting after August's heavy rain and September's typhoon, plus long rains and little sunshine, have slowed growth and sizing. Prices are expected to be normal in early November and above normal in late November as shipments fall."
+  },
+  "cabbage": {
+   "score": 2,
+   "verdict_ja": "平年を上回って推移",
+   "reason_ja": "群馬県産の出荷が減少し、千葉県産・茨城県産・愛知県産中心の出荷へと切り替わる。群馬県産は11月上旬に出荷が終了する見込み。千葉県産・茨城県産・愛知県産は9月の長雨や日照不足の影響で定植作業の遅れや生育遅れが発生しているほか、小玉傾向がみられている。全体として、11月の出荷数量は平年を下回り、価格は平年を上回って推移する見込み。",
+   "reason_en": "Gunma finishes in early November and shipments shift to Chiba, Ibaraki and Aichi, where September's long rains and low sunshine delayed planting and growth and heads are small. November shipments are expected to be below normal and prices above normal."
+  },
+  "spinach": {
+   "score": 0,
+   "verdict_ja": "平年並みで推移",
+   "reason_ja": "主産地の生育は概ね順調であり、11月の出荷数量・価格は平年並みで推移する見込み。",
+   "reason_en": "Growth in the main producing areas is mostly on track, so November shipments and prices are expected to be normal."
+  },
+  "negi": {
+   "score": 0.5,
+   "verdict_ja": "11月前半: 平年並みで推移 / 11月後半: やや平年を上回って推移",
+   "reason_ja": "北海道産・秋田県産・青森県産の出荷が減少し、茨城県産の出荷が増加する。北海道産・東北産の生育は順調。茨城県産は9月の長雨や日照不足の影響で生育不良がみられる。全体として、11月前半の出荷数量・価格は平年並みで推移し、11月後半の出荷数量はやや平年を下回り、価格はやや平年を上回って推移する見込み。",
+   "reason_en": "Shipments shift from Hokkaido and Tohoku, where growth is good, to Ibaraki, where September's long rains and low sunshine have hurt growth. Prices are expected to be normal in early November and slightly above normal in late November."
+  },
+  "cucumber": {
+   "score": 0.5,
+   "verdict_ja": "11月前半: やや平年を上回って推移 / 11月後半: 平年並みで推移",
+   "reason_ja": "関東産中心の出荷から宮崎県産中心の出荷に切り替わる。関東産は9月の長雨の影響により樹勢の低下がみられ、出荷数量の減少につながっている。宮崎県産の生育は概ね順調である。全体として、11月前半の出荷数量は平年を下回り、価格はやや平年を上回って推移し、11月後半の出荷数量・価格は平年並みで推移する見込み。",
+   "reason_en": "Shipments shift from Kanto to Miyazaki. Kanto plants were weakened by September's long rains, cutting shipments, while growth in Miyazaki is mostly on track. Prices are expected to be slightly above normal in early November and normal in late November."
+  },
+  "tomato": {
+   "score": 0,
+   "verdict_ja": "平年並みで推移",
+   "reason_ja": "関東産・東海産は9月の長雨の影響により着果不良が発生し、着果数の減少が懸念される。熊本県産は9月の気温が適度であり、10月も好天が続いたことから生育は概ね順調である。全体として、11月の出荷数量・価格は平年並みで推移する見込み。",
+   "reason_en": "In Kanto and Tokai, September's long rains caused poor fruit setting, while Kumamoto has grown well thanks to mild September temperatures and fine October weather. Overall, November shipments and prices are expected to be normal."
+  },
+  "potato": {
+   "score": 0,
+   "verdict_ja": "平年並みで推移",
+   "reason_ja": "北海道産中心の出荷。11月の出荷数量・価格は平年並みで推移する見込み。",
+   "reason_en": "Mainly from Hokkaido. November shipments and prices are expected to be normal."
+  },
+  "onion": {
+   "score": -2,
+   "verdict_ja": "平年を下回って推移",
+   "reason_ja": "北海道産中心の出荷。主産地の生育は概ね順調であり、大玉傾向。11月の出荷数量は平年を上回り、価格は平年を下回って推移する見込み。",
+   "reason_en": "Mainly from Hokkaido, where growth is mostly on track and bulbs are large. November shipments are expected to be above normal and prices below normal."
+  }
+ },
+ "track_record": {
+  "calls": 129,
+  "same_direction": 0.853,
+  "since": "2023-07",
+  "until": "2026-09",
+  "up": {
+   "n": 99,
+   "same_direction": 0.869,
+   "median_change": 0.138
+  },
+  "down": {
+   "n": 30,
+   "same_direction": 0.8,
+   "median_change": -0.108
+  },
+  "by_item": {
+   "cabbage": {
+    "n": 22,
+    "right": 18
+   },
+   "carrot": {
+    "n": 22,
+    "right": 21
+   },
+   "cucumber": {
+    "n": 13,
+    "right": 10
+   },
+   "daikon": {
+    "n": 9,
+    "right": 6
+   },
+   "negi": {
+    "n": 13,
+    "right": 13
+   },
+   "onion": {
+    "n": 23,
+    "right": 18
+   },
+   "potato": {
+    "n": 8,
+    "right": 7
+   },
+   "spinach": {
+    "n": 1,
+    "right": 1
+   },
+   "tomato": {
+    "n": 18,
+    "right": 16
+   }
+  },
+  "method": "Nagoya retail price vs its 5-year same-month average, food CPI removed; called moves only"
+ }
+}

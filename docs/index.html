@@ -151,7 +151,11 @@
   .news .meta { color: var(--muted); font-size: .75rem; }
   .card details.news-box { margin-top: 8px; font-size: .85rem; }
   /* make it last (preserving guides) */
-  #make-it-last { scroll-margin-top: 64px; }
+  #make-it-last, #outlook { scroll-margin-top: 64px; }
+  .ol-row { border-bottom: 1px solid var(--line); padding: 4px 0; }
+  .ol-row > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 8px; color: var(--text); }
+  .ol-row > summary::-webkit-details-marker { display: none; }
+  .ol-row p { margin: 4px 0 6px; font-size: .85rem; line-height: 1.55; }
   .keep-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 8px 24px; margin-top: 6px; }
   .keep { border-bottom: 1px solid var(--line); padding: 4px 0; }
   .keep > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; color: var(--text); }
@@ -204,6 +208,7 @@
   <div class="summary" id="summary"></div>
   <section class="card editor" id="basket-editor" hidden></section>
   <section class="card wide" id="guide" hidden></section>
+  <section class="card wide" id="outlook" hidden></section>
   <section class="card wide" id="wages" hidden></section>
   <div class="section-head" id="items">
     <h2 class="section-title" data-i18n="allItems"></h2>
@@ -249,6 +254,12 @@ const T = {
         realPay: p => `物価を考慮した実質賃金は${Math.abs(p).toFixed(1)}%${p < 0 ? "減少" : "増加"}`,
         payShare: (pct, y) => `あなたのかごの1か月分は、愛知県の平均月給(${y}年)の約${pct.toFixed(0)}%`,
         wagesNote: y => `賃金は厚生労働省「賃金構造基本統計調査」の愛知県・一般労働者(企業規模10人以上・産業計)の所定内給与額(残業代・賞与を除く)。年1回の調査で、最新は${y}年。2020年に推計方法が変わっています。物価は各年の平均。`,
+        outlookTitle: m => `今後の見通し:${m}`, outlookSub: "農林水産省「野菜の生育状況及び価格見通し」(東京の卸売市場、平年=過去5年平均との比較)",
+        likelyUp: "高くなりそう", likelyDown: "安くなりそう", nearNormal: "ほぼ平年並み",
+        basketImpact: v => `この見通しどおりなら、あなたのかごは平年より月に約${yen(Math.abs(v))}${v > 0 ? "高く" : "安く"}なる計算です(実績の中央値から概算)。`,
+        trackRecord: tr => `これまでの実績:${tr.since.slice(0, 4)}年${+tr.since.slice(5)}月以降、「高くなる/安くなる」と予想した${tr.calls}回のうち${Math.round(tr.same_direction * 100)}%で、名古屋の小売価格も同じ方向に動きました(物価上昇分を除く。上昇予想${Math.round(tr.up.same_direction * 100)}%、下落予想${Math.round(tr.down.same_direction * 100)}%)。小売価格の動きは卸売より小さく、中央値は${pctTxt(tr.up.median_change)}/${pctTxt(tr.down.median_change)}でした。`,
+        outlookNote: "全国の卸売市場の見通しで、名古屋の店頭価格の予想ではありません。理由は農林水産省の発表の要約です。",
+        reasonJaOnly: "",
         makeItLast: "保存のコツ", makeItLastSub: "今月安くなりやすい野菜・果物を長持ちさせる方法",
         youNeed: "材料", keeps: "保存の目安", caution: "注意", veranda: "ベランダ活用",
         safetyTitle: "安全に保存するために", sourceLbl: "参考",
@@ -293,6 +304,12 @@ const T = {
         realPay: p => `Adjusted for prices, pay ${p < 0 ? "fell" : "rose"} ${Math.abs(p).toFixed(1)}%`,
         payShare: (pct, y) => `A month of your basket is about ${pct.toFixed(0)}% of Aichi's average monthly pay (${y})`,
         wagesNote: y => `Pay is average scheduled monthly earnings (所定内給与額, excluding overtime and bonuses) of full-time workers in Aichi at companies with 10+ employees, from the Basic Survey on Wage Structure. It's surveyed once a year; the latest is ${y}. The survey changed its estimation method in 2020. Prices are yearly averages.`,
+        outlookTitle: m => `Coming up: ${m}`, outlookSub: "From MAFF's monthly vegetable outlook (Tokyo wholesale markets, compared with the 5-year average for the month)",
+        likelyUp: "Likely higher", likelyDown: "Likely lower", nearNormal: "About normal",
+        basketImpact: v => `If the outlook holds, your basket would cost about ${yen(Math.abs(v))} a month ${v > 0 ? "more" : "less"} than usual (rough estimate from the track record).`,
+        trackRecord: tr => `Track record: since ${tr.since}, when the outlook said prices would be higher or lower (${tr.calls} times), Nagoya's retail prices moved the same way ${Math.round(tr.same_direction * 100)}% of the time, with inflation removed (higher: ${Math.round(tr.up.same_direction * 100)}%, lower: ${Math.round(tr.down.same_direction * 100)}%). Retail moves were smaller than wholesale: typically ${pctTxt(tr.up.median_change)} / ${pctTxt(tr.down.median_change)}.`,
+        outlookNote: "This is an outlook for national wholesale markets, not a forecast of Nagoya shop prices. Reasons are from the ministry's report.",
+        reasonJaOnly: " (Japanese; translation pending)",
         makeItLast: "Make it last", makeItLastSub: "Ways to keep the produce that's usually cheap this month",
         youNeed: "You need", keeps: "Keeps", caution: "Note", veranda: "Veranda tip",
         safetyTitle: "Storing food safely", sourceLbl: "Reference",
@@ -318,6 +335,8 @@ let cpi = null;
 let wages = null;
 let insights = null;
 let preserve = null;
+let outlook = null;
+const pctTxt = v => `${v > 0 ? "+" : "−"}${Math.abs(v * 100).toFixed(0)}%`;
 const wageCharts = [];
 let sortBy = (() => { try { return localStorage.getItem("sortBy"); } catch { return null; } })() || "category";
 const charts = [];
@@ -515,7 +534,7 @@ function basketChanged(rerenderEditor) {
   saveBasket();
   if (rerenderEditor) renderEditor();
   clearTimeout(basketTimer);
-  basketTimer = setTimeout(() => { renderBasket(T[lang]); renderWages(T[lang]); }, 120);
+  basketTimer = setTimeout(() => { renderBasket(T[lang]); renderOutlook(T[lang]); renderWages(T[lang]); }, 120);
 }
 function renderEditor() {
   const ed = document.getElementById("basket-editor");
@@ -610,6 +629,53 @@ function seasonStrip(item, main, t) {
     <div class="bar-labels">${t.monthNames.map(n => `<span>${n}</span>`).join("")}</div>
     <p>${t.cheapest}: ${joinMonths(cheap, t)} · ${t.dearest}: ${joinMonths(dear, t)}</p>
     ${nowLine ? `<p>${nowLine}</p>` : ""}</div>`;
+}
+
+// ---------- Coming up (docs/data/outlook.json, MAFF vegetable outlook)
+function verdictText(v) {
+  if (lang === "ja") return v.verdict_ja;
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return v.verdict_ja
+    .replace(/(\d+)月前半/g, (_, m) => `early ${months[m - 1]}`).replace(/(\d+)月後半/g, (_, m) => `late ${months[m - 1]}`)
+    .replace(/やや平年を上回って推移/g, "slightly above normal").replace(/平年を上回って推移/g, "above normal")
+    .replace(/やや平年を下回って推移/g, "slightly below normal").replace(/平年を下回って推移/g, "below normal")
+    .replace(/平年並みで推移/g, "normal");
+}
+function renderOutlook(t) {
+  const box = document.getElementById("outlook");
+  const items = Object.entries(outlook?.items || {}).map(([id, v]) => ({ id, v, item: data.items.find(i => i.id === id) })).filter(r => r.item);
+  if (!items.length) { box.hidden = true; return; }
+  const m = outlook.edition, mo = +m.slice(5);
+  const title = lang === "ja" ? `${m.slice(0, 4)}年${mo}月` : `${t.monthFull(mo - 1)} ${m.slice(0, 4)}`;
+  const up = items.filter(r => r.v.score >= 0.5).sort((a, b) => b.v.score - a.v.score);
+  const down = items.filter(r => r.v.score <= -0.5).sort((a, b) => a.v.score - b.v.score);
+  const normal = items.filter(r => Math.abs(r.v.score) < 0.5);
+  const row = (r, cls) => `<details class="ol-row"><summary><span>${esc(r.item["name_" + lang])}</span>
+      <span class="chg ${cls}">${esc(verdictText(r.v))}</span></summary>
+      <p>${esc(lang === "en" && r.v.reason_en ? r.v.reason_en : r.v.reason_ja)}${lang === "en" && !r.v.reason_en ? `<span class="unit">${t.reasonJaOnly}</span>` : ""}</p></details>`;
+  // Rough basket effect: scale the track record's median retail move by the strength of the call.
+  const tr = outlook.track_record || {};
+  let impact = 0;
+  if (basket && myBasket && tr.up?.median_change != null && tr.down?.median_change != null) {
+    for (const r of [...up, ...down]) {
+      const amount = myBasket.items[r.id];
+      const last = latestPrice(r.item);
+      if (!amount || last == null) continue;
+      const cost = amount * scaleOf(r.id) * basket.items[r.id].per * last;
+      impact += cost * (r.v.score > 0 ? tr.up.median_change : -tr.down.median_change) * Math.min(Math.abs(r.v.score), 2) / 2 * Math.sign(r.v.score);
+    }
+  }
+  const safe = /^https:\/\//.test(outlook.source_url || "") ? esc(outlook.source_url) : "#";
+  box.innerHTML = `<h2>${t.outlookTitle(title)}</h2><div class="unit">${t.outlookSub}</div>
+    <div class="guide-cols">
+      <div><h3>${t.likelyUp}</h3>${up.length ? up.map(r => row(r, "up")).join("") : "<p class='unit'>–</p>"}</div>
+      <div><h3>${t.likelyDown}</h3>${down.length ? down.map(r => row(r, "down")).join("") : "<p class='unit'>–</p>"}</div>
+    </div>
+    ${normal.length ? `<p class="unit" style="margin:10px 0 0">${t.nearNormal}: ${normal.map(r => esc(r.item["name_" + lang])).join(lang === "ja" ? "、" : ", ")}</p>` : ""}
+    ${Math.abs(impact) >= 10 ? `<p style="margin:10px 0 0">${t.basketImpact(Math.round(impact / 10) * 10)}</p>` : ""}
+    ${tr.calls ? `<p class="note">${t.trackRecord(tr)}</p>` : ""}
+    <p class="note">${t.outlookNote} <a href="${safe}" target="_blank" rel="noopener noreferrer">${t.sourceLbl}</a></p>`;
+  box.hidden = false;
 }
 
 // ---------- Make it last (docs/preserve.json)
@@ -739,6 +805,7 @@ function renderMenu(t) {
   add("movers", t.movers);
   add("guide", document.querySelector("#guide h2")?.textContent || "");
   if (document.getElementById("make-it-last")) add("make-it-last", t.makeItLast, true);
+  add("outlook", document.querySelector("#outlook h2")?.textContent || "");
   add("wages", t.wagesTitle);
   add("items", t.allItems);
   if (sortBy === "category") for (const c of data?.categories || []) add(`cat-${c.id}`, c["name_" + lang], true);
@@ -915,6 +982,7 @@ function render() {
     return;
   }
   renderGuide(t);
+  renderOutlook(t);
   renderWages(t);
   renderChecker();
 
@@ -1024,9 +1092,9 @@ document.getElementById("check-btn").onclick = () => {
 };
 
 const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
-Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json"), load("data/insights.json"), load("preserve.json")])
-  .then(([d, b, c, w, ins, pr]) => {
-    data = d; basket = b; cpi = c; wages = w; insights = ins; preserve = pr;
+Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json"), load("data/insights.json"), load("preserve.json"), load("data/outlook.json")])
+  .then(([d, b, c, w, ins, pr, ol]) => {
+    data = d; basket = b; cpi = c; wages = w; insights = ins; preserve = pr; outlook = ol;
     if (basket) myBasket = loadBasket();
     render();
     if (/[#&]check\b/.test(location.hash)) toggleChecker(true);  // bookmarkable: .../#check

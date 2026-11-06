@@ -11,7 +11,10 @@ Run on a schedule a day after the price update (the update runs on the 26th and 
 1. `git fetch origin main` and start a new branch from `origin/main` named
    `explain-YYYY-MM` (the data month).
 2. Open `docs/data/insights.json`.
-   - If `explained.month` equals `month`, this month is already done: **stop and do nothing.**
+   - If `explained.month` equals `month` and every item in `docs/data/outlook.json` has a `reason_en`,
+     this month is already done: **stop and do nothing.** (If only the outlook still needs translating,
+     do just that part, on a branch named `outlook-YYYY-MM` after the outlook's `edition`, and title the
+     pull request `Translate the <Month YYYY> vegetable outlook / <YYYY年M月>の野菜の見通しを翻訳`.)
    - If no item has any visible headlines, stop and do nothing.
    - If a pull request for `explain-YYYY-MM` is already open, stop and do nothing.
 
@@ -49,10 +52,18 @@ Then add at the top level:
 "explained": {"month": "<same as month>", "by": "monthly explainer", "date": "<today, YYYY-MM-DD>"}
 ```
 
+## Also: translate the vegetable outlook
+
+`docs/data/outlook.json` holds the agriculture ministry's latest vegetable price outlook. For each item
+whose `reason_en` is empty, translate `reason_ja` into plain English (keep it faithful and about the same
+length; no links or Markdown) and save it as `reason_en`. Don't change any other field. Do this even if
+`insights.json` is already explained for the month; if both are already done, there's nothing to do.
+
 ## Check, commit, open a pull request
 
 1. Run `python fetch/check_insights.py` and fix anything it reports. Run `python -m unittest discover -s tests`.
-2. Commit only `docs/data/insights.json` with the message `Explain <Month YYYY> price changes`.
+2. Commit only `docs/data/insights.json` and `docs/data/outlook.json` with the message
+   `Explain <Month YYYY> price changes`.
 3. Push the branch and open a pull request to `main` titled
    `Possible reasons for <Month YYYY> price changes / <YYYY年M月>の値動きの理由`.
    In the description, list each item with its change and both summaries, the hidden headlines with
