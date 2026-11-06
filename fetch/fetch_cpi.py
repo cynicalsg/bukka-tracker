@@ -14,13 +14,15 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_prices import (  # noqa: E402
-    as_list, class_objects, fetch_meta, fetch_table, parse_month, parse_number, text,
+    as_list, class_objects, fetch_meta, fetch_table, iter_table_values, parse_month, parse_number, text,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = ROOT / "fetch" / "cpi.json"
 OUTPUT_PATH = ROOT / "docs" / "data" / "cpi.json"
 CATALOG_PATH = ROOT / "docs" / "data" / "cpi_catalog.json"
+CITY_INDEX_PATH = ROOT / "docs" / "data" / "cities.json"
+CITY_DIR = ROOT / "docs" / "data" / "cities"
 
 
 def bare_name(name: str) -> str:
@@ -79,6 +81,44 @@ def build_cpi(stat: dict, codes: dict, config: dict, table_title: str = "") -> d
     }
 
 
+def city_cpi_points(values, codes: dict, area_to_key: dict[str, str], since: str) -> dict[str, dict[str, list]]:
+    """{area key: {series id: [[month, index]]}} for the index tab, from `since`."""
+    by_code = {e["@code"]: sid for sid, e in codes["series"].items()}
+    tab_code = codes["tab"]["@code"] if codes["tab"] else None
+    out: dict[str, dict[str, list]] = {}
+    for v in values:
+        key, sid = area_to_key.get(v.get("@area")), by_code.get(v.get("@cat01"))
+        month, value = parse_month(v.get("@time", "")), parse_number(v.get("$"))
+        if key and sid and month and month >= since and value is not None and (not tab_code or v.get("@tab") == tab_code):
+            out.setdefault(key, {}).setdefault(sid, []).append([month, value])
+    return {k: {sid: sorted(p) for sid, p in v.items()} for k, v in out.items()}
+
+
+def add_city_cpi(app_id: str, config: dict, meta: dict, codes: dict, since: str = "2000-01") -> None:
+    """Add food and overall CPI to each city file; cities the CPI doesn't cover get the national index."""
+    index = json.loads(CITY_INDEX_PATH.read_text(encoding="utf-8"))
+    areas = {bare_name(e.get("@name", "")): e["@code"] for e in class_objects(meta).get("area", [])}
+    area_to_key = {areas[c["name_ja"]]: c["id"] for c in index["cities"] if c["name_ja"] in areas}
+    if "全国" in areas:
+        area_to_key[areas["全国"]] = "national"
+    filters = {"cdArea": ",".join(sorted(area_to_key)), "cdCat01": ",".join(e["@code"] for e in codes["series"].values()),
+               "cdTimeFrom": f"{since[:4]}00{since[5:]}{since[5:]}"}
+    if codes["tab"]:
+        filters["cdTab"] = codes["tab"]["@code"]
+    pts = city_cpi_points(iter_table_values(app_id, config["stats_data_id"], filters), codes, area_to_key, since)
+    own = 0
+    for c in index["cities"]:
+        path = CITY_DIR / f"{c['id']}.json"
+        if not path.exists():
+            continue
+        body = json.loads(path.read_text(encoding="utf-8"))
+        source = "city" if c["id"] in pts else "national"
+        own += source == "city"
+        body["cpi"] = {"source": source, **pts.get(c["id"] if source == "city" else "national", {})}
+        path.write_text(json.dumps(body, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+    print(f"City CPI: {own}/{len(index['cities'])} cities have their own index; the rest use the national one")
+
+
 def main() -> None:
     app_id = os.environ.get("ESTAT_APP_ID")
     if not app_id:
@@ -99,6 +139,8 @@ def main() -> None:
     for sid, s in cpi["series"].items():
         p = s["points"]
         print(f"  {sid}: {len(p)} months, {p[0] if p else '-'} .. {p[-1] if p else '-'}")
+    if CITY_INDEX_PATH.exists():
+        add_city_cpi(app_id, config, meta, codes)
 
 
 if __name__ == "__main__":
