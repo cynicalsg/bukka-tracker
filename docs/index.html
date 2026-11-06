@@ -150,6 +150,19 @@
   .news a { color: var(--text); }
   .news .meta { color: var(--muted); font-size: .75rem; }
   .card details.news-box { margin-top: 8px; font-size: .85rem; }
+  /* make it last (preserving guides) */
+  #make-it-last { scroll-margin-top: 64px; }
+  .keep-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 8px 24px; margin-top: 6px; }
+  .keep { border-bottom: 1px solid var(--line); padding: 4px 0; }
+  .keep > summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; color: var(--text); }
+  .keep > summary::-webkit-details-marker { display: none; }
+  .keep > summary b { font-weight: 600; }
+  .badge { font-size: .7rem; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 7px; white-space: nowrap; }
+  .keep-body { font-size: .86rem; line-height: 1.55; padding: 4px 0 8px; }
+  .keep-body ol { margin: 4px 0; padding-left: 1.3em; }
+  .keep-body p { margin: 4px 0; }
+  .keep-body .lbl { color: var(--muted); font-size: .78rem; }
+  .card details.keep-box { margin-top: 8px; font-size: .85rem; }
   .explain { margin: 8px 0 4px; font-size: .88rem; line-height: 1.55; background: var(--bg); border-radius: 8px; padding: 8px 10px; }
   .section-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin: 28px 0 0; }
   .section-title { margin: 0; font-size: 1.1rem; }
@@ -236,6 +249,10 @@ const T = {
         realPay: p => `物価を考慮した実質賃金は${Math.abs(p).toFixed(1)}%${p < 0 ? "減少" : "増加"}`,
         payShare: (pct, y) => `あなたのかごの1か月分は、愛知県の平均月給(${y}年)の約${pct.toFixed(0)}%`,
         wagesNote: y => `賃金は厚生労働省「賃金構造基本統計調査」の愛知県・一般労働者(企業規模10人以上・産業計)の所定内給与額(残業代・賞与を除く)。年1回の調査で、最新は${y}年。2020年に推計方法が変わっています。物価は各年の平均。`,
+        makeItLast: "保存のコツ", makeItLastSub: "今月安くなりやすい野菜・果物を長持ちさせる方法",
+        youNeed: "材料", keeps: "保存の目安", caution: "注意", veranda: "ベランダ活用",
+        safetyTitle: "安全に保存するために", sourceLbl: "参考",
+        usuallyCheaper: p => `例年この時期は年平均より${p}%安い`, keepCount: n => `保存のコツ(${n})`,
         why: "なぜ?", relatedNews: n => `関連ニュース(${n})`,
         newsNote: "自動で集めた見出しです。値動きの理由を示すとは限りません。", official: "公式情報",
         explainLabel: "考えられる理由(下の見出しをもとにAIが作成)",
@@ -276,6 +293,10 @@ const T = {
         realPay: p => `Adjusted for prices, pay ${p < 0 ? "fell" : "rose"} ${Math.abs(p).toFixed(1)}%`,
         payShare: (pct, y) => `A month of your basket is about ${pct.toFixed(0)}% of Aichi's average monthly pay (${y})`,
         wagesNote: y => `Pay is average scheduled monthly earnings (所定内給与額, excluding overtime and bonuses) of full-time workers in Aichi at companies with 10+ employees, from the Basic Survey on Wage Structure. It's surveyed once a year; the latest is ${y}. The survey changed its estimation method in 2020. Prices are yearly averages.`,
+        makeItLast: "Make it last", makeItLastSub: "Ways to keep the produce that's usually cheap this month",
+        youNeed: "You need", keeps: "Keeps", caution: "Note", veranda: "Veranda tip",
+        safetyTitle: "Storing food safely", sourceLbl: "Reference",
+        usuallyCheaper: p => `usually ${p}% below its yearly average this month`, keepCount: n => `Make it last (${n})`,
         why: "Why?", relatedNews: n => `Related news (${n})`,
         newsNote: "Headlines collected automatically (in Japanese); they may not explain the change.", official: "Official",
         explainLabel: "Possible reasons (written by AI from the headlines below)",
@@ -296,6 +317,7 @@ const BASKET_KEY = "basket.v1";
 let cpi = null;
 let wages = null;
 let insights = null;
+let preserve = null;
 const wageCharts = [];
 let sortBy = (() => { try { return localStorage.getItem("sortBy"); } catch { return null; } })() || "category";
 const charts = [];
@@ -590,6 +612,29 @@ function seasonStrip(item, main, t) {
     ${nowLine ? `<p>${nowLine}</p>` : ""}</div>`;
 }
 
+// ---------- Make it last (docs/preserve.json)
+const guidesFor = itemId => (preserve?.guides || []).filter(g => g.items.includes(itemId));
+function keepHtml(g, t, extra = "") {
+  const L = k => esc(g[`${k}_${lang}`] || "");
+  return `<details class="keep"><summary><span><b>${L("title")}</b>${extra}</span>
+      <span class="badge">${esc(preserve.methods[g.method]?.[lang] || g.method)}</span></summary>
+    <div class="keep-body">
+      <p><span class="lbl">${t.youNeed}:</span> ${L("needs")}</p>
+      <ol>${g["steps_" + lang].map(st => `<li>${esc(st)}</li>`).join("")}</ol>
+      <p><span class="lbl">${t.keeps}:</span> ${L("keeps")}</p>
+      ${g["note_" + lang] ? `<p><span class="lbl">${t.caution}:</span> ${L("note")}</p>` : ""}
+      ${g.veranda ? `<p><span class="lbl">${t.veranda}:</span> ${L("veranda")}</p>` : ""}
+    </div></details>`;
+}
+function safetyHtml(t) {
+  const s = preserve?.safety;
+  if (!s) return "";
+  return `<details class="keep"><summary><span><b>${t.safetyTitle}</b></span></summary><div class="keep-body">
+    <ul style="margin:4px 0;padding-left:1.2em">${s[lang].map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+    <p><span class="lbl">${t.sourceLbl}:</span> <a href="${/^https:\/\//.test(s.source.url) ? esc(s.source.url) : "#"}" target="_blank" rel="noopener noreferrer">${esc(s.source["title_" + lang])}</a></p>
+  </div></details>`;
+}
+
 function renderGuide(t) {
   const box = document.getElementById("guide");
   const k = thisMonth0();
@@ -604,7 +649,16 @@ function renderGuide(t) {
       <div><h3>${t.guideCheap}</h3>${cheap.length ? list(cheap, "down") : "<p class='unit'>–</p>"}</div>
       <div><h3>${t.guideDear}</h3>${dear.length ? list(dear, "up") : "<p class='unit'>–</p>"}</div>
     </div>
-    <p class="note">${t.guideNote}</p>`;
+    <p class="note">${t.guideNote}</p>
+    ${(() => {
+      const keep = cheap.flatMap(r => guidesFor(r.i.id).map(g => ({ g, r })));
+      if (!keep.length) return "";
+      return `<h3 id="make-it-last" style="margin:18px 0 2px;font-size:1rem;color:var(--text)">${t.makeItLast}</h3>
+        <p class="unit" style="margin:0">${t.makeItLastSub}</p>
+        <div class="keep-list">${keep.map(({ g, r }) => keepHtml(g, t,
+          `<br><span class="unit">${esc(r.i["name_" + lang])} · ${t.usuallyCheaper(((1 - r.f) * 100).toFixed(0))}</span>`)).join("")}
+          ${safetyHtml(t)}</div>`;
+    })()}`;
   box.hidden = false;
 }
 
@@ -684,6 +738,7 @@ function renderMenu(t) {
   if (basket && myBasket) add("basket-slot", sameAsDefault() && !sharedView ? basket["name_" + lang] : t.myBasket);
   add("movers", t.movers);
   add("guide", document.querySelector("#guide h2")?.textContent || "");
+  if (document.getElementById("make-it-last")) add("make-it-last", t.makeItLast, true);
   add("wages", t.wagesTitle);
   add("items", t.allItems);
   if (sortBy === "category") for (const c of data?.categories || []) add(`cat-${c.id}`, c["name_" + lang], true);
@@ -915,7 +970,8 @@ function render() {
       <div class="unit">${lastMonth}${natLine ? ` · ${natLine}` : ""}</div>
       <div class="chart"><canvas></canvas></div>
       ${seasonStrip(item, main, t)}
-      ${(info => info ? `<details class="news-box"><summary>${t.relatedNews((info.headlines || []).length)}</summary>${newsList(info, t)}</details>` : "")(newsFor(item.id))}`;
+      ${(info => info ? `<details class="news-box"><summary>${t.relatedNews((info.headlines || []).length)}</summary>${newsList(info, t)}</details>` : "")(newsFor(item.id))}
+      ${(gs => gs.length ? `<details class="keep-box"><summary>${t.keepCount(gs.length)}</summary>${gs.map(g => keepHtml(g, t)).join("")}${safetyHtml(t)}</details>` : "")(guidesFor(item.id))}`;
     grid.appendChild(card);
 
     const months = [...new Set(Object.values(item.series).flat().map(p => p[0]))].sort();
@@ -968,9 +1024,9 @@ document.getElementById("check-btn").onclick = () => {
 };
 
 const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
-Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json"), load("data/insights.json")])
-  .then(([d, b, c, w, ins]) => {
-    data = d; basket = b; cpi = c; wages = w; insights = ins;
+Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json"), load("data/insights.json"), load("preserve.json")])
+  .then(([d, b, c, w, ins, pr]) => {
+    data = d; basket = b; cpi = c; wages = w; insights = ins; preserve = pr;
     if (basket) myBasket = loadBasket();
     render();
     if (/[#&]check\b/.test(location.hash)) toggleChecker(true);  // bookmarkable: .../#check
