@@ -45,7 +45,7 @@
    "pref": "北海道",
    "region": "ht",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "aomori",
@@ -54,7 +54,7 @@
    "pref": "青森県",
    "region": "ht",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "morioka",
@@ -63,7 +63,7 @@
    "pref": "岩手県",
    "region": "ht",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "sendai",
@@ -72,7 +72,7 @@
    "pref": "宮城県",
    "region": "ht",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "akita",
@@ -81,7 +81,7 @@
    "pref": "秋田県",
    "region": "ht",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "yamagata",
@@ -90,7 +90,7 @@
    "pref": "山形県",
    "region": "ht",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "fukushima",
@@ -99,7 +99,7 @@
    "pref": "福島県",
    "region": "ht",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "mito",
@@ -108,7 +108,7 @@
    "pref": "茨城県",
    "region": "kt",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "utsunomiya",
@@ -117,7 +117,7 @@
    "pref": "栃木県",
    "region": "kt",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "maebashi",
@@ -126,7 +126,7 @@
    "pref": "群馬県",
    "region": "kt",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "saitama",
@@ -135,7 +135,7 @@
    "pref": "埼玉県",
    "region": "kt",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "chiba",
@@ -144,7 +144,7 @@
    "pref": "千葉県",
    "region": "kt",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "tokyo",
@@ -153,7 +153,7 @@
    "pref": "東京都",
    "region": "kt",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "yokohama",
@@ -162,7 +162,7 @@
    "pref": "神奈川県",
    "region": "kt",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "kawasaki",
@@ -171,7 +171,7 @@
    "pref": "神奈川県",
    "region": "kt",
    "latest": "2026-09",
-   "items": 45
+   "items": 53
   },
   {
    "id": "sagamihara",
@@ -180,7 +180,7 @@
    "pref": "神奈川県",
    "region": "kt",
    "latest": "2026-09",
-   "items": 45
+   "items": 53
   },
   {
    "id": "niigata",
@@ -189,7 +189,7 @@
    "pref": "新潟県",
    "region": "hk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "toyama",
@@ -198,7 +198,7 @@
    "pref": "富山県",
    "region": "hk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "kanazawa",
@@ -207,7 +207,7 @@
    "pref": "石川県",
    "region": "hk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "fukui",
@@ -216,7 +216,7 @@
    "pref": "福井県",
    "region": "hk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "kofu",
@@ -225,7 +225,7 @@
    "pref": "山梨県",
    "region": "hk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "nagano",
@@ -234,7 +234,7 @@
    "pref": "長野県",
    "region": "hk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "gifu",
@@ -243,7 +243,7 @@
    "pref": "岐阜県",
    "region": "tk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "shizuoka",
@@ -252,7 +252,7 @@
    "pref": "静岡県",
    "region": "tk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "hamamatsu",
@@ -261,7 +261,7 @@
    "pref": "静岡県",
    "region": "tk",
    "latest": "2026-09",
-   "items": 45
+   "items": 53
   },
   {
    "id": "nagoya",
@@ -270,7 +270,7 @@
    "pref": "愛知県",
    "region": "tk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "tsu",
@@ -279,7 +279,7 @@
    "pref": "三重県",
    "region": "tk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "otsu",
@@ -288,7 +288,7 @@
    "pref": "滋賀県",
    "region": "kk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "kyoto",
@@ -297,7 +297,7 @@
    "pref": "京都府",
    "region": "kk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "osaka",
@@ -306,7 +306,7 @@
    "pref": "大阪府",
    "region": "kk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "sakai",
@@ -315,7 +315,7 @@
    "pref": "大阪府",
    "region": "kk",
    "latest": "2026-09",
-   "items": 45
+   "items": 53
   },
   {
    "id": "kobe",
@@ -324,7 +324,7 @@
    "pref": "兵庫県",
    "region": "kk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "nara",
@@ -333,7 +333,7 @@
    "pref": "奈良県",
    "region": "kk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "wakayama",
@@ -342,7 +342,7 @@
    "pref": "和歌山県",
    "region": "kk",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "tottori",
@@ -351,7 +351,7 @@
    "pref": "鳥取県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "matsue",
@@ -360,7 +360,7 @@
    "pref": "島根県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "okayama",
@@ -369,7 +369,7 @@
    "pref": "岡山県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "hiroshima",
@@ -378,7 +378,7 @@
    "pref": "広島県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "yamaguchi",
@@ -387,7 +387,7 @@
    "pref": "山口県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "tokushima",
@@ -396,7 +396,7 @@
    "pref": "徳島県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "takamatsu",
@@ -405,7 +405,7 @@
    "pref": "香川県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "matsuyama",
@@ -414,7 +414,7 @@
    "pref": "愛媛県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "kochi",
@@ -423,7 +423,7 @@
    "pref": "高知県",
    "region": "cs",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "fukuoka",
@@ -432,7 +432,7 @@
    "pref": "福岡県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "kitakyushu",
@@ -441,7 +441,7 @@
    "pref": "福岡県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 45
+   "items": 53
   },
   {
    "id": "saga",
@@ -450,7 +450,7 @@
    "pref": "佐賀県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "nagasaki",
@@ -459,7 +459,7 @@
    "pref": "長崎県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "kumamoto",
@@ -468,7 +468,7 @@
    "pref": "熊本県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "oita",
@@ -477,7 +477,7 @@
    "pref": "大分県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "miyazaki",
@@ -486,7 +486,7 @@
    "pref": "宮崎県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "kagoshima",
@@ -495,7 +495,7 @@
    "pref": "鹿児島県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   },
   {
    "id": "naha",
@@ -504,7 +504,7 @@
    "pref": "沖縄県",
    "region": "ko",
    "latest": "2026-09",
-   "items": 48
+   "items": 63
   }
  ]
 }

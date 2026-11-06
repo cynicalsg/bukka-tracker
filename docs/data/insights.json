@@ -1,7 +1,7 @@
 {
  "month": "2026-09",
  "method": "headlines",
- "generated": "2026-11-06T05:52:00Z",
+ "generated": "2026-11-06T06:42:29Z",
  "news_window": [
   "2026-08-01",
   "2026-11-01"
@@ -66,6 +66,39 @@
    "summary_ja": null,
    "summary_en": null
   },
+  "grape_shine": {
+   "mom": -33.7,
+   "yoy": null,
+   "headlines": [
+    {
+     "title": "韓国のシャインマスカットが供給過剰で価格急落 1房650円 日本から苗木流出",
+     "source": "テレ朝NEWS",
+     "url": "https://news.tv-asahi.co.jp/news_international/articles/900203082.html",
+     "date": "2026-10-30"
+    },
+    {
+     "title": "次のヒットを探せ シャインマスカット、価格下落傾向 生産者・小売業界、新たな品種模索 ／東京",
+     "source": "毎日新聞",
+     "url": "https://mainichi.jp/articles/20261019/ddl/k13/020/002000c",
+     "date": "2026-10-19"
+    },
+    {
+     "title": "出荷量増でシャインマスカット80円 刀根柿は10円値下がり 早生ミカンは産地切り替えで減り値上がり（テレビ愛知）",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.yahoo.co.jp/articles/3edb31407a12d0d18ed25b8a5c22a7446a190379",
+     "date": "2026-10-14"
+    },
+    {
+     "title": "シャインマスカット、リンゴは20円、刀根柿は10円それぞれ価格値下がり 雨の影響受けず出荷順調",
+     "source": "愛知のニュース",
+     "url": "https://news.tv-aichi.co.jp/single.php?id=10343",
+     "date": "2026-10-07"
+    }
+   ],
+   "official": [],
+   "summary_ja": null,
+   "summary_en": null
+  },
   "apple": {
    "mom": -33.0,
    "yoy": null,
@@ -105,85 +138,38 @@
    "summary_ja": "見出しと記事は、2025年産リンゴが猛暑や雪害などで不作となり、2026年8月までの販売期間を通じて高値だったと伝えています[1][4]。9月の値下がりそのものの理由は書かれていません。",
    "summary_en": "The headlines and article describe the 2025 apple crop, which was small after summer heat and snow damage and sold at high prices through August 2026 [1][4]. They don't explain the September drop itself."
   },
-  "potato": {
-   "mom": -22.4,
+  "nashi": {
+   "mom": -23.7,
    "yoy": null,
    "headlines": [
     {
-     "title": "玉川徹氏、\"白菜1玉1000円超\" 野菜の高騰対策を提案「玉ねぎとかじゃがいもを食べて防衛を」（エンタメNEXT）",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.yahoo.co.jp/articles/68c6cf1abad6d17e3a33646e1aa1de2b5d998491",
-     "date": "2026-10-09",
-     "title_en": "Toru Tamakawa suggests defending against high vegetable prices (Chinese cabbage over ¥1,000) by eating onions and potatoes",
-     "hide": true
+     "title": "市原市の梨直売所まとめ【2026年版】｜JA市原市の梨共同選果場直売所は出荷日のみ9:00〜15:00、秋満月・甘太・王秋の旬と価格帯",
+     "source": "ジモはる",
+     "url": "https://jimoharu.net/nashi-chokubaijyo-ichihara/",
+     "date": "2026-10-28"
     },
     {
-     "title": "【9月の野菜価格】平年並みの野菜多く じゃがいも・たまねぎは特にお買い得に（ウェザーマップ）",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.yahoo.co.jp/articles/b2eee414af4d137011eb1f799a6a406b5ba7c70a",
-     "date": "2026-08-31",
-     "title_en": "September vegetable prices: many at normal levels; potatoes and onions especially good value"
+     "title": "韓国・秋夕前に食品価格上昇…梨19％、ズッキーニ36％、韓牛ヒレ14％高",
+     "source": "AFPBB News",
+     "url": "https://www.afpbb.com/articles/-/3653910",
+     "date": "2026-09-21"
     },
     {
-     "title": "野菜の相場予測 だいこん、はくさいは高値に じゃがいもは安値続く(気象予報士 星野 朋美 2026年08月07日)",
-     "source": "tenki.jp",
-     "url": "https://tenki.jp/forecaster/t_hoshino/2026/08/07/40034.html",
-     "date": "2026-08-07",
-     "title_en": "Vegetable price outlook: daikon and Chinese cabbage high, potatoes to stay cheap (Aug 7, 2026)"
-    }
-   ],
-   "official": [
-    {
-     "title_ja": "農林水産省「野菜の需給・価格動向」",
-     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
-     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
-    }
-   ],
-   "summary_ja": "主産地の北海道で夏の天候に恵まれ収穫が順調に進み、9月のじゃがいもは平年より安くお買い得になると報じられています[2]。8月の相場予測でも、供給が安定して安値が続く見通しとされていました[3]。",
-   "summary_en": "Reports say good summer weather in Hokkaido, the main growing area, kept the harvest on track, making potatoes cheaper than usual and good value in September [2]. An August outlook also expected stable supply to keep prices low [3]."
-  },
-  "cabbage": {
-   "mom": -22.1,
-   "yoy": null,
-   "headlines": [
-    {
-     "title": "【中継】ハクサイとキャベツ 平年並みの価格まで下がる キノコ類は値上がり…「寒さで需要が増加」",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.yahoo.co.jp/articles/edc6d28ca8b5fb93691262e476a34ba4937b82c2",
-     "date": "2026-10-28",
-     "title_en": "Live: Chinese cabbage and cabbage fall back to normal prices; mushrooms rise as cold boosts demand"
-    },
-    {
-     "title": "レタス160円 ハクサイ・キャベツは100円 天候に恵まれ野菜の価格大幅値下がり（テレビ愛知）",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.yahoo.co.jp/articles/9f18e52b2a96373251b9357b24c3ac049293d5b9",
-     "date": "2026-10-23",
-     "title_en": "Lettuce ¥160, Chinese cabbage and cabbage ¥100: good weather brings big vegetable price drops (TV Aichi)"
-    },
-    {
-     "title": "葉物野菜価格高騰続く キャベツが欠かせない松山のご当地メニュー人気店は様々な工夫【愛媛】",
+     "title": "大きい・安い・甘い…秋の味覚の梨やぶどうが“豊作”円安追い風に海外にも販路拡大（2026年8月26日掲載）",
      "source": "日テレNEWS NNN",
-     "url": "https://news.ntv.co.jp/n/rnb/category/economy/rb554f4842ef6b4223ba08c9ec7793572e",
-     "date": "2026-10-21",
-     "title_en": "Leafy vegetable prices stay high; Matsuyama restaurants built around cabbage find ways to cope (Ehime)"
+     "url": "https://news.ntv.co.jp/category/society/0d256361fe034915b8635bcc3b064409",
+     "date": "2026-08-26"
     },
     {
-     "title": "長雨や台風の影響で葉物野菜の価格高騰 キャベツ１玉が600円超（沖縄テレビOTV）",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.yahoo.co.jp/articles/a61785255617bee417aeb0fa2c16bef84bb2448c",
-     "date": "2026-10-16",
-     "title_en": "Long rains and typhoons push up leafy vegetable prices; a head of cabbage tops ¥600 (Okinawa TV)"
+     "title": "秋の味覚に猛暑の影響 岡山特産のピオーネやあたご梨などの出来や価格はどうなる？",
+     "source": "KSBニュース",
+     "url": "https://news.ksb.co.jp/article/16815080",
+     "date": "2026-08-18"
     }
    ],
-   "official": [
-    {
-     "title_ja": "農林水産省「野菜の需給・価格動向」",
-     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
-     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
-    }
-   ],
-   "summary_ja": "記事はいずれも10月のもので、名古屋では9月の大雨で上がった価格が天候の安定で下がり[2]、札幌でも関東や北海道の収穫回復で平年並みに戻ったと報じられています[1]。沖縄では長雨や台風で高値と伝えられ[4]、9月の値下がりの理由は分かりません。",
-   "summary_en": "These reports are all from October: in Nagoya, prices pushed up by heavy September rain fell as the weather settled [2], and in Sapporo they returned to normal as harvests in Kanto and Hokkaido recovered [1]. Okinawa reported high prices after long rains and typhoons [4]. They don't explain the September drop."
+   "official": [],
+   "summary_ja": null,
+   "summary_en": null
   },
   "dishsoap": {
    "mom": null,
