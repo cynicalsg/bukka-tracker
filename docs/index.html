@@ -28,6 +28,9 @@
   header.intro { padding-top: 20px; }
   h1 { margin: 0; font-size: 1.6rem; }
   .sub { margin: 4px 0 0; color: var(--muted); }
+  .city-pick { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; color: var(--muted); font-size: .9rem; }
+  .city-pick select { font: inherit; font-size: 1rem; color: var(--text); background: var(--card); border: 1px solid var(--line);
+                      border-radius: 8px; padding: 6px 8px; max-width: 70vw; }
   .menu { position: absolute; right: max(16px, calc((100vw - 1100px) / 2 + 16px)); top: calc(100% + 6px); width: 340px;
           max-height: calc(100vh - 80px); overflow: auto; background: var(--card); border: 1px solid var(--line);
           border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, .18); padding: 6px 14px 14px; }
@@ -195,6 +198,8 @@
     <div class="seg"><button data-range="24"></button><button data-range="60"></button><button data-range="all"></button></div>
     <h3 data-i18n="menuSort"></h3>
     <div class="seg"><button data-sort="category"></button><button data-sort="up"></button><button data-sort="down"></button></div>
+    <h3 data-i18n="cityLabel"></h3>
+    <div class="seg"><select data-city-select style="width:100%;font:inherit;padding:6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text)"></select></div>
     <h3 data-i18n="menuLang"></h3>
     <div class="seg"><button data-lang="ja">日本語</button><button data-lang="en">English</button></div>
   </nav>
@@ -202,6 +207,7 @@
 <header class="intro">
   <h1 data-i18n="title"></h1>
   <p class="sub" data-i18n="subtitle"></p>
+  <label class="city-pick"><span data-i18n="cityLabel"></span> <select id="city-select" data-city-select></select></label>
 </header>
 <main>
   <section class="card checker" id="checker" hidden></section>
@@ -221,23 +227,24 @@
 
 <script>
 const T = {
-  ja: { title: "名古屋 物価トラッカー", subtitle: "名古屋市の生活必需品の小売価格の推移(月次)", per: "あたり",
+  ja: { get title() { return `${cityShortJa()} 物価トラッカー`; }, get subtitle() { return `${cur.name_ja}の生活必需品の小売価格の推移(月次)`; }, per: "あたり",
+        cityLabel: "都市", loadingCity: "読み込み中…",
         r24: "2年", r60: "5年", rall: "全期間", yoy: "前年同月比", noData: "データはまだありません。GitHub Action の初回実行後に表示されます。",
         source: "出典", updated: "更新", toggle: "English",
         sort_category: "分類別", sort_up: "値上がり順", sort_down: "値下がり順", other: "その他",
         allItems: "品目別の価格", mom: "前月比", y1: "1年前比", y5: "5年前比", inBasket: "かごの中身",
-        item: "品目", amount: "量", cost: "金額", shareCol: "割合", basketSub: n => `${n}品目・名古屋市の小売価格で計算`,
+        item: "品目", amount: "量", cost: "金額", shareCol: "割合", basketSub: n => `${n}品目・${cur.name_ja}の小売価格で計算`,
         movers: "今月の値動き", sinceMonth: "前月から", sinceYear: "前年同月から", up: "値上がり", down: "値下がり",
         noMoves: "変動なし",
         menu: "☰ メニュー", menuJump: "移動", menuTools: "ツール", menuRange: "グラフの期間", menuSort: "品目の並び順", menuLang: "言語 / Language",
         check: "値段チェック", checkTitle: "この値段はお得?", checkItem: "品目", checkPrice: "店頭価格", checkQty: "量",
-        checkPer: u => `${u}あたり`, avgLabel: m => `名古屋の平均(${m})`, lowLabel: "過去1年の最安", highLabel: "過去1年の最高",
+        checkPer: u => `${u}あたり`, avgLabel: m => `${cityShortJa()}の平均(${m})`, lowLabel: "過去1年の最安", highLabel: "過去1年の最高",
         youLabel: "この値段",
         vLow: "過去1年で最も安い水準です", vGood: "お得です", vAvg: "ほぼ平均的な値段です", vHigh: "平均より高めです", vTop: "過去1年で最も高い水準です",
-        vsAvg: p => `名古屋の平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`,
+        vsAvg: p => `${cityShortJa()}の平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`,
         checkNote: "調査価格は特定の銘柄(例:国産豚バラ)の平均です。同じような商品同士で比べてください。",
         guide: m => `旬ガイド:${m}月`, guideCheap: "例年この時期は安い", guideDear: "例年この時期は高い",
-        guideNote: "過去10年の名古屋の価格から、各月の価格を年平均と比べた目安です。", vsYear: "年平均比",
+        get guideNote() { return `過去10年の${cityShortJa()}の価格から、各月の価格を年平均と比べた目安です。`; }, vsYear: "年平均比",
         cheapest: "例年安い", dearest: "例年高い", monthNames: ["1","2","3","4","5","6","7","8","9","10","11","12"],
         monthFull: m => `${m + 1}月`,
         nowVsUsual: (m, p) => `季節要因を除くと、${m}の価格は過去1年の平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`,
@@ -250,15 +257,16 @@ const T = {
         shared: "共有されたかごを表示しています。", saveMine: "自分のかごとして保存", backMine: "自分のかごに戻る",
         carried: "* 旬以外の月は直近の旬の価格で計算", empty: "品目が選ばれていません。「かごを編集」から追加してください。",
         wagesTitle: "物価と賃金", wagesSub: (a, b) => `${a}年〜${b}年の変化(${a}年=100)`,
-        pay: "愛知県の平均賃金", basketLine: "あなたのかご", cpiAllLine: "名古屋市の総合CPI", cpiFoodLine: "名古屋市の食料CPI",
+        get pay() { return `${cur.pref}の平均賃金`; }, basketLine: "あなたのかご",
+        get cpiAllLine() { return `${cpiPlaceJa()}の総合CPI`; }, get cpiFoodLine() { return `${cpiPlaceJa()}の食料CPI`; },
         realPay: p => `物価を考慮した実質賃金は${Math.abs(p).toFixed(1)}%${p < 0 ? "減少" : "増加"}`,
-        payShare: (pct, y) => `あなたのかごの1か月分は、愛知県の平均月給(${y}年)の約${pct.toFixed(0)}%`,
-        wagesNote: y => `賃金は厚生労働省「賃金構造基本統計調査」の愛知県・一般労働者(企業規模10人以上・産業計)の所定内給与額(残業代・賞与を除く)。年1回の調査で、最新は${y}年。2020年に推計方法が変わっています。物価は各年の平均。`,
+        payShare: (pct, y) => `あなたのかごの1か月分は、${cur.pref}の平均月給(${y}年)の約${pct.toFixed(0)}%`,
+        wagesNote: y => `賃金は厚生労働省「賃金構造基本統計調査」の${cur.pref}・一般労働者(企業規模10人以上・産業計)の所定内給与額(残業代・賞与を除く)。年1回の調査で、最新は${y}年。2020年に推計方法が変わっています。物価は各年の平均。`,
         outlookTitle: m => `今後の見通し:${m}`, outlookSub: "農林水産省「野菜の生育状況及び価格見通し」(東京の卸売市場、平年=過去5年平均との比較)",
         likelyUp: "高くなりそう", likelyDown: "安くなりそう", nearNormal: "ほぼ平年並み",
         basketImpact: v => `この見通しどおりなら、あなたのかごは平年より月に約${yen(Math.abs(v))}${v > 0 ? "高く" : "安く"}なる計算です(実績の中央値から概算)。`,
         trackRecord: tr => `これまでの実績:${tr.since.slice(0, 4)}年${+tr.since.slice(5)}月以降、「高くなる/安くなる」と予想した${tr.calls}回のうち${Math.round(tr.same_direction * 100)}%で、名古屋の小売価格も同じ方向に動きました(物価上昇分を除く。上昇予想${Math.round(tr.up.same_direction * 100)}%、下落予想${Math.round(tr.down.same_direction * 100)}%)。小売価格の動きは卸売より小さく、中央値は${pctTxt(tr.up.median_change)}/${pctTxt(tr.down.median_change)}でした。`,
-        outlookNote: "全国の卸売市場の見通しで、名古屋の店頭価格の予想ではありません。理由は農林水産省の発表の要約です。",
+        get outlookNote() { return `全国の卸売市場の見通しで、${cityShortJa()}の店頭価格の予想ではありません。実績は名古屋の小売価格で計算しています。理由は農林水産省の発表の要約です。`; },
         reasonJaOnly: "",
         makeItLast: "保存のコツ", makeItLastSub: "今月安くなりやすい野菜・果物を長持ちさせる方法",
         youNeed: "材料", keeps: "保存の目安", caution: "注意", veranda: "ベランダ活用",
@@ -269,25 +277,26 @@ const T = {
         explainLabel: "考えられる理由(下の見出しをもとにAIが作成)",
         explainNote: "説明はAIがニュース見出しから作成したもので、全国の報道にもとづきます。名古屋の値動きの理由と一致するとは限りません。",
         cpiRef: k => k === "all" ? "総合CPI" : "食料CPI", ifCpi: k => `${k === "all" ? "総合CPI" : "食料CPI"}と同じ率で上がった場合`, baseline: "食料CPI",
-        cpiNote: (k, n) => `CPI(消費者物価指数)は名古屋市の「${n}」指数${k === "all" ? "(全品目・サービス)" : "(外食を含む)"}で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。`,
+        cpiNote: (k, n) => `CPI(消費者物価指数)は${cpiPlaceJa()}の「${n}」指数${k === "all" ? "(全品目・サービス)" : "(外食を含む)"}で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。`,
         vsNational: p => `全国平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`, sameNational: "全国平均とほぼ同じ", cpiLegend: "CPIと同じ率で上がった場合(食品は食料CPI、その他は総合CPI)" },
-  en: { title: "Nagoya Price Tracker", subtitle: "Monthly retail prices of everyday essentials in Nagoya", per: "per",
+  en: { get title() { return `${cur.name_en} Price Tracker`; }, get subtitle() { return `Monthly retail prices of everyday essentials in ${cur.name_en}`; }, per: "per",
+        cityLabel: "City", loadingCity: "Loading…",
         r24: "2 yrs", r60: "5 yrs", rall: "All", yoy: "vs. last year", noData: "No data yet. It will appear after the first GitHub Action run.",
         source: "Source", updated: "Updated", toggle: "日本語",
         sort_category: "By category", sort_up: "Biggest rise", sort_down: "Biggest fall", other: "Other",
         allItems: "Prices by item", mom: "1 mo", y1: "1 yr", y5: "5 yrs", inBasket: "What's in the basket",
-        item: "Item", amount: "Amount", cost: "Cost", shareCol: "Share", basketSub: n => `${n} staples at Nagoya retail prices`,
+        item: "Item", amount: "Amount", cost: "Cost", shareCol: "Share", basketSub: n => `${n} staples at ${cur.name_en} retail prices`,
         movers: "Biggest changes", sinceMonth: "Since last month", sinceYear: "Since last year", up: "Up", down: "Down",
         noMoves: "No change",
         menu: "☰ Menu", menuJump: "Jump to", menuTools: "Tools", menuRange: "Chart range", menuSort: "Sort items", menuLang: "Language / 言語",
         check: "Price check", checkTitle: "Is this a good price?", checkItem: "Item", checkPrice: "Shelf price", checkQty: "Amount",
-        checkPer: u => `per ${u}`, avgLabel: m => `Nagoya avg (${m})`, lowLabel: "12-mo low", highLabel: "12-mo high",
+        checkPer: u => `per ${u}`, avgLabel: m => `${cur.name_en} avg (${m})`, lowLabel: "12-mo low", highLabel: "12-mo high",
         youLabel: "This price",
         vLow: "Cheaper than any month in the past year", vGood: "Good price", vAvg: "About average", vHigh: "Above average", vTop: "Higher than any month in the past year",
-        vsAvg: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the Nagoya average`,
+        vsAvg: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the ${cur.name_en} average`,
         checkNote: "Survey prices are averages for a specific product (e.g. domestic pork belly), so compare like with like.",
         guide: m => `Seasonal guide: ${m}`, guideCheap: "Usually cheap this month", guideDear: "Usually expensive this month",
-        guideNote: "Based on Nagoya prices over the past 10 years: each month's typical price compared with the yearly average.", vsYear: "vs. yearly avg",
+        get guideNote() { return `Based on ${cur.name_en} prices over the past 10 years: each month's typical price compared with the yearly average.`; }, vsYear: "vs. yearly avg",
         cheapest: "Usually cheapest", dearest: "priciest", monthNames: ["J","F","M","A","M","J","J","A","S","O","N","D"],
         monthFull: m => ["January","February","March","April","May","June","July","August","September","October","November","December"][m],
         nowVsUsual: (m, p) => `Seasonally adjusted, the ${m} price is ${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} its past-year average`,
@@ -300,15 +309,16 @@ const T = {
         shared: "You're viewing a shared basket.", saveMine: "Save as my basket", backMine: "Back to my basket",
         carried: "* Out of season: last in-season price used", empty: "No items selected. Use “Edit basket” to add some.",
         wagesTitle: "Prices and pay", wagesSub: (a, b) => `Change ${a}–${b} (${a} = 100)`,
-        pay: "Aichi average pay", basketLine: "Your basket", cpiAllLine: "Nagoya overall CPI", cpiFoodLine: "Nagoya food CPI",
+        get pay() { return `${prefEn()} average pay`; }, basketLine: "Your basket",
+        get cpiAllLine() { return `${cpiPlaceEn()} overall CPI`; }, get cpiFoodLine() { return `${cpiPlaceEn()} food CPI`; },
         realPay: p => `Adjusted for prices, pay ${p < 0 ? "fell" : "rose"} ${Math.abs(p).toFixed(1)}%`,
-        payShare: (pct, y) => `A month of your basket is about ${pct.toFixed(0)}% of Aichi's average monthly pay (${y})`,
-        wagesNote: y => `Pay is average scheduled monthly earnings (所定内給与額, excluding overtime and bonuses) of full-time workers in Aichi at companies with 10+ employees, from the Basic Survey on Wage Structure. It's surveyed once a year; the latest is ${y}. The survey changed its estimation method in 2020. Prices are yearly averages.`,
+        payShare: (pct, y) => `A month of your basket is about ${pct.toFixed(0)}% of ${prefEn()}'s average monthly pay (${y})`,
+        wagesNote: y => `Pay is average scheduled monthly earnings (所定内給与額, excluding overtime and bonuses) of full-time workers in ${prefEn()} at companies with 10+ employees, from the Basic Survey on Wage Structure. It's surveyed once a year; the latest is ${y}. The survey changed its estimation method in 2020. Prices are yearly averages.`,
         outlookTitle: m => `Coming up: ${m}`, outlookSub: "From MAFF's monthly vegetable outlook (Tokyo wholesale markets, compared with the 5-year average for the month)",
         likelyUp: "Likely higher", likelyDown: "Likely lower", nearNormal: "About normal",
         basketImpact: v => `If the outlook holds, your basket would cost about ${yen(Math.abs(v))} a month ${v > 0 ? "more" : "less"} than usual (rough estimate from the track record).`,
         trackRecord: tr => `Track record: since ${tr.since}, when the outlook said prices would be higher or lower (${tr.calls} times), Nagoya's retail prices moved the same way ${Math.round(tr.same_direction * 100)}% of the time, with inflation removed (higher: ${Math.round(tr.up.same_direction * 100)}%, lower: ${Math.round(tr.down.same_direction * 100)}%). Retail moves were smaller than wholesale: typically ${pctTxt(tr.up.median_change)} / ${pctTxt(tr.down.median_change)}.`,
-        outlookNote: "This is an outlook for national wholesale markets, not a forecast of Nagoya shop prices. Reasons are from the ministry's report.",
+        get outlookNote() { return `This is an outlook for national wholesale markets, not a forecast of ${cur.name_en} shop prices. The track record is measured against Nagoya's retail prices. Reasons are from the ministry's report.`; },
         reasonJaOnly: " (Japanese; translation pending)",
         makeItLast: "Make it last", makeItLastSub: "Ways to keep the produce that's usually cheap this month",
         youNeed: "You need", keeps: "Keeps", caution: "Note", veranda: "Veranda tip",
@@ -319,7 +329,7 @@ const T = {
         explainLabel: "Possible reasons (written by AI from the headlines below)",
         explainNote: "The explanation was written by AI from news headlines and reflects national coverage; Nagoya's prices may have moved for other reasons. English titles are translations.",
         cpiRef: k => k === "all" ? "Overall CPI" : "Food CPI", ifCpi: k => `If it had risen with ${k === "all" ? "overall" : "food"} CPI`, baseline: "Food CPI",
-        cpiNote: (k, n) => `CPI (consumer price index) here is Nagoya's ${k === "all" ? "overall index (総合, all goods and services)" : `food index (${n}), which includes eating out`}. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.`,
+        cpiNote: (k, n) => `CPI (consumer price index) here is ${cpiPlaceEn()}'s ${k === "all" ? "overall index (総合, all goods and services)" : `food index (${n}), which includes eating out`}. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.`,
         vsNational: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the national average`, sameNational: "About the national average", cpiLegend: "If it had risen with CPI (food CPI for food, overall CPI otherwise)" },
 };
 let lang = (() => { try { return localStorage.getItem("lang"); } catch { return null; } })()
@@ -336,6 +346,70 @@ let wages = null;
 let insights = null;
 let preserve = null;
 let outlook = null;
+// ---------- Cities
+const DEFAULT_CITY = { id: "nagoya", name_ja: "名古屋市", name_en: "Nagoya", pref: "愛知県", region: "tk" };
+let cityIndex = null;   // docs/data/cities.json
+let cur = DEFAULT_CITY; // the selected city
+let cityData = null;    // docs/data/cities/<id>.json for cities other than the default
+let cpiBase = null;     // Nagoya CPI from data/cpi.json
+const cityShortJa = () => cur.name_ja.replace(/市$/, "");
+const PREF_EN = {"北海道":"Hokkaido","青森県":"Aomori","岩手県":"Iwate","宮城県":"Miyagi","秋田県":"Akita","山形県":"Yamagata","福島県":"Fukushima",
+  "茨城県":"Ibaraki","栃木県":"Tochigi","群馬県":"Gunma","埼玉県":"Saitama","千葉県":"Chiba","東京都":"Tokyo","神奈川県":"Kanagawa",
+  "新潟県":"Niigata","富山県":"Toyama","石川県":"Ishikawa","福井県":"Fukui","山梨県":"Yamanashi","長野県":"Nagano","岐阜県":"Gifu",
+  "静岡県":"Shizuoka","愛知県":"Aichi","三重県":"Mie","滋賀県":"Shiga","京都府":"Kyoto","大阪府":"Osaka","兵庫県":"Hyogo","奈良県":"Nara",
+  "和歌山県":"Wakayama","鳥取県":"Tottori","島根県":"Shimane","岡山県":"Okayama","広島県":"Hiroshima","山口県":"Yamaguchi","徳島県":"Tokushima",
+  "香川県":"Kagawa","愛媛県":"Ehime","高知県":"Kochi","福岡県":"Fukuoka","佐賀県":"Saga","長崎県":"Nagasaki","熊本県":"Kumamoto",
+  "大分県":"Oita","宮崎県":"Miyazaki","鹿児島県":"Kagoshima","沖縄県":"Okinawa"};
+const prefEn = () => PREF_EN[cur.pref] || cur.pref;
+const cpiNational = () => cur.id !== DEFAULT_CITY.id && cityData?.cpi?.source === "national";
+const cpiPlaceJa = () => cpiNational() ? "全国" : cur.name_ja;
+const cpiPlaceEn = () => cpiNational() ? "National" : cur.name_en;
+
+// Point every card at the selected city's data: item.series.local, item.seasonal and cpi.
+function applyCity() {
+  const isDefault = cur.id === DEFAULT_CITY.id;
+  for (const item of data.items) {
+    if (!("_seasonal" in item)) item._seasonal = item.seasonal ?? null;
+    item.series.local = isDefault ? (item.series.nagoya || []) : (cityData?.series?.[item.id] || []);
+    item.seasonal = isDefault ? item._seasonal : (cityData?.seasonal?.[item.id] ?? null);
+  }
+  if (isDefault || !cityData?.cpi) cpi = isDefault ? cpiBase : null;
+  else cpi = { source: cpiBase?.source, series: {
+    food: { points: cityData.cpi.food || [], estat_name: "食料" },
+    all: { points: cityData.cpi.all || [], estat_name: "総合" } } };
+}
+function chartAreas() {
+  return [{ id: "local", name_ja: cur.name_ja, name_en: cur.name_en }, ...(data.areas || []).filter(a => a.id !== "nagoya")];
+}
+function renderCityPickers() {
+  const regions = cityIndex?.regions || [];
+  const cities = cityIndex?.cities || [DEFAULT_CITY];
+  const groups = regions.length ? regions.map(r => [r, cities.filter(c => c.region === r.id)]).filter(([, cs]) => cs.length)
+                                : [[{ name_ja: "", name_en: "" }, cities]];
+  const html = groups.map(([r, cs]) => `<optgroup label="${esc(r["name_" + lang])}">${cs.map(c =>
+    `<option value="${esc(c.id)}" ${c.id === cur.id ? "selected" : ""}>${esc(c["name_" + lang])}</option>`).join("")}</optgroup>`).join("");
+  document.querySelectorAll("[data-city-select]").forEach(sel => { sel.innerHTML = html; sel.value = cur.id; });
+}
+async function selectCity(id, { remember = true } = {}) {
+  const meta = cityIndex?.cities?.find(c => c.id === id);
+  if (!meta) return;
+  if (meta.id !== DEFAULT_CITY.id) {
+    const body = await fetch(`data/cities/${encodeURIComponent(meta.id)}.json`, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
+    if (!body) return;  // keep the current city if the file can't be loaded
+    cityData = body;
+  } else {
+    cityData = null;
+  }
+  cur = { ...DEFAULT_CITY, ...meta };
+  if (remember) {
+    try { localStorage.setItem("city", cur.id); } catch {}
+    const url = new URL(location.href);
+    if (cur.id === DEFAULT_CITY.id) url.searchParams.delete("city"); else url.searchParams.set("city", cur.id);
+    history.replaceState(null, "", url);
+  }
+  applyCity();
+  render();
+}
 const pctTxt = v => `${v > 0 ? "+" : "−"}${Math.abs(v * 100).toFixed(0)}%`;
 const wageCharts = [];
 let sortBy = (() => { try { return localStorage.getItem("sortBy"); } catch { return null; } })() || "category";
@@ -355,7 +429,7 @@ function pctSpan(now, before, label = "") {
   const cls = pct > 0.05 ? "up" : pct < -0.05 ? "down" : "";
   return `<span class="chg ${cls}">${pct > 0 ? "+" : ""}${pct.toFixed(1)}%${label ? " " + label : ""}</span>`;
 }
-const seriesOf = item => item.series.nagoya || Object.values(item.series)[0] || [];
+const seriesOf = item => item.series.local || item.series.nagoya || Object.values(item.series)[0] || [];
 
 // ---------- Custom basket
 function defaultBasket() {
@@ -399,7 +473,8 @@ const latestPrice = item => { const s = seriesOf(item); return s.length ? s[s.le
 // months before an item's series starts are left out.
 function basketSeries() {
   const mult = multiplier();
-  const parts = data.items.filter(i => basket.items[i.id] && myBasket.items[i.id] > 0).map(i => ({
+  // items this city doesn't survey are left out
+  const parts = data.items.filter(i => basket.items[i.id] && myBasket.items[i.id] > 0 && seriesOf(i).length).map(i => ({
     item: i, amount: myBasket.items[i.id] * scaleOf(i.id), units: myBasket.items[i.id] * scaleOf(i.id) * basket.items[i.id].per,
     own: new Map(seriesOf(i)), prices: new Map(), carried: new Set(),
   }));
@@ -570,7 +645,7 @@ function renderEditor() {
   ed.querySelector("#ed-reset").onclick = () => { myBasket = defaultBasket(); basketChanged(true); };
   ed.querySelector("#ed-share").onclick = async e => {
     const btn = e.currentTarget;  // currentTarget is cleared once the handler awaits
-    const url = `${location.origin}${location.pathname}#b=${b64url(JSON.stringify(myBasket))}`;
+    const url = `${location.origin}${location.pathname}${location.search}#b=${b64url(JSON.stringify(myBasket))}`;
     try { await navigator.clipboard.writeText(url); } catch { window.prompt(t.copyLink, url); return; }
     btn.textContent = t.copied; setTimeout(() => { btn.textContent = t.copyLink; }, 1500);
   };
@@ -730,7 +805,7 @@ function renderGuide(t) {
 
 // ---------- Related news (docs/data/insights.json)
 function newsFor(itemId) {
-  if (!insights || !data) return null;
+  if (!insights || !data || cur.id !== DEFAULT_CITY.id) return null;  // news and explanations are written for Nagoya
   const latest = data.items.map(seriesOf).filter(s => s.length).map(s => s[s.length - 1][0]).sort().pop();
   const info = insights.month === latest ? insights.items?.[itemId] : null;
   const visible = (info?.headlines || []).filter(h => !h.hide).length;
@@ -758,7 +833,8 @@ function yearlyAvg(points) {
 function renderWages(t) {
   const box = document.getElementById("wages");
   wageCharts.splice(0).forEach(c => c.destroy());
-  const pay = new Map(wages?.points || []);
+  const prefPoints = wages?.prefs?.[cur.pref] || (cur.pref === "愛知県" ? wages?.points : null);
+  const pay = new Map(prefPoints || []);
   const all = yearlyAvg(cpi?.series?.all?.points || []), food = yearlyAvg(cpi?.series?.food?.points || []);
   const bpts = basket && myBasket ? basketSeries().points : [];
   const bask = yearlyAvg(bpts);
@@ -959,6 +1035,8 @@ function renderSummary(t) {
 }
 
 function render() {
+  document.title = `${T.ja.title} | ${T.en.title}`;
+  renderCityPickers();
   const t = T[lang];
   document.documentElement.lang = lang;
   document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
@@ -986,8 +1064,8 @@ function render() {
   renderWages(t);
   renderChecker();
 
-  const color = id => css(id === "nagoya" ? "--nagoya" : "--tokyo");
-  document.getElementById("legend").innerHTML = (data.areas.length < 2 ? "" : data.areas.map(a =>
+  const color = id => css(id === "local" ? "--nagoya" : "--tokyo");
+  document.getElementById("legend").innerHTML = (chartAreas().length < 2 ? "" : chartAreas().map(a =>
     `<span><span class="swatch" style="background:${color(a.id)}"></span>${a["name_" + lang]}</span>`).join("")) +
     (cpiFood() ? `<span><span class="swatch" style="background:none;border-top:2px dashed var(--muted);height:0"></span>${t.cpiLegend}</span>` : "");
 
@@ -1048,10 +1126,10 @@ function render() {
       type: "line",
       data: {
         labels: shown,
-        datasets: [...data.areas.filter(a => item.series[a.id]).map(a => {
+        datasets: [...chartAreas().filter(a => item.series[a.id]).map(a => {
           const m = new Map(item.series[a.id]);
           return { label: a["name_" + lang], data: shown.map(x => m.get(x) ?? null),
-                   borderColor: color(a.id), borderWidth: a.id === "nagoya" ? 2 : 1.25,
+                   borderColor: color(a.id), borderWidth: a.id === "local" ? 2 : 1.25,
                    pointRadius: 0, spanGaps: true, tension: 0.2 };
         }), ...refDataset(shown, shown.map(x => new Map(main).get(x) ?? null), t.ifCpi(cpiKindForItem(item)), cpiKindForItem(item))],
       },
@@ -1092,11 +1170,20 @@ document.getElementById("check-btn").onclick = () => {
 };
 
 const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
-Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json"), load("data/insights.json"), load("preserve.json"), load("data/outlook.json")])
-  .then(([d, b, c, w, ins, pr, ol]) => {
-    data = d; basket = b; cpi = c; wages = w; insights = ins; preserve = pr; outlook = ol;
+document.querySelectorAll("[data-city-select]").forEach(sel => sel.onchange = () => {
+  toggleMenu(false);
+  selectCity(sel.value);
+});
+Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json"), load("data/insights.json"), load("preserve.json"), load("data/outlook.json"), load("data/cities.json")])
+  .then(async ([d, b, c, w, ins, pr, ol, ci]) => {
+    data = d; basket = b; cpi = cpiBase = c; wages = w; insights = ins; preserve = pr; outlook = ol; cityIndex = ci;
     if (basket) myBasket = loadBasket();
-    render();
+    if (data) applyCity();
+    // ?city=osaka in the link wins, then the last city used in this browser
+    let want = new URL(location.href).searchParams.get("city");
+    if (!want) { try { want = localStorage.getItem("city"); } catch {} }
+    if (data && want && want !== DEFAULT_CITY.id && cityIndex?.cities?.some(c => c.id === want)) await selectCity(want, { remember: false });
+    else render();
     if (/[#&]check\b/.test(location.hash)) toggleChecker(true);  // bookmarkable: .../#check
   });
 </script>
