@@ -61,5 +61,17 @@ class Wages(unittest.TestCase):
         self.assertEqual(fw.merge_tabs(stat, cells, tabs),
                          {2020: 299.0, 2021: 300.0, 2022: 301.0, 2023: 305.0, 2024: 308.0})
 
+    def test_all_prefectures(self):
+        cells = fw.resolve_cells(CLASSES, CONFIG)
+        base = {"@tab": "41", "@cat01": "1", "@cat02": "01", "@cat04": "T1"}
+        stat = {"DATA_INF": {"VALUE": [
+            dict(base, **{"@area": "23000", "@time": "2023000000", "$": "320"}),
+            dict(base, **{"@area": "22000", "@time": "2023000000", "$": "300"}),
+        ]}}
+        out = fw.all_prefectures(stat, cells, [{"@code": "41", "@name": "所定内給与額"}], "area", CLASSES["area"])
+        self.assertEqual(out, {"愛知県": {2023: 320.0}, "静岡県": {2023: 300.0}})
+        self.assertEqual(fw.pref_name("２３ 愛知"), "愛知")
+
+
 if __name__ == "__main__":
     unittest.main()

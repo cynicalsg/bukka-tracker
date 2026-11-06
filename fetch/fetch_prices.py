@@ -19,6 +19,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = ROOT / "fetch" / "items.json"
+CITIES_PATH = ROOT / "fetch" / "cities.json"
+CITY_DIR = ROOT / "docs" / "data" / "cities"
+CITY_INDEX_PATH = ROOT / "docs" / "data" / "cities.json"
 OUTPUT_PATH = ROOT / "docs" / "data" / "prices.json"
 CATALOG_PATH = ROOT / "docs" / "data" / "catalog.json"
 API = "https://api.e-stat.go.jp/rest/3.0/app/json"
@@ -85,6 +88,22 @@ def fetch_table(app_id: str, stats_data_id: str, filters: dict | None = None) ->
         next_key = stat.get("RESULT_INF", {}).get("NEXT_KEY")
         if not next_key:
             return merged
+        start = next_key
+
+
+def iter_table_values(app_id: str, stats_data_id: str, filters: dict):
+    """Yield a table's VALUE rows page by page, without holding the whole download in memory."""
+    start = 1
+    while True:
+        data = api_get("getStatsData", {"appId": app_id, "statsDataId": stats_data_id, "startPosition": start,
+                                        "limit": 100000, "metaGetFlg": "N", **filters})["GET_STATS_DATA"]
+        if data["RESULT"]["STATUS"] not in (0, "0", 1, "1"):  # 1 = no data for these filters
+            raise SystemExit(f"e-Stat error {data['RESULT']['STATUS']}: {data['RESULT'].get('ERROR_MSG')}")
+        stat = data.get("STATISTICAL_DATA", {})
+        yield from as_list(stat.get("DATA_INF", {}).get("VALUE"))
+        next_key = stat.get("RESULT_INF", {}).get("NEXT_KEY")
+        if not next_key:
+            return
         start = next_key
 
 
@@ -289,22 +308,64 @@ def capital_areas(classes: dict[str, list[dict]], capitals: list[str]) -> dict[s
     return out
 
 
-def national_average(stat: dict, item_dim: str, area_to_cap: dict[str, str], min_cities: int) -> dict[str, list]:
-    """Unweighted mean across prefectural capitals, per item code and month.
-    A month is kept only when at least `min_cities` capitals report a price."""
-    acc: dict[tuple, dict[str, list]] = {}
-    for v in as_list(stat["DATA_INF"]["VALUE"]):
-        cap = area_to_cap.get(v.get("@area"))
+def city_prices(values, item_dim: str, area_to_city: dict[str, str]) -> dict[str, dict[str, dict[str, float]]]:
+    """{city: {item code: {month: price}}}. Former area codes of the same city are averaged where they overlap."""
+    acc: dict[tuple, list] = {}
+    for v in values:
+        city = area_to_city.get(v.get("@area"))
         month = parse_month(v.get("@time", ""))
         price = parse_number(v.get("$"))
-        if cap and month and price is not None:
-            acc.setdefault((v.get(f"@{item_dim}"), month), {}).setdefault(cap, []).append(price)
+        if city and month and price is not None:
+            acc.setdefault((city, v.get(f"@{item_dim}"), month), []).append(price)
+    out: dict[str, dict[str, dict[str, float]]] = {}
+    for (city, code, month), ps in acc.items():
+        out.setdefault(city, {}).setdefault(code, {})[month] = round(sum(ps) / len(ps), 1)
+    return out
+
+
+def national_average(by_city: dict, capitals: list[str], since: str, min_cities: int) -> dict[str, list]:
+    """Unweighted mean across prefectural capitals, per item code and month (from `since`).
+    A month is kept only when at least `min_cities` capitals report a price."""
+    per: dict[tuple, list] = {}
+    for city in capitals:
+        for code, months in by_city.get(city, {}).items():
+            for month, price in months.items():
+                if month >= since:
+                    per.setdefault((code, month), []).append(price)
     out: dict[str, list] = {}
-    for (code, month), caps in acc.items():
-        if len(caps) >= min_cities:
-            per_city = [sum(vals) / len(vals) for vals in caps.values()]
-            out.setdefault(code, []).append([month, round(sum(per_city) / len(per_city), 1)])
+    for (code, month), ps in per.items():
+        if len(ps) >= min_cities:
+            out.setdefault(code, []).append([month, round(sum(ps) / len(ps), 1)])
     return {code: sorted(pts) for code, pts in out.items()}
+
+
+def write_city_files(by_city: dict, cities: dict, dataset: dict, config: dict) -> list[dict]:
+    """docs/data/cities/<id>.json per city (unit-adjusted series and seasonal patterns) and an index."""
+    CITY_DIR.mkdir(parents=True, exist_ok=True)
+    cfg_by_id = {i["id"]: i for i in config["items"]}
+    index = []
+    for c in cities["cities"]:
+        raw = by_city.get(c["match"], {})
+        series, seasonal = {}, {}
+        for entry in dataset["items"]:
+            pts = adjust_series(sorted([m, p] for m, p in raw.get(entry["estat_code"], {}).items()), cfg_by_id[entry["id"]])
+            if pts:
+                series[entry["id"]] = pts
+                prof = seasonal_profile(pts)
+                if prof:
+                    seasonal[entry["id"]] = prof
+        if not series:
+            print(f"  {c['id']}: no data", file=sys.stderr)
+            continue
+        latest = max(pts[-1][0] for pts in series.values())
+        body = {"id": c["id"], "name_ja": c["name_ja"], "name_en": c["name_en"], "pref": c["pref"],
+                "latest": latest, "series": series, "seasonal": seasonal}
+        (CITY_DIR / f"{c['id']}.json").write_text(json.dumps(body, ensure_ascii=False, separators=(",", ":")) + "\n",
+                                                  encoding="utf-8")
+        index.append({k: c[k] for k in ("id", "name_ja", "name_en", "pref", "region")} | {"latest": latest, "items": len(series)})
+    CITY_INDEX_PATH.write_text(json.dumps({"default": cities["default"], "regions": cities["regions"], "cities": index},
+                                          ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    return index
 
 
 def add_national(dataset: dict, averages: dict[str, list], config: dict) -> None:
@@ -341,18 +402,20 @@ def main() -> None:
     stat = fetch_table(app_id, table_id, filters)
     dataset = build_dataset(stat, config)
 
+    cities = json.loads(CITIES_PATH.read_text(encoding="utf-8"))
     nat = config.get("national")
+    classes = class_objects(meta)
+    item_dim = find_item_dimension(classes, config["items"])
+    names = sorted({c["match"] for c in cities["cities"]} | set(nat["capitals"] if nat else []))
+    area_to_city = capital_areas(classes, names)
+    found = set(area_to_city.values())
+    print(f"Cities: {len(found)}/{len(names)} found" + (f"; missing {sorted(set(names) - found)}" if len(found) < len(names) else ""))
+    city_filters = {**{k: v for k, v in filters.items() if k != "cdArea"}, "cdArea": ",".join(area_to_city)}
+    by_city = city_prices(iter_table_values(app_id, table_id, city_filters), item_dim, area_to_city)
+    index = write_city_files(by_city, cities, dataset, config)
+    print(f"Wrote {len(index)} city files to {CITY_DIR.relative_to(ROOT)}")
     if nat:
-        classes = class_objects(meta)
-        item_dim = find_item_dimension(classes, config["items"])
-        area_to_cap = capital_areas(classes, nat["capitals"])
-        found = set(area_to_cap.values())
-        print(f"National average: {len(found)}/{len(nat['capitals'])} capitals found"
-              + (f"; missing {sorted(set(nat['capitals']) - found)}" if len(found) < len(nat["capitals"]) else ""))
-        y, m = nat["from"].split("-")
-        nat_filters = {**{k: v for k, v in filters.items() if k != "cdArea"},
-                       "cdArea": ",".join(area_to_cap), "cdTimeFrom": f"{y}00{m}{m}"}
-        averages = national_average(fetch_table(app_id, table_id, nat_filters), item_dim, area_to_cap, nat["min_cities"])
+        averages = national_average(by_city, nat["capitals"], nat["from"], nat["min_cities"])
         add_national(dataset, averages, config)
         print(f"National average: {sum(len(v) for v in averages.values())} item-months")
 

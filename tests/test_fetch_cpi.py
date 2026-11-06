@@ -46,5 +46,13 @@ class CPI(unittest.TestCase):
         self.assertEqual(cpi["series"]["food"]["estat_name"], "食料")
 
 
+    def test_city_cpi_points(self):
+        codes = fc.pick_codes(META, CONFIG)
+        values = STAT["DATA_INF"]["VALUE"] + [{"@tab": "1", "@cat01": "0002", "@area": "13100", "@time": "1999001212", "$": "90"}]
+        pts = fc.city_cpi_points(values, codes, {"23100": "nagoya", "13100": "tokyo"}, "2000-01")
+        self.assertEqual(pts["nagoya"]["food"], [["2026-08", 111.9], ["2026-09", 112.4]])
+        self.assertEqual(pts["tokyo"]["food"], [["2026-09", 113.0]])        # 1999 dropped
+
+
 if __name__ == "__main__":
     unittest.main()

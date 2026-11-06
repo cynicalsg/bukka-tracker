@@ -85,6 +85,25 @@ def merge_tabs(stat: dict, cells: dict, tabs: list[dict]) -> dict[int, float]:
     return merged
 
 
+def area_key_of(cells: dict, config: dict) -> str | None:
+    return next((k for k, e in cells.items() if config["area_match"] in e.get("@name", "")), None)
+
+
+def pref_name(name: str) -> str:
+    """'２３ 愛知' / '愛知県' -> '愛知県' style name (leading codes dropped)."""
+    return re.sub(r"^[\d０-９\s]+", "", name).strip()
+
+
+def all_prefectures(stat: dict, cells: dict, tabs: list[dict], area_key: str, areas: list[dict]) -> dict[str, dict[int, float]]:
+    """Same cells as Aichi's, for every prefecture in the table."""
+    out = {}
+    for a in areas:
+        got = merge_tabs(stat, {**cells, area_key: a}, tabs)
+        if got:
+            out[pref_name(a.get("@name", ""))] = got
+    return out
+
+
 def candidate_tables(app_id: str, config: dict) -> list[str]:
     found = list(config.get("known_tables", []))
     for word in config["search_words"]:
@@ -102,6 +121,7 @@ def main() -> None:
         raise SystemExit("Set ESTAT_APP_ID")
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     years: dict[int, float] = {}
+    prefs: dict[str, dict[int, float]] = {}
     sources = []
     for tid in candidate_tables(app_id, config):
         meta = fetch_meta(app_id, tid)
@@ -119,9 +139,14 @@ def main() -> None:
             else:
                 print(f"         {k}: {len(es)} entries, e.g. {[e.get('@name', '') for e in es[:6]]}")
         tabs = [e for e in classes.get("tab", []) if config["tab_match"] in e.get("@name", "")]
-        filters = {f"cd{k.capitalize()}": e["@code"] for k, e in cells.items()}
+        area_key = area_key_of(cells, config)
+        filters = {f"cd{k.capitalize()}": e["@code"] for k, e in cells.items() if k != area_key}
         filters["cdTab"] = ",".join(e["@code"] for e in tabs)
-        got = merge_tabs(fetch_table(app_id, tid, filters), cells, tabs)
+        stat = fetch_table(app_id, tid, filters)
+        got = merge_tabs(stat, cells, tabs)
+        for pref, yv in all_prefectures(stat, cells, tabs, area_key, classes.get(area_key, [])).items():
+            for y, v in yv.items():
+                prefs.setdefault(pref, {}).setdefault(y, v)
         print(f"  use  {tid} {title}: {', '.join(e.get('@name', '') for e in cells.values())} -> "
               f"{min(got) if got else '-'}..{max(got) if got else '-'}")
         if got:
@@ -138,9 +163,10 @@ def main() -> None:
                    "tables": sources},
         "break_year": 2020,
         "points": [[y, years[y]] for y in sorted(years)],
+        "prefs": {k: [[y, v[y]] for y in sorted(v)] for k, v in sorted(prefs.items()) if k != "全国"},
     }
     OUTPUT_PATH.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-    print(f"Wrote {len(years)} years: {out['points'][0]} .. {out['points'][-1]}")
+    print(f"Wrote {len(years)} years: {out['points'][0]} .. {out['points'][-1]}; {len(out['prefs'])} prefectures")
 
 
 if __name__ == "__main__":
