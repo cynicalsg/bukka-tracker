@@ -21,13 +21,14 @@
 <style>
   :root {
     --bg: #f7f6f3; --card: #ffffff; --text: #1d1d1f; --muted: #6b6b70; --line: #e4e2dc;
-    --nagoya: #c2410c; --tokyo: #64748b; --up: #b91c1c; --down: #15803d;
+    --nagoya: #c2410c; --tokyo: #64748b; --up: #b91c1c; --down: #15803d; --link: #1d4ed8;
   }
   @media (prefers-color-scheme: dark) {
     :root { --bg: #151517; --card: #1f1f22; --text: #ececee; --muted: #9b9ba1; --line: #2e2e33;
-            --nagoya: #fb923c; --tokyo: #94a3b8; --up: #f87171; --down: #4ade80; }
+            --nagoya: #fb923c; --tokyo: #94a3b8; --up: #f87171; --down: #4ade80; --link: #93c5fd; }
   }
   * { box-sizing: border-box; }
+  a { color: var(--link); }
   body { margin: 0; background: var(--bg); color: var(--text);
          font: 15px/1.5 system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif; }
   header, main, footer { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
@@ -171,6 +172,8 @@
   .ol-row { border-bottom: 1px solid var(--line); padding: 4px 0; }
   .ol-row > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 8px; color: var(--text); }
   .ol-row > summary::-webkit-details-marker { display: none; }
+  .ol-row .ol-name { flex-shrink: 0; white-space: nowrap; }
+  .ol-row .ol-v { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
   .ol-row p { margin: 4px 0 6px; font-size: .85rem; line-height: 1.55; }
   .keep-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 8px 24px; margin-top: 6px; }
   .keep { border-bottom: 1px solid var(--line); padding: 4px 0; }
@@ -720,14 +723,15 @@ function seasonStrip(item, main, t) {
 }
 
 // ---------- Coming up (docs/data/outlook.json, MAFF vegetable outlook)
-function verdictText(v) {
-  if (lang === "ja") return v.verdict_ja;
+function verdictParts(v) {
+  // One line per period ("11月前半: … / 11月後半: …" becomes two lines), worded briefly.
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return v.verdict_ja
-    .replace(/(\d+)月前半/g, (_, m) => `early ${months[m - 1]}`).replace(/(\d+)月後半/g, (_, m) => `late ${months[m - 1]}`)
-    .replace(/やや平年を上回って推移/g, "slightly above normal").replace(/平年を上回って推移/g, "above normal")
-    .replace(/やや平年を下回って推移/g, "slightly below normal").replace(/平年を下回って推移/g, "below normal")
-    .replace(/平年並みで推移/g, "normal");
+  return v.verdict_ja.split(/\s*\/\s*/).map(part => lang === "ja"
+    ? part.replace(/\d+月(前半|後半)/g, "$1").replace(/(上回|下回)って推移/g, "$1る").replace(/平年並みで推移/g, "平年並み")
+    : part.replace(/(\d+)月前半/g, (_, m) => `early ${months[m - 1]}`).replace(/(\d+)月後半/g, (_, m) => `late ${months[m - 1]}`)
+        .replace(/やや平年を上回って推移/g, "slightly above normal").replace(/平年を上回って推移/g, "above normal")
+        .replace(/やや平年を下回って推移/g, "slightly below normal").replace(/平年を下回って推移/g, "below normal")
+        .replace(/平年並みで推移/g, "normal"));
 }
 function renderOutlook(t) {
   const box = document.getElementById("outlook");
@@ -738,8 +742,8 @@ function renderOutlook(t) {
   const up = items.filter(r => r.v.score >= 0.5).sort((a, b) => b.v.score - a.v.score);
   const down = items.filter(r => r.v.score <= -0.5).sort((a, b) => a.v.score - b.v.score);
   const normal = items.filter(r => Math.abs(r.v.score) < 0.5);
-  const row = (r, cls) => `<details class="ol-row"><summary><span>${esc(r.item["name_" + lang])}</span>
-      <span class="chg ${cls}">${esc(verdictText(r.v))}</span></summary>
+  const row = (r, cls) => `<details class="ol-row"><summary><span class="ol-name">${esc(r.item["name_" + lang])}</span>
+      <span class="chg ol-v ${cls}">${verdictParts(r.v).map(x => `<span>${esc(x)}</span>`).join("")}</span></summary>
       <p>${esc(lang === "en" && r.v.reason_en ? r.v.reason_en : r.v.reason_ja)}${lang === "en" && !r.v.reason_en ? `<span class="unit">${t.reasonJaOnly}</span>` : ""}</p></details>`;
   // Rough basket effect: scale the track record's median retail move by the strength of the call.
   const tr = outlook.track_record || {};
