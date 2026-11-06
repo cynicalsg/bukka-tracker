@@ -1,7 +1,7 @@
 {
  "month": "2026-09",
  "method": "headlines",
- "generated": "2026-11-06T01:45:07Z",
+ "generated": "2026-11-06T01:48:15Z",
  "news_window": [
   "2026-08-01",
   "2026-11-01"
@@ -49,32 +49,7 @@
   "toothpaste": {
    "mom": 17.4,
    "yoy": 30.0,
-   "headlines": [
-    {
-     "title": "スマート歯ブラシの使い方：30秒で完了する新しい歯磨き習慣",
-     "source": "CAMPFIRE (キャンプファイヤー)",
-     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFB4OWJ2VDRjRHJQSzV0eFNXTHdLMGJEcUhCUFA3VTMzdEFJczVvLThCYVhPNGZGREUzUnFkdkU1Wk1IUVpmendXb1pHUXNFdjZUTi02Z2hjZ2dVbExtRTFhTmVLajdFTlhzR0xB?oc=5",
-     "date": "2026-10-31"
-    },
-    {
-     "title": "【徹底比較】歯周病予防歯磨き粉のおすすめ人気ランキング【歯槽膿漏にも！2026年10月】",
-     "source": "マイベスト",
-     "url": "https://news.google.com/rss/articles/CBMiO0FVX3lxTE1saC04OE1Za3A4dmtieFhET2NjU3IzLV9yOGwtbnBVOENTWjZaRFkwX3Axa1JoS183RUtn?oc=5",
-     "date": "2026-10-29"
-    },
-    {
-     "title": "クレストの歯磨き粉のおすすめ人気ランキング【2026年10月】",
-     "source": "マイベスト",
-     "url": "https://news.google.com/rss/articles/CBMiPkFVX3lxTE4tc01IOXBrOUV3WVFpeURPTXZpZmozZS1zZVM4NmpTT01QMWY0WDFfamtqLTNtMjZNVGIwMXBn?oc=5",
-     "date": "2026-10-22"
-    },
-    {
-     "title": "コルゲートの歯磨き粉のおすすめ人気ランキング【2026年10月】",
-     "source": "マイベスト",
-     "url": "https://news.google.com/rss/articles/CBMiPkFVX3lxTE1udlo5Q2xkQ2dIbDdOR2VQSDN2MXFTRVVvMk9Ea2VyMmN6eFBDYnBvRzRQMlFMTWtaQ0Ewa2pn?oc=5",
-     "date": "2026-10-21"
-    }
-   ],
+   "headlines": [],
    "official": [],
    "summary_ja": null,
    "summary_en": null
@@ -98,31 +73,25 @@
      "date": "2026-10-09"
     },
     {
-     "title": "【コストコタイムズ】9/24更新！今日狙いたいセール4品！マニア一推しはつがるりんご1,298円（コストコハッカー） - エキスパート",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNU2xwaVdOZEZLMXphTWJlM1pHZU90UThOUWhDck5qMk1jVUxVblQ2UGJvTEM4U2QySnVkMmJZR0RYUFJzbWt6OEVxTG1UcEN0YnNvQm1yY0dSekx6X0wwd1JfQnJOSzA0bVhGQmpuUGdXS25sR3BsZVVOdlY5czZFVHFqT0JzZnp5?oc=5",
-     "date": "2026-09-24"
-    },
-    {
-     "title": "「青森りんご」など国産果汁飲料が安定供給に影 果汁原料の作付面積減少などが背景 つなぎとめるJR東日本クロスステーション",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5BalUxenc3N0cxVExqaHdXTmg2WnN4YjVJcFNWN010MU1KQjM5M0NxQ2E1R19lMVVQYVl1d1JacGp6cEFyMFRJeW55bkNZSU00Y3FmdWZOTGpGdnRkQUMwVkxBOG9MekNIQW1wQnFCN1VXa3RNX25rdW8td2FNNGM?oc=5",
-     "date": "2026-08-30"
-    },
-    {
      "title": "【倒産情報】負債８２００万円 創業1948年の老舗リンゴ移出業者が事業停止 ピーク時は年売上高約3億3000万円も約１億3800万円に減少…不作や海外輸出の需要増による市場価格高騰で仕入れ苦戦…価格競争も",
      "source": "TBS NEWS DIG",
      "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE82ZHBKakVQeTZFYTVLTElva3o0UVF3V1U3QUpQN201S1l4OFl4QmZvN21HdHVzeFcxMVA2S2RJQkVPNVRIVnZnSkJMNVNvdElSV0xMSjVFTQ?oc=5",
      "date": "2026-08-17"
-    }
-   ],
-   "official": [
+    },
     {
-     "title_ja": "農林水産省「野菜の需給・価格動向」",
-     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
-     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
+     "title": "群馬県産りんごを贅沢に使用 「吹割りんごの手作りアップルパイ」を「ＪＡタウン」で特別価格販売",
+     "source": "沖縄タイムス社",
+     "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBvMkhWN056Sl9kc1NBbkxMUV9Lc2g4djlYUjNHczRJbm5iTUZTVmEwYjkzcFdqZHVsR1JzTmNFU3ZVQjRWcHRNQUxPOFFOb2RYRkZUdzZfQnY3MmlrMWc?oc=5",
+     "date": "2026-10-30"
+    },
+    {
+     "title": "消費地価格キロ462円、過去4番目の高さ／25年産青森県産リンゴ（陸奥新報）",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFA3WkRsREdhMGpQVzNoSkJKa3h0eElIWXNTXzlYRFZLM05fNEJ0YTgzZU5iNXdLMnplOGtmU2NYT0YxeUxFb011Q2MyUmE2Q0VEZlVVc3czcGU2MVBiX19vaHhMYmNMUDFadEMtWkNOUHBwMFRCTDVnVnJRMFRSaFk?oc=5",
+     "date": "2026-10-08"
     }
    ],
+   "official": [],
    "summary_ja": null,
    "summary_en": null
   },
@@ -130,12 +99,6 @@
    "mom": -22.4,
    "yoy": null,
    "headlines": [
-    {
-     "title": "【豊作】甘い・大きい・形よしで「パーフェクト」の声も… 北海道産じゃがいもが“当たり年” 例年にない安さに客も店もホクホク",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5lY05UVHNjblNRM0JmWFJEUHlPYVlBYXgydFdJanpRcHdxV3FHUk9pS2hWZ3VFcFREQlR6aHpscTJfelRLYUVCZXlDS3p6UEJhV2F1Mm4zZ3Y2QTRqYmhlazFLZVhYX3RBbXh5NkxtU3dmZV9uMElrWUlSUFJ1MGs?oc=5",
-     "date": "2026-10-27"
-    },
     {
      "title": "玉川徹氏、\"白菜1玉1000円超\" 野菜の高騰対策を提案「玉ねぎとかじゃがいもを食べて防衛を」（エンタメNEXT）",
      "source": "Yahoo!ニュース",
@@ -207,14 +170,7 @@
   "dishsoap": {
    "mom": null,
    "yoy": 44.6,
-   "headlines": [
-    {
-     "title": "台所用洗剤ランキング（2026年7月1日～2026年9月30日）",
-     "source": "週刊粧業オンライン",
-     "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5nZVMzOEJhdXJoSVRKS19mYkN2M3BtTGhxcUtlUC01Y3JHcXRCbFBRMUJ3Uzl3OFMxaUpLZ2RxMTdBNzFubGZVQkNRakkxNG1iVWM3Znl3S3RGZlRIT3RJc1lQOGc?oc=5",
-     "date": "2026-10-21"
-    }
-   ],
+   "headlines": [],
    "official": [],
    "summary_ja": null,
    "summary_en": null
@@ -294,18 +250,6 @@
      "source": "Yahoo!ニュース",
      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9aMDNRMlZKTEpwbXZyTWl1NjktVC1sYzk2T1BveW8tWGRxLTZWMDBCY2lJX0RQTldEYkNEWHBCRUFwZHFGM1VvOE02S3FObXEtSUdhZmpoNkN4ZmpNX1ZMYTQySlktLWJwTDNVT216NnM5Y00wNVpsR2R4eEJzLWM?oc=5",
      "date": "2026-10-21"
-    },
-    {
-     "title": "白川町×各務原市の特産品がコラボ 「白川茶にんじんフランク」開発 [岐阜県]",
-     "source": "朝日新聞",
-     "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5BWTFiMUswcHdWVmxvazF6M1BVNGNFc05JUTRqd2lsRGNVLTdLR1pxclY4cEVZSVJCOTVqNXFQcXZtZV9aM040bE42TFJGWThHTUwxMEhreTRUR2VNYk5RTUNaeGNaODQ?oc=5",
-     "date": "2026-09-25"
-    },
-    {
-     "title": "ズートピアのにんじんペンはどこで売ってる？公式再販や100均を徹底調査",
-     "source": "elhuyar.eus",
-     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBqcFFtX1NYeE52WU55TmpwTnNrUnAwVXFKdkZWU2RuOGNoajF3U0Njdm9KNWFxVjM4eW9QOGNSMTZEcTFPNXlLYzVyMTIzMy1iSkI0MlhuekpLN3V5ZHNyUF81clpYblluRnRn?oc=5",
-     "date": "2026-09-18"
     }
    ],
    "official": [
@@ -323,37 +267,19 @@
    "yoy": -16.3,
    "headlines": [
     {
-     "title": "【コストコ】10月25日まで！三元豚スペアリブが100グラムあたり129円に！　銀鮭西京漬けやみかんも特別価格でゲットするなら今！チェックしておきたいセール品まとめ　お肉・魚・フルーツ・ベーカリー編",
-     "source": "えん食べ [グルメニュース]",
-     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1GSlIwVnF1RE00Tklad1VJV1Foa05DTlNUbjBjTUZwTW1NTVRKS2Z1REJER2lEdFpjeTlxVWdBaS1NblZpVWZOTU84RHl6Z0xITDA2VlpPOWF3N3lOM3FnQm40VjVZY0NQVG1rRURuWkxFOHBuNVHSAXtBVV95cUxPU3VTSjVJSE5WSTFIUFpxSENRMU1pUzk3cGhjaEc5NF9najlHZWpKZnphUWtFeUtLZkRBUzIydGN0WmwtZzE1RmY2a1EwdEcweEV2UktMVUxua1ozT3B1dkNhT1pZSl9mU0xiWGctQk9kZmxzNTlJaWxvSHM?oc=5",
-     "date": "2026-10-23"
+     "title": "値段は5割高くても「足りないくらい売れている」全国から注文が相次ぐブランドみかん「南国の陽蜜」人気の理由",
+     "source": "TBS NEWS DIG",
+     "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE93cng0VS1YYWpzcWlkcGtkMGwzMm5JVnFKQjNKVnVobjR6S1lxVEZKRVhFanRSaGF1QlN5eUlTVkVUa29aOHg5cWFaMjJ0VW44SDFGdjlDVnpjTDJiMVRsR3A5MA?oc=5",
+     "date": "2026-10-05"
     },
     {
-     "title": "“早生ミカン”の出荷がピーク 生産農家を変えたブランド品種『北原早生』も ミカン生産農家「出来は過去最高」 【福岡発】",
-     "source": "Yahoo!ニュース",
-     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFB5VEZBb29fc3cxSEJWc1F5VzkxckFNRmtNcUdyX1RSZTNGVS1EdlhxemtnZWRyZmJSY1UxeVQ1UXVJelR5ZDFISmMzd1JYbEFPaDI2TWFuQVpKLWxRcmVpR2pfMHk1RFZIMS16U2dNRUNxRkQtTnVUb18weGhINUk?oc=5",
-     "date": "2026-10-22"
-    },
-    {
-     "title": "＜最新＞極早生ミカン、長雨影響８％高",
-     "source": "日本農業新聞",
-     "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9ZQzdqYW95SWZ0cjdYeFVKQmlCOE5hTEFnMmVrV1dMeUJNaDhlWUZFUi16a3Badkc4U0hlN2pIZGxlZ2FVT2NFby1SRE5lTzdPZnhvTXhBSQ?oc=5",
-     "date": "2026-09-15"
-    },
-    {
-     "title": "朱鷺が舞う佐渡から、米・柿・みかんをお届け！ 佐渡産の秋の味覚を「ＪＡタウン」で販売中",
-     "source": "宮崎日日新聞",
-     "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFBEVEdkUXJzUEV3NVpzenBNNDBzamxWUlJUbzRzb3RsaXVOWk4tRjM1bDh1U2JheHBWbF8xOVMzcGJoM0lBaml1X2lEci0wNFg2bzJRUTFzRUZBZ2RyYVdObkthS2JmMFZfaGhBSVFVVlBsZw?oc=5",
-     "date": "2026-10-23"
+     "title": "みかんたっぷりで385円！ ラーメンに「ミニパフェ」がいいね",
+     "source": "ASCII.jp",
+     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE90QkZ4TmpuZC1zNVY4ZklkOHpvNmtpQnRZWUpBVjQtNURiTzlkMnIxellVWEg2MXhpV3d2bTgxeXQtUGFsU0FtM2NMR2NUbDFJVnh3bw?oc=5",
+     "date": "2026-09-13"
     }
    ],
-   "official": [
-    {
-     "title_ja": "農林水産省「野菜の需給・価格動向」",
-     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
-     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
-    }
-   ],
+   "official": [],
    "summary_ja": null,
    "summary_en": null
   }
