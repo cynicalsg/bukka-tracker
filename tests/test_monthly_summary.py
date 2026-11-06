@@ -59,6 +59,16 @@ class Summary(unittest.TestCase):
         self.assertEqual([i["id"] for _, i in cheap], ["mikan"])
         self.assertEqual(ms.seasonal_for(PRICES, 6), ([], []))  # July: not surveyed
 
+    def test_news_lines_only_for_current_month(self):
+        ins = {"month": "2026-09", "items": {"rice": {"headlines": [
+            {"title": "コメ価格が下落", "url": "https://n/1", "source": "NHK", "date": "2026-10-01"}]}}}
+        self.assertEqual(ms.news_lines(ins, PRICES, "en"),
+                         ["- **Rice**: [コメ価格が下落](https://n/1) (NHK, 2026-10-01)"])
+        self.assertEqual(ms.news_lines(dict(ins, month="2026-08"), PRICES, "en"), [])
+        text = ms.summary(PRICES, BASKET, None, today=datetime(2026, 10, 26), insights=ins)
+        self.assertIn("**Related news**", text)
+        self.assertIn("**関連ニュース**", text)
+
     def test_summary_text(self):
         text = ms.summary(PRICES, BASKET, None, today=datetime(2026, 10, 26))
         self.assertIn("## September 2026", text)
