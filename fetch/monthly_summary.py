@@ -118,6 +118,26 @@ def news_lines(insights: dict | None, prices: dict, lang: str, per_item: int = 2
     return out
 
 
+def outlook_lines(outlook: dict | None, prices: dict, lang: str) -> list[str]:
+    """One line with the vegetable outlook's 'likely higher / lower' calls."""
+    if not outlook or not outlook.get("items"):
+        return []
+    names = {i["id"]: i[f"name_{lang}"] for i in prices["items"]}
+    up = [names.get(k, k) for k, v in outlook["items"].items() if v["score"] >= 0.5]
+    down = [names.get(k, k) for k, v in outlook["items"].items() if v["score"] <= -0.5]
+    if not up and not down:
+        return []
+    y, mo = int(outlook["edition"][:4]), int(outlook["edition"][5:7])
+    tr = outlook.get("track_record") or {}
+    pct = f"{round(tr['same_direction'] * 100)}%" if tr.get("same_direction") else None
+    if lang == "en":
+        record = f"; right about the direction {pct} of the time since {tr.get('since')}" if pct else ""
+        return [f"**Vegetable outlook for {MONTHS_EN[mo - 1]} {y}** (MAFF{record}) — likely higher: "
+                f"{', '.join(up) or '–'}; likely lower: {', '.join(down) or '–'}"]
+    return [f"**{y}年{mo}月の野菜の見通し**(農林水産省。これまでの的中率{pct or '–'}) — "
+            f"高くなりそう: {'、'.join(up) or '–'}／安くなりそう: {'、'.join(down) or '–'}"]
+
+
 def site_url() -> str:
     repo = os.environ.get("GITHUB_REPOSITORY", "cynicalsg/bukka-tracker")
     owner, name = repo.split("/", 1)
@@ -130,7 +150,7 @@ def title(m: str) -> str:
 
 
 def summary(prices: dict, basket: dict | None, cpi: dict | None, today: datetime | None = None,
-            insights: dict | None = None) -> str:
+            insights: dict | None = None, outlook: dict | None = None) -> str:
     m = latest_month(prices)
     today = today or datetime.now(JST)
     next_month0 = today.month % 12  # the month after today, 0-based
@@ -183,6 +203,8 @@ def summary(prices: dict, basket: dict | None, cpi: dict | None, today: datetime
                   + (", ".join(f"{i['name_en']} ({c:+.0%})" for c, i in cheap) or "–")
                   + "; usually expensive: " + (", ".join(f"{i['name_en']} ({c:+.0%})" for c, i in dear) or "–"))
 
+    if outlook_lines(outlook, prices, "en"):
+        en += ["", *outlook_lines(outlook, prices, "en")]
     news_en, news_ja = news_lines(insights, prices, "en"), news_lines(insights, prices, "ja")
     if news_en:
         en += ["", "**Related news** (collected automatically; headlines may not explain the change):", *news_en]
@@ -198,6 +220,8 @@ def summary(prices: dict, basket: dict | None, cpi: dict | None, today: datetime
                   + ("、".join(f"{i['name_ja']}({c:+.0%})" for c, i in cheap) or "–")
                   + "／例年高い: " + ("、".join(f"{i['name_ja']}({c:+.0%})" for c, i in dear) or "–"))
 
+    if outlook_lines(outlook, prices, "ja"):
+        ja += ["", *outlook_lines(outlook, prices, "ja")]
     if news_ja:
         ja += ["", "**関連ニュース**(自動収集。値動きの理由を示すとは限りません):", *news_ja]
 
@@ -217,7 +241,7 @@ def main() -> None:
         print(title(latest_month(prices)))
         return
     print(summary(prices, load(ROOT / "docs" / "basket.json"), load(DATA / "cpi.json"),
-                  insights=load(DATA / "insights.json")), end="")
+                  insights=load(DATA / "insights.json"), outlook=load(DATA / "outlook.json")), end="")
 
 
 if __name__ == "__main__":

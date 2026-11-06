@@ -69,6 +69,16 @@ class Summary(unittest.TestCase):
         self.assertIn("**Related news**", text)
         self.assertIn("**関連ニュース**", text)
 
+    def test_outlook_lines(self):
+        ol = {"edition": "2026-11", "track_record": {"same_direction": 0.853, "since": "2023-07"},
+              "items": {"rice": {"score": 2}, "eggs": {"score": -1}, "mikan": {"score": 0}}}
+        en = ms.outlook_lines(ol, PRICES, "en")[0]
+        self.assertIn("November 2026", en)
+        self.assertIn("likely higher: Rice; likely lower: Eggs", en)
+        self.assertIn("right about the direction 85% of the time since 2023-07", en)
+        self.assertIn("高くなりそう: rice", ms.outlook_lines(ol, PRICES, "ja")[0])
+        self.assertEqual(ms.outlook_lines({"edition": "2026-11", "items": {"rice": {"score": 0}}}, PRICES, "en"), [])
+
     def test_summary_text(self):
         text = ms.summary(PRICES, BASKET, None, today=datetime(2026, 10, 26))
         self.assertIn("## September 2026", text)
