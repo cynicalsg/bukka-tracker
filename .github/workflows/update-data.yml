@@ -47,6 +47,10 @@ jobs:
         env:
           ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
         run: python fetch/fetch_wages.py
+      - name: Collect related news for the biggest changes
+        # Free: news headlines only. A problem here shouldn't stop the price update.
+        continue-on-error: true
+        run: python fetch/fetch_insights.py
       - name: Note the latest month after fetching
         id: after
         run: echo "month=$(python fetch/monthly_summary.py --latest-month)" >> "$GITHUB_OUTPUT"

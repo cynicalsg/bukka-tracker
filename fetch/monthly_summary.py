@@ -104,6 +104,20 @@ def seasonal_for(prices: dict, month0: int, threshold: float = 0.10):
     return cheap, dear
 
 
+def news_lines(insights: dict | None, prices: dict, lang: str, per_item: int = 2) -> list[str]:
+    """Up to `per_item` headlines for each item on the Biggest changes list."""
+    if not insights or insights.get("month") != latest_month(prices):
+        return []
+    names = {i["id"]: i[f"name_{lang}"] for i in prices["items"]}
+    out = []
+    for item_id, info in insights["items"].items():
+        hs = info.get("headlines", [])[:per_item]
+        if hs:
+            links = "; ".join(f"[{h['title']}]({h['url']}) ({h['source']}{', ' + h['date'] if h['date'] else ''})" for h in hs)
+            out.append(f"- **{names.get(item_id, item_id)}**: {links}")
+    return out
+
+
 def site_url() -> str:
     repo = os.environ.get("GITHUB_REPOSITORY", "cynicalsg/bukka-tracker")
     owner, name = repo.split("/", 1)
@@ -115,7 +129,8 @@ def title(m: str) -> str:
     return f"Nagoya prices: {MONTHS_EN[mo - 1]} {y} / 名古屋の物価 {y}年{mo}月"
 
 
-def summary(prices: dict, basket: dict | None, cpi: dict | None, today: datetime | None = None) -> str:
+def summary(prices: dict, basket: dict | None, cpi: dict | None, today: datetime | None = None,
+            insights: dict | None = None) -> str:
     m = latest_month(prices)
     today = today or datetime.now(JST)
     next_month0 = today.month % 12  # the month after today, 0-based
@@ -168,6 +183,10 @@ def summary(prices: dict, basket: dict | None, cpi: dict | None, today: datetime
                   + (", ".join(f"{i['name_en']} ({c:+.0%})" for c, i in cheap) or "–")
                   + "; usually expensive: " + (", ".join(f"{i['name_en']} ({c:+.0%})" for c, i in dear) or "–"))
 
+    news_en, news_ja = news_lines(insights, prices, "en"), news_lines(insights, prices, "ja")
+    if news_en:
+        en += ["", "**Related news** (collected automatically; headlines may not explain the change):", *news_en]
+
     ja = [f"## {y}年{mo}月", ""]
     if basket_line_ja:
         ja.append(basket_line_ja)
@@ -178,6 +197,9 @@ def summary(prices: dict, basket: dict | None, cpi: dict | None, today: datetime
         ja.append(f"**{nm_ja}の旬ガイド** — 例年安い: "
                   + ("、".join(f"{i['name_ja']}({c:+.0%})" for c, i in cheap) or "–")
                   + "／例年高い: " + ("、".join(f"{i['name_ja']}({c:+.0%})" for c, i in dear) or "–"))
+
+    if news_ja:
+        ja += ["", "**関連ニュース**(自動収集。値動きの理由を示すとは限りません):", *news_ja]
 
     footer = ["", "---", f"Charts / グラフ: {site_url()}",
               "Source / 出典: 総務省統計局「小売物価統計調査」「消費者物価指数」(e-Stat)"]
@@ -194,7 +216,8 @@ def main() -> None:
     if "--title" in sys.argv:
         print(title(latest_month(prices)))
         return
-    print(summary(prices, load(ROOT / "docs" / "basket.json"), load(DATA / "cpi.json")), end="")
+    print(summary(prices, load(ROOT / "docs" / "basket.json"), load(DATA / "cpi.json"),
+                  insights=load(DATA / "insights.json")), end="")
 
 
 if __name__ == "__main__":
