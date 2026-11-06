@@ -1,0 +1,361 @@
+{
+ "month": "2026-09",
+ "method": "headlines",
+ "generated": "2026-11-06T01:45:07Z",
+ "news_window": [
+  "2026-08-01",
+  "2026-11-01"
+ ],
+ "items": {
+  "tomato": {
+   "mom": 20.0,
+   "yoy": null,
+   "headlines": [
+    {
+     "title": "トマト１割安 入荷不安定見越し売り込み消極的",
+     "source": "日本農業新聞",
+     "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE44UDk0V2xES2dtNnNPcnU0eE1ReUVPWlJkSWFad3hDWm9QbUg4cGtEYVotMlk0YnpaN1QyYlBOZndkai0xY0t4cEk5c0NVUUhwNEY2Z01LcXdrcTQ?oc=5",
+     "date": "2026-10-06"
+    },
+    {
+     "title": "レタス２４％上昇、トマトは１０００円強に 野菜小売価格",
+     "source": "日本農業新聞",
+     "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE80cVFTdnE4OGhhZVVkZ3dkd1B6SUZZZWFJMlM0M3Fqc1JKVG5CZUttOF9Xem53QWY2MTN2RXlVLUxwbDhkeENJMUs2M01ZVWJSSVhEN0J4TjYxUnM?oc=5",
+     "date": "2026-09-30"
+    },
+    {
+     "title": "長引く雨による記録的な日照不足で苗が植えられない… レタスが2倍、トマトは3倍と野菜の価格高騰も（2026年9月17日掲載）",
+     "source": "日テレNEWS NNN",
+     "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNTThQbUJVS2hrNFd3UERxb1RoVGNQeVk1WHdFMTdNRGpkU2xtb2x3UUZwNmVMZFMyM1VaSDlubmNvaHNjbXljNmdlMDhGMFgzQXJraDdiV1BuVHRTbUdxRVg5Njk1aGFNNXlHN08xcGFLYm1KbXhSUnU3enNnVEoxakhidjVRUXc?oc=5",
+     "date": "2026-09-17"
+    },
+    {
+     "title": "キュウリやトマト…夏野菜が高騰！農家を救う「0℃保存」新冷蔵技術とは：ガイアの夜明け",
+     "source": "テレビ東京",
+     "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFA1d2E5ZkotcE5VZUdUTldvYTNnLXJSSUVCSTZKNE5YU1Q2V3pyVWYzNGpCdUFPLXdHaUhqOXRycmxUZ3BpRTRCalZhZUV1RGp0SzNYUlZBaTI2YllGeF9EZzA1MUxJeEJvZ2VDSm5LSTNPQQ?oc=5",
+     "date": "2026-08-14"
+    }
+   ],
+   "official": [
+    {
+     "title_ja": "農林水産省「野菜の需給・価格動向」",
+     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
+     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
+    }
+   ],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "toothpaste": {
+   "mom": 17.4,
+   "yoy": 30.0,
+   "headlines": [
+    {
+     "title": "スマート歯ブラシの使い方：30秒で完了する新しい歯磨き習慣",
+     "source": "CAMPFIRE (キャンプファイヤー)",
+     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFB4OWJ2VDRjRHJQSzV0eFNXTHdLMGJEcUhCUFA3VTMzdEFJczVvLThCYVhPNGZGREUzUnFkdkU1Wk1IUVpmendXb1pHUXNFdjZUTi02Z2hjZ2dVbExtRTFhTmVLajdFTlhzR0xB?oc=5",
+     "date": "2026-10-31"
+    },
+    {
+     "title": "【徹底比較】歯周病予防歯磨き粉のおすすめ人気ランキング【歯槽膿漏にも！2026年10月】",
+     "source": "マイベスト",
+     "url": "https://news.google.com/rss/articles/CBMiO0FVX3lxTE1saC04OE1Za3A4dmtieFhET2NjU3IzLV9yOGwtbnBVOENTWjZaRFkwX3Axa1JoS183RUtn?oc=5",
+     "date": "2026-10-29"
+    },
+    {
+     "title": "クレストの歯磨き粉のおすすめ人気ランキング【2026年10月】",
+     "source": "マイベスト",
+     "url": "https://news.google.com/rss/articles/CBMiPkFVX3lxTE4tc01IOXBrOUV3WVFpeURPTXZpZmozZS1zZVM4NmpTT01QMWY0WDFfamtqLTNtMjZNVGIwMXBn?oc=5",
+     "date": "2026-10-22"
+    },
+    {
+     "title": "コルゲートの歯磨き粉のおすすめ人気ランキング【2026年10月】",
+     "source": "マイベスト",
+     "url": "https://news.google.com/rss/articles/CBMiPkFVX3lxTE1udlo5Q2xkQ2dIbDdOR2VQSDN2MXFTRVVvMk9Ea2VyMmN6eFBDYnBvRzRQMlFMTWtaQ0Ewa2pn?oc=5",
+     "date": "2026-10-21"
+    }
+   ],
+   "official": [],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "soysauce": {
+   "mom": 14.0,
+   "yoy": null,
+   "headlines": [],
+   "official": [],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "apple": {
+   "mom": -33.0,
+   "yoy": null,
+   "headlines": [
+    {
+     "title": "去年産りんご過去２番目の高値取引 県内取引価格は319円 冬の雪害と夏の猛暑で去年産りんごの収穫量が少なかった",
+     "source": "日テレNEWS NNN",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9sUDAxYWNFeGNEOUJnQnFsemJoNHFVUmlqbENoTklYT0RSaGdKUUdtNlNCMjV6aVNWWG9lRV94ZGFLeGIwUUlBdVZub2laSHZOdU5WVzNXcE55T3RvREdJUHFTV0dqVVFBTGoxM0VZQzcxMlQyWld5WFgzNUQ5OTA?oc=5",
+     "date": "2026-10-09"
+    },
+    {
+     "title": "【コストコタイムズ】9/24更新！今日狙いたいセール4品！マニア一推しはつがるりんご1,298円（コストコハッカー） - エキスパート",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNU2xwaVdOZEZLMXphTWJlM1pHZU90UThOUWhDck5qMk1jVUxVblQ2UGJvTEM4U2QySnVkMmJZR0RYUFJzbWt6OEVxTG1UcEN0YnNvQm1yY0dSekx6X0wwd1JfQnJOSzA0bVhGQmpuUGdXS25sR3BsZVVOdlY5czZFVHFqT0JzZnp5?oc=5",
+     "date": "2026-09-24"
+    },
+    {
+     "title": "「青森りんご」など国産果汁飲料が安定供給に影 果汁原料の作付面積減少などが背景 つなぎとめるJR東日本クロスステーション",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5BalUxenc3N0cxVExqaHdXTmg2WnN4YjVJcFNWN010MU1KQjM5M0NxQ2E1R19lMVVQYVl1d1JacGp6cEFyMFRJeW55bkNZSU00Y3FmdWZOTGpGdnRkQUMwVkxBOG9MekNIQW1wQnFCN1VXa3RNX25rdW8td2FNNGM?oc=5",
+     "date": "2026-08-30"
+    },
+    {
+     "title": "【倒産情報】負債８２００万円 創業1948年の老舗リンゴ移出業者が事業停止 ピーク時は年売上高約3億3000万円も約１億3800万円に減少…不作や海外輸出の需要増による市場価格高騰で仕入れ苦戦…価格競争も",
+     "source": "TBS NEWS DIG",
+     "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE82ZHBKakVQeTZFYTVLTElva3o0UVF3V1U3QUpQN201S1l4OFl4QmZvN21HdHVzeFcxMVA2S2RJQkVPNVRIVnZnSkJMNVNvdElSV0xMSjVFTQ?oc=5",
+     "date": "2026-08-17"
+    }
+   ],
+   "official": [
+    {
+     "title_ja": "農林水産省「野菜の需給・価格動向」",
+     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
+     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
+    }
+   ],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "potato": {
+   "mom": -22.4,
+   "yoy": null,
+   "headlines": [
+    {
+     "title": "【豊作】甘い・大きい・形よしで「パーフェクト」の声も… 北海道産じゃがいもが“当たり年” 例年にない安さに客も店もホクホク",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5lY05UVHNjblNRM0JmWFJEUHlPYVlBYXgydFdJanpRcHdxV3FHUk9pS2hWZ3VFcFREQlR6aHpscTJfelRLYUVCZXlDS3p6UEJhV2F1Mm4zZ3Y2QTRqYmhlazFLZVhYX3RBbXh5NkxtU3dmZV9uMElrWUlSUFJ1MGs?oc=5",
+     "date": "2026-10-27"
+    },
+    {
+     "title": "玉川徹氏、\"白菜1玉1000円超\" 野菜の高騰対策を提案「玉ねぎとかじゃがいもを食べて防衛を」（エンタメNEXT）",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE01MEV6cXFxWWRaaGFLUGN3VjhiNVd2cWtBaTJRR19wZTNlR2o1QU0yMTZDRk5XYk9qa2QzOER1elQ4N0dFcHR0X01WME52NmpzZUNVV3lnSFNlTmxxQUVhQXNGQ2E5b2E1TW9rS2x2cGRDTS05MXg4NWNVeEt5amc?oc=5",
+     "date": "2026-10-09"
+    },
+    {
+     "title": "【9月の野菜価格】平年並みの野菜多く じゃがいも・たまねぎは特にお買い得に（ウェザーマップ）",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE14U1Z3QWN5REppS1N4MEpEU0toVURJOFM3UENmN2pXSkNQcTZ0YTZsNmx0aEtoN1puM3FxVG1DN09IODhzOU5xQjZJVG1jdGlqaENwWmZfdVpiMGlUSnBZMWNsSHBxazhNaDZ2bEwtbXNTeHFvWFdkSHlBTjRjXzg?oc=5",
+     "date": "2026-08-31"
+    },
+    {
+     "title": "野菜の相場予測 だいこん、はくさいは高値に じゃがいもは安値続く(気象予報士 星野 朋美 2026年08月07日)",
+     "source": "tenki.jp",
+     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE4xSXh6d3V4VnlkRlNURTFCNzdNMUZpRXdGZzc0eXdGb2NPdXk2MHh1OWJWNS05clhGMFR6bmdsaVFXa21xdVQ5RXYyTnFpSVg4R0d5dVpRQm5iZm9sWm5tT2o4ZXVrNjBkdk1N?oc=5",
+     "date": "2026-08-07"
+    }
+   ],
+   "official": [
+    {
+     "title_ja": "農林水産省「野菜の需給・価格動向」",
+     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
+     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
+    }
+   ],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "cabbage": {
+   "mom": -22.1,
+   "yoy": null,
+   "headlines": [
+    {
+     "title": "【中継】ハクサイとキャベツ 平年並みの価格まで下がる キノコ類は値上がり…「寒さで需要が増加」",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9QSDBXclZNX0JON1dFX2FwNk1adk9ranhzVW1ab1RUUW1TcEtSZzRpekFhVkoxdlYtckpqYWttZW5jd3JoU2V3c1lzUWMxT1g2NWVVR0dNdEM3cFdOemltQTNCc3hHMzUxV1J2QVNmYTViS1hDUUQ5UEhmYjNjZXM?oc=5",
+     "date": "2026-10-28"
+    },
+    {
+     "title": "レタス160円 ハクサイ・キャベツは100円 天候に恵まれ野菜の価格大幅値下がり（テレビ愛知）",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBiZzZqbnFvWHJPMXNLY01iTUNoTlo1bEpFamxBT2EzSV8yaTJRQXNlLTJmZHRlV3BIaDJ3X0VCNG1JZ2hWUlJJc0tGZDYtcU5CXzU4UjRUZ3E4MFl6TEROeFB1U2YzbC1BdVRSbFhQZGpPYjRud2tXdXRBWFlSRDA?oc=5",
+     "date": "2026-10-23"
+    },
+    {
+     "title": "葉物野菜価格高騰続く キャベツが欠かせない松山のご当地メニュー人気店は様々な工夫【愛媛】",
+     "source": "日テレNEWS NNN",
+     "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOcVFBc0VwQTNRa3g4cFlkNmJpVWVFQ3RuWEdSbTVJNm5XMkloUTVtMHFtR0VSRDlMTEExdkdPMDJaVWJIVk95UFM4UE5SVkJKOTBjWlpzVWE1UE55bURYejBRN0xmZ05Vd3N5dnJIVVZJdXR1LVpGUngyeXZlLU1vbXlEOUF3eDQ?oc=5",
+     "date": "2026-10-21"
+    },
+    {
+     "title": "長雨や台風の影響で葉物野菜の価格高騰 キャベツ１玉が600円超（沖縄テレビOTV）",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5uTXZmcmViVlF4SzU4TjZjdVNwSGVpZXVmRDZqeHpWaDNnNUhUSDZHNUZfNER6UnJobFltdVhvYV9JYnQ3OXpTcy14QjYxaF9mY0pjSkoyOGFPOFI4WFFTcU80d1l2QjhSejZnUnBKTDE4Z2lzdVBhQnJlck9hOTQ?oc=5",
+     "date": "2026-10-16"
+    }
+   ],
+   "official": [
+    {
+     "title_ja": "農林水産省「野菜の需給・価格動向」",
+     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
+     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
+    }
+   ],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "dishsoap": {
+   "mom": null,
+   "yoy": 44.6,
+   "headlines": [
+    {
+     "title": "台所用洗剤ランキング（2026年7月1日～2026年9月30日）",
+     "source": "週刊粧業オンライン",
+     "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5nZVMzOEJhdXJoSVRKS19mYkN2M3BtTGhxcUtlUC01Y3JHcXRCbFBRMUJ3Uzl3OFMxaUpLZ2RxMTdBNzFubGZVQkNRakkxNG1iVWM3Znl3S3RGZlRIT3RJc1lQOGc?oc=5",
+     "date": "2026-10-21"
+    }
+   ],
+   "official": [],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "greentea": {
+   "mom": null,
+   "yoy": 30.1,
+   "headlines": [
+    {
+     "title": "マヨネーズ20～30円値上げ 抹茶ブームで緑茶飲料も…11月から1469品目値上げ 前年の約10倍",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9VTko2VGxIUUdaVktLcl9zaGo2OFU1LTJHeloyQW1lWkdRQXBzTFhRQTUtbHE4MjIwM3d5QUlESTJPMmJPRXF0RW9sSUdoLW9Gak44cWRQVER1eFlPTk9YbDVIcEZ1VldlVGZlaVJ3Yk9ndDdRTjU5dHJycldNbkk?oc=5",
+     "date": "2026-10-29"
+    },
+    {
+     "title": "緑茶飲料、輸入原料が急増 国産の流通量減少、価格高騰で（共同通信）",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9aWHJvV0pBZU50N2pqYm50MjFxZ0NzQ1ozMWxTMzVTM0pCcEpfVVplUS1LeGhqYWU1akFTR3RXbjZZM1Qtd0RNb3EyWWdicFFqbW9na3FmbGU5Z25XWVExaHRWV2UwNHgyWUxqQ3hydENVdXlQeUE2TGJBSzVkLTQ?oc=5",
+     "date": "2026-10-28"
+    },
+    {
+     "title": "世界的な抹茶ブームで「いつものお茶」が値上がり…嬉野の玉緑茶は取引価格ほぼ2倍に【佐賀県】｜佐賀のニュース",
+     "source": "サガテレビ",
+     "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBIN1F6bHQ3b0lLMlY4emtZampOVUN3eTd3TTRzX2xkX2V1M1RyM1VUVnRqYWUxWnhKX3I4S3NXNk5DZERpMVZmODVIWTRjS3VVOVhXdEc1ZnpKQ3hWNXJfSFBR?oc=5",
+     "date": "2026-10-22"
+    },
+    {
+     "title": "値上げの秋「気軽におにぎりも買えないよ」 光熱費も、緑茶も、加熱式たばこも、発泡酒も…",
+     "source": "中日新聞Web",
+     "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE04cktlTFUybG1rUTFRckc3R0RVNjNWajlNejJqV09zRVNYRjRCWkpXbnZkQlM0OWxIR3FKYjhQUWpPVG5jeTMyMXAwWGdDN3dud2JxNA?oc=5",
+     "date": "2026-10-01"
+    }
+   ],
+   "official": [],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "rice": {
+   "mom": null,
+   "yoy": -24.5,
+   "headlines": [
+    {
+     "title": "高騰から一転「暴落」のコメ 報じられない「作り続けられる価格」の議論 #エキスパートトピ（松平尚也） - エキスパート",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQRWs5UHYta3Vwb1dhODYwTE9OZTN1Slg4UDJqb1ZfY3dfOWZ2cEVTQjlvNjVmSm04SGl0NXNnQ0pVN19DcHh6cDViazNKTjNCSldWUzRMMlF0YVY2UkdIWVg4MVFuVHNNdUNGajFsY25OSERQMW9YNWhSaUFhTmlQVjNXQXNNaUp2?oc=5",
+     "date": "2026-10-31"
+    },
+    {
+     "title": "コメの平均小売価格が11週連続値下がり 政府は備蓄米10万トンの買戻しを検討 関係者「価格に大きな影響はない規模」",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1MeERBVzA5Q0xvcVIySmhOT1kxbDFfaEdSM3lQN0oxVjVZdFJtLUNNM1BBUEgwOUtHcGV6X2k0RDI2R1dlNUFrQnpZRWY3NHBWZmVlaHNFMkc0NS1rdkpsZVg3VmgwNDgxTzRUeVdzUVc1ODYxTS0wSU1kNHZ5VVk?oc=5",
+     "date": "2026-10-30"
+    },
+    {
+     "title": "コメ価格11週連続値下がり 過剰在庫で値下がり続く",
+     "source": "NHKニュース",
+     "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE80NkUzWnRfMnY2eGFCYlExck5vSlk1WnppVnBYMlNEaWQwcWVMT2tOMVJ6R2lValhhTlV2NDNvMGo1c2wzSnhneEN3ektqblM0VmpZN3ItQzVtVnZIREMw?oc=5",
+     "date": "2026-10-30"
+    },
+    {
+     "title": "コメ小売り価格が11週連続値下がり 「ほっともっと」は期間限定ご飯大盛り無料 「ほっかほっか亭」大盛り値下げ",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5kanFGenoxaXBuOW10bWpIQUpCbUFWdy00aGpGeW9hV0d5VHpWeV9CUjhucU9yRDVwWndjeHBJRE1PWjlFWGlDdFNzZHVuTjZzWmFlNlVRd1M4c2FwSmFiSDU0SnMwQWxHejlGSUpxbzdONHBZaDhCWXMtRTg0N1U?oc=5",
+     "date": "2026-10-30"
+    }
+   ],
+   "official": [],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "carrot": {
+   "mom": null,
+   "yoy": -17.6,
+   "headlines": [
+    {
+     "title": "高いのは葉物だけ？だいこん・にんじん・たまねぎは平年並みで3種1061円（LIMO）",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9aMDNRMlZKTEpwbXZyTWl1NjktVC1sYzk2T1BveW8tWGRxLTZWMDBCY2lJX0RQTldEYkNEWHBCRUFwZHFGM1VvOE02S3FObXEtSUdhZmpoNkN4ZmpNX1ZMYTQySlktLWJwTDNVT216NnM5Y00wNVpsR2R4eEJzLWM?oc=5",
+     "date": "2026-10-21"
+    },
+    {
+     "title": "白川町×各務原市の特産品がコラボ 「白川茶にんじんフランク」開発 [岐阜県]",
+     "source": "朝日新聞",
+     "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5BWTFiMUswcHdWVmxvazF6M1BVNGNFc05JUTRqd2lsRGNVLTdLR1pxclY4cEVZSVJCOTVqNXFQcXZtZV9aM040bE42TFJGWThHTUwxMEhreTRUR2VNYk5RTUNaeGNaODQ?oc=5",
+     "date": "2026-09-25"
+    },
+    {
+     "title": "ズートピアのにんじんペンはどこで売ってる？公式再販や100均を徹底調査",
+     "source": "elhuyar.eus",
+     "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBqcFFtX1NYeE52WU55TmpwTnNrUnAwVXFKdkZWU2RuOGNoajF3U0Njdm9KNWFxVjM4eW9QOGNSMTZEcTFPNXlLYzVyMTIzMy1iSkI0MlhuekpLN3V5ZHNyUF81clpYblluRnRn?oc=5",
+     "date": "2026-09-18"
+    }
+   ],
+   "official": [
+    {
+     "title_ja": "農林水産省「野菜の需給・価格動向」",
+     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
+     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
+    }
+   ],
+   "summary_ja": null,
+   "summary_en": null
+  },
+  "mikan": {
+   "mom": null,
+   "yoy": -16.3,
+   "headlines": [
+    {
+     "title": "【コストコ】10月25日まで！三元豚スペアリブが100グラムあたり129円に！　銀鮭西京漬けやみかんも特別価格でゲットするなら今！チェックしておきたいセール品まとめ　お肉・魚・フルーツ・ベーカリー編",
+     "source": "えん食べ [グルメニュース]",
+     "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1GSlIwVnF1RE00Tklad1VJV1Foa05DTlNUbjBjTUZwTW1NTVRKS2Z1REJER2lEdFpjeTlxVWdBaS1NblZpVWZOTU84RHl6Z0xITDA2VlpPOWF3N3lOM3FnQm40VjVZY0NQVG1rRURuWkxFOHBuNVHSAXtBVV95cUxPU3VTSjVJSE5WSTFIUFpxSENRMU1pUzk3cGhjaEc5NF9najlHZWpKZnphUWtFeUtLZkRBUzIydGN0WmwtZzE1RmY2a1EwdEcweEV2UktMVUxua1ozT3B1dkNhT1pZSl9mU0xiWGctQk9kZmxzNTlJaWxvSHM?oc=5",
+     "date": "2026-10-23"
+    },
+    {
+     "title": "“早生ミカン”の出荷がピーク 生産農家を変えたブランド品種『北原早生』も ミカン生産農家「出来は過去最高」 【福岡発】",
+     "source": "Yahoo!ニュース",
+     "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFB5VEZBb29fc3cxSEJWc1F5VzkxckFNRmtNcUdyX1RSZTNGVS1EdlhxemtnZWRyZmJSY1UxeVQ1UXVJelR5ZDFISmMzd1JYbEFPaDI2TWFuQVpKLWxRcmVpR2pfMHk1RFZIMS16U2dNRUNxRkQtTnVUb18weGhINUk?oc=5",
+     "date": "2026-10-22"
+    },
+    {
+     "title": "＜最新＞極早生ミカン、長雨影響８％高",
+     "source": "日本農業新聞",
+     "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9ZQzdqYW95SWZ0cjdYeFVKQmlCOE5hTEFnMmVrV1dMeUJNaDhlWUZFUi16a3Badkc4U0hlN2pIZGxlZ2FVT2NFby1SRE5lTzdPZnhvTXhBSQ?oc=5",
+     "date": "2026-09-15"
+    },
+    {
+     "title": "朱鷺が舞う佐渡から、米・柿・みかんをお届け！ 佐渡産の秋の味覚を「ＪＡタウン」で販売中",
+     "source": "宮崎日日新聞",
+     "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFBEVEdkUXJzUEV3NVpzenBNNDBzamxWUlJUbzRzb3RsaXVOWk4tRjM1bDh1U2JheHBWbF8xOVMzcGJoM0lBaml1X2lEci0wNFg2bzJRUTFzRUZBZ2RyYVdObkthS2JmMFZfaGhBSVFVVlBsZw?oc=5",
+     "date": "2026-10-23"
+    }
+   ],
+   "official": [
+    {
+     "title_ja": "農林水産省「野菜の需給・価格動向」",
+     "title_en": "MAFF: vegetable supply and price trends (Japanese)",
+     "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
+    }
+   ],
+   "summary_ja": null,
+   "summary_en": null
+  }
+ }
+}
