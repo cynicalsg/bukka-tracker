@@ -47,8 +47,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": "8〜9月の長雨による記録的な日照不足で植え付けや生育が遅れ、トマトなど野菜の価格が大きく上がったと報じられています[2][3]。10月にも入荷の不安定さが伝えられています[1]。",
-   "summary_en": "Reports point to record low sunshine from prolonged rain in August–September, which delayed planting and growth and pushed up vegetable prices including tomatoes [2][3]. Unstable supply was still being reported in October [1]."
+   "summary_ja": "8月には岐阜県などで40℃超の猛暑によりトマトなど夏野菜の収穫が減り[4]、9月には長雨と日照不足で入荷が減って野菜の価格が上がったと報じられています[2][3]。ただし10月初めにはトマトは平年より1割ほど安いとも伝えられています[1]。",
+   "summary_en": "Reports point to heat above 40°C in August, in places such as Gifu, that cut summer vegetable harvests including tomatoes [4], then prolonged rain and low sunshine in September that reduced arrivals and pushed vegetable prices up [2][3]. By early October, though, tomatoes were reported about 10% below their usual level [1]."
   },
   "toothpaste": {
    "mom": 17.4,
@@ -82,7 +82,7 @@
      "source": "TBS NEWS DIG",
      "url": "https://newsdig.tbs.co.jp/articles/-/2877612",
      "date": "2026-08-17",
-     "title_en": "Bankruptcy: long-established apple shipper founded in 1948 halts business with ¥82 million debt, citing poor harvests and higher prices",
+     "title_en": "Bankruptcy: apple shipper founded in 1948 halts business with ¥82 million debt; sales fell from about ¥330 million at peak to about ¥138 million as poor harvests and export demand pushed up market prices and made buying hard",
      "hide": true
     },
     {
@@ -102,8 +102,8 @@
     }
    ],
    "official": [],
-   "summary_ja": "見出しは主に前シーズン(2025年産)が雪害と猛暑で不作となり高値だったことを伝えています[1][4]。9月の値下がりそのものの理由は、これらの見出しからは分かりません。",
-   "summary_en": "The headlines mainly describe last season's (2025) small, expensive crop after winter snow damage and summer heat [1][4]. They don't explain the September drop itself."
+   "summary_ja": "見出しと記事は、2025年産リンゴが猛暑や雪害などで不作となり、2026年8月までの販売期間を通じて高値だったと伝えています[1][4]。9月の値下がりそのものの理由は書かれていません。",
+   "summary_en": "The headlines and article describe the 2025 apple crop, which was small after summer heat and snow damage and sold at high prices through August 2026 [1][4]. They don't explain the September drop itself."
   },
   "potato": {
    "mom": -22.4,
@@ -139,8 +139,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": "9月はじゃがいも・たまねぎが特にお買い得と伝えられ[2]、8月の相場予測でもじゃがいもは安値が続く見通しとされていました[3]。",
-   "summary_en": "Potatoes and onions were reported as especially good value in September [2], and an August price outlook expected potatoes to stay cheap [3]."
+   "summary_ja": "主産地の北海道で夏の天候に恵まれ収穫が順調に進み、9月のじゃがいもは平年より安くお買い得になると報じられています[2]。8月の相場予測でも、供給が安定して安値が続く見通しとされていました[3]。",
+   "summary_en": "Reports say good summer weather in Hokkaido, the main growing area, kept the harvest on track, making potatoes cheaper than usual and good value in September [2]. An August outlook also expected stable supply to keep prices low [3]."
   },
   "cabbage": {
    "mom": -22.1,
@@ -182,8 +182,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": "天候に恵まれてキャベツなどの価格が大きく下がり、平年並みに戻ったと報じられています[1][2]。一方、沖縄や愛媛では長雨や台風で葉物野菜の高値が続いたとも伝えられています[3][4]。",
-   "summary_en": "Reports say good weather brought cabbage and other vegetable prices down sharply, back to normal levels [1][2]. Leafy greens stayed expensive in some regions, such as Okinawa and Ehime, after long rains and typhoons [3][4]."
+   "summary_ja": "記事はいずれも10月のもので、名古屋では9月の大雨で上がった価格が天候の安定で下がり[2]、札幌でも関東や北海道の収穫回復で平年並みに戻ったと報じられています[1]。沖縄では長雨や台風で高値と伝えられ[4]、9月の値下がりの理由は分かりません。",
+   "summary_en": "These reports are all from October: in Nagoya, prices pushed up by heavy September rain fell as the weather settled [2], and in Sapporo they returned to normal as harvests in Kanto and Hokkaido recovered [1]. Okinawa reported high prices after long rains and typhoons [4]. They don't explain the September drop."
   },
   "dishsoap": {
    "mom": null,
@@ -223,12 +223,12 @@
      "source": "中日新聞Web",
      "url": "https://www.chunichi.co.jp/article/1319365",
      "date": "2026-10-01",
-     "title_en": "Autumn of price rises: utilities, green tea, heated tobacco, low-malt beer…"
+     "title_en": "'Can't even casually buy onigiri': an autumn of price rises in utilities, green tea, heated tobacco, happoshu…"
     }
    ],
    "official": [],
-   "summary_ja": "世界的な抹茶ブームで国産茶葉の取引価格が大きく上がり、国産の流通量が減っていると報じられています[2][3]。緑茶飲料などの値上げも伝えられています[1][4]。",
-   "summary_en": "Reports point to a global matcha boom that has driven up domestic tea leaf prices and reduced domestic supply [2][3]. Price rises for green tea products have also been reported [1][4]."
+   "summary_ja": "海外での抹茶需要の高まりで国産茶葉の価格が上がり、農家の高齢化などで国内生産も減っていると報じられています[2][3]。茶葉の値上がりを理由に、緑茶飲料の値上げも伝えられています[1][4]。",
+   "summary_en": "Reports point to growing overseas demand for matcha pushing up domestic tea leaf prices, while domestic production shrinks as farmers age [2][3]. Price rises for green tea drinks, blamed on costlier tea leaves, have also been reported [1][4]."
   },
   "rice": {
    "mom": null,
@@ -253,19 +253,19 @@
      "source": "NHKニュース",
      "url": "https://news.web.nhk/newsweb/na/nd-20261030de68670",
      "date": "2026-10-30",
-     "title_en": "Rice prices fall for 11th straight week as excess inventory weighs (NHK)"
+     "title_en": "Rice prices fall for 11th straight week as excess inventory keeps pushing them down"
     },
     {
      "title": "コメ小売り価格が11週連続値下がり 「ほっともっと」は期間限定ご飯大盛り無料 「ほっかほっか亭」大盛り値下げ",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/e75f1306ec3a28b14fccb7c3e69e55afdea4f5e4",
      "date": "2026-10-30",
-     "title_en": "Rice retail prices down 11 weeks running; restaurant chains offer free or cheaper large portions"
+     "title_en": "Rice retail prices fall for 11th straight week; Hotto Motto offers free large rice for a limited time, Hokka Hokka Tei cuts its large-portion price"
     }
    ],
    "official": [],
-   "summary_ja": "昨年の高騰から一転し、過剰在庫によりコメの小売価格が11週連続で下がっていると報じられています[2][3]。政府による備蓄米の買い戻しの検討も伝えられています[2]。",
-   "summary_en": "Reports say rice retail prices have fallen for 11 straight weeks, reversing last year's surge, as excess inventory weighs on the market [2][3]. The government is also reported to be considering buying back stockpiled rice [2]."
+   "summary_ja": "民間在庫が過去最多となり新米の販売も鈍いなど供給過剰で、コメの小売価格は11週連続で下がり、前年より大きく安くなっていると報じられています[1][2][3]。家庭での購入量の減少も伝えられています[1]。",
+   "summary_en": "Reports say oversupply, with record private inventories and slow sales of the new crop, has pushed rice retail prices down for 11 straight weeks, well below a year earlier [1][2][3]. Lower household purchases have also been reported [1]."
   },
   "carrot": {
    "mom": null,
@@ -286,8 +286,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": "10月時点でにんじんは平年並みの価格と伝えられています[1]。前年より安い理由は、この見出しからは分かりません。",
-   "summary_en": "Carrots were reported at around normal prices in October [1]. The headline doesn't say why they're cheaper than a year ago."
+   "summary_ja": "10月時点でにんじんは平年並みの価格と伝えられています[1]。前年より安い理由は、この記事には書かれていません。",
+   "summary_en": "Carrots were reported at around their usual price in October [1]. The article doesn't say why they're cheaper than a year ago."
   },
   "mikan": {
    "mom": null,
@@ -298,7 +298,7 @@
      "source": "TBS NEWS DIG",
      "url": "https://newsdig.tbs.co.jp/articles/mrt/2986370?page=3",
      "date": "2026-10-05",
-     "title_en": "Brand mandarin 'Nangoku no Hamitsu' sells out despite 50% higher price",
+     "title_en": "50% pricier but 'selling faster than we can supply': why the brand mandarin 'Nangoku no Hamitsu', ordered from across Japan, is popular",
      "hide": true
     },
     {
@@ -317,7 +317,7 @@
  },
  "explained": {
   "month": "2026-09",
-  "by": "monthly explainer (dry run)",
+  "by": "monthly explainer",
   "date": "2026-11-06"
  }
 }
