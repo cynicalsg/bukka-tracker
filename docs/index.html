@@ -141,6 +141,15 @@
   .movers h3:first-of-type { margin-top: 8px; }
   .movers ol { list-style: none; margin: 0; padding: 0; }
   .movers li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+  .movers li.has-news { display: block; }
+  .movers li.has-news > details > summary { display: flex; justify-content: space-between; gap: 8px; list-style: none; cursor: pointer; color: var(--text); }
+  .movers li.has-news > details > summary::-webkit-details-marker { display: none; }
+  .why { font-size: .72rem; color: var(--nagoya); border: 1px solid currentColor; border-radius: 999px; padding: 0 6px; margin-left: 6px; white-space: nowrap; }
+  .news { margin: 6px 0 8px; padding: 0; list-style: none; font-size: .82rem; }
+  .news li { display: block !important; border: 0 !important; padding: 3px 0 !important; }
+  .news a { color: var(--text); }
+  .news .meta { color: var(--muted); font-size: .75rem; }
+  .card details.news-box { margin-top: 8px; font-size: .85rem; }
   .section-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin: 28px 0 0; }
   .section-title { margin: 0; font-size: 1.1rem; }
   .sorts { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -226,6 +235,8 @@ const T = {
         realPay: p => `物価を考慮した実質賃金は${Math.abs(p).toFixed(1)}%${p < 0 ? "減少" : "増加"}`,
         payShare: (pct, y) => `あなたのかごの1か月分は、愛知県の平均月給(${y}年)の約${pct.toFixed(0)}%`,
         wagesNote: y => `賃金は厚生労働省「賃金構造基本統計調査」の愛知県・一般労働者(企業規模10人以上・産業計)の所定内給与額(残業代・賞与を除く)。年1回の調査で、最新は${y}年。2020年に推計方法が変わっています。物価は各年の平均。`,
+        why: "なぜ?", relatedNews: n => `関連ニュース(${n})`,
+        newsNote: "自動で集めた見出しです。値動きの理由を示すとは限りません。", official: "公式情報",
         cpiRef: k => k === "all" ? "総合CPI" : "食料CPI", ifCpi: k => `${k === "all" ? "総合CPI" : "食料CPI"}と同じ率で上がった場合`, baseline: "食料CPI",
         cpiNote: (k, n) => `CPI(消費者物価指数)は名古屋市の「${n}」指数${k === "all" ? "(全品目・サービス)" : "(外食を含む)"}で、品質調整済み・全国の購入割合で重み付けされています。個々の店頭価格とは一致しないため、目安としてご覧ください。`,
         vsNational: p => `全国平均より${Math.abs(p).toFixed(0)}%${p < 0 ? "安い" : "高い"}`, sameNational: "全国平均とほぼ同じ", cpiLegend: "CPIと同じ率で上がった場合(食品は食料CPI、その他は総合CPI)" },
@@ -262,6 +273,8 @@ const T = {
         realPay: p => `Adjusted for prices, pay ${p < 0 ? "fell" : "rose"} ${Math.abs(p).toFixed(1)}%`,
         payShare: (pct, y) => `A month of your basket is about ${pct.toFixed(0)}% of Aichi's average monthly pay (${y})`,
         wagesNote: y => `Pay is average scheduled monthly earnings (所定内給与額, excluding overtime and bonuses) of full-time workers in Aichi at companies with 10+ employees, from the Basic Survey on Wage Structure. It's surveyed once a year; the latest is ${y}. The survey changed its estimation method in 2020. Prices are yearly averages.`,
+        why: "Why?", relatedNews: n => `Related news (${n})`,
+        newsNote: "Headlines collected automatically (in Japanese); they may not explain the change.", official: "Official",
         cpiRef: k => k === "all" ? "Overall CPI" : "Food CPI", ifCpi: k => `If it had risen with ${k === "all" ? "overall" : "food"} CPI`, baseline: "Food CPI",
         cpiNote: (k, n) => `CPI (consumer price index) here is Nagoya's ${k === "all" ? "overall index (総合, all goods and services)" : `food index (${n}), which includes eating out`}. It is quality-adjusted and weighted by national spending, so it won't match shelf prices exactly; treat it as a reference point.`,
         vsNational: p => `${Math.abs(p).toFixed(0)}% ${p < 0 ? "below" : "above"} the national average`, sameNational: "About the national average", cpiLegend: "If it had risen with CPI (food CPI for food, overall CPI otherwise)" },
@@ -277,6 +290,7 @@ const basketCharts = [];
 const BASKET_KEY = "basket.v1";
 let cpi = null;
 let wages = null;
+let insights = null;
 const wageCharts = [];
 let sortBy = (() => { try { return localStorage.getItem("sortBy"); } catch { return null; } })() || "category";
 const charts = [];
@@ -589,6 +603,23 @@ function renderGuide(t) {
   box.hidden = false;
 }
 
+// ---------- Related news (docs/data/insights.json)
+function newsFor(itemId) {
+  if (!insights || !data) return null;
+  const latest = data.items.map(seriesOf).filter(s => s.length).map(s => s[s.length - 1][0]).sort().pop();
+  const info = insights.month === latest ? insights.items?.[itemId] : null;
+  return info && ((info.headlines || []).length || (info.official || []).length) ? info : null;
+}
+function newsList(info, t) {
+  const summary = info["summary_" + lang];  // written by the AI version, if enabled
+  const safeUrl = u => /^https:\/\//.test(u) ? esc(u) : "#";
+  return `${summary ? `<p style="margin:6px 0">${esc(summary)}</p>` : ""}<ul class="news">
+    ${(info.headlines || []).map(h => `<li><a href="${safeUrl(h.url)}" target="_blank" rel="noopener noreferrer">${esc(h.title)}</a>
+      <span class="meta"> · ${esc(h.source)}${h.date ? " · " + esc(h.date) : ""}</span></li>`).join("")}
+    ${(info.official || []).map(o => `<li><span class="meta">${t.official}: </span><a href="${safeUrl(o.url)}" target="_blank" rel="noopener noreferrer">${esc(o["title_" + lang])}</a></li>`).join("")}
+  </ul><p class="note" style="margin:0 0 6px">${t.newsNote}</p>`;
+}
+
 // ---------- Prices and pay
 // Yearly average of monthly points, for years with at least 10 months.
 function yearlyAvg(points) {
@@ -773,8 +804,12 @@ function renderSummary(t) {
     const now = m.get(latest), before = m.get(monthsBack(latest, n));
     return now != null && before ? { i, now, before, pct: (now / before - 1) * 100 } : null;
   }).filter(Boolean);
-  const list = (rows, label) => rows.length ? `<h3>${label}</h3><ol>${rows.map(r =>
-      `<li><span>${esc(r.i["name_" + lang])}</span>${pctSpan(r.now, r.before)}</li>`).join("")}</ol>` : "";
+  const list = (rows, label) => rows.length ? `<h3>${label}</h3><ol>${rows.map(r => {
+      const info = newsFor(r.i.id);
+      return info
+        ? `<li class="has-news"><details><summary><span>${esc(r.i["name_" + lang])}<span class="why">${t.why}</span></span>${pctSpan(r.now, r.before)}</summary>${newsList(info, t)}</details></li>`
+        : `<li><span>${esc(r.i["name_" + lang])}</span>${pctSpan(r.now, r.before)}</li>`;
+    }).join("")}</ol>` : "";
   const block = (title, n) => {
     const c = changes(n).sort((a, b) => b.pct - a.pct);
     const ups = c.filter(r => r.pct > 0.05).slice(0, 3);
@@ -871,7 +906,8 @@ function render() {
       <div class="price"><strong>${yen(last)}</strong>${chg}</div>
       <div class="unit">${lastMonth}${natLine ? ` · ${natLine}` : ""}</div>
       <div class="chart"><canvas></canvas></div>
-      ${seasonStrip(item, main, t)}`;
+      ${seasonStrip(item, main, t)}
+      ${(info => info ? `<details class="news-box"><summary>${t.relatedNews((info.headlines || []).length)}</summary>${newsList(info, t)}</details>` : "")(newsFor(item.id))}`;
     grid.appendChild(card);
 
     const months = [...new Set(Object.values(item.series).flat().map(p => p[0]))].sort();
@@ -924,9 +960,9 @@ document.getElementById("check-btn").onclick = () => {
 };
 
 const load = url => fetch(url, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
-Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json")])
-  .then(([d, b, c, w]) => {
-    data = d; basket = b; cpi = c; wages = w;
+Promise.all([load("data/prices.json"), load("basket.json"), load("data/cpi.json"), load("data/wages.json"), load("data/insights.json")])
+  .then(([d, b, c, w, ins]) => {
+    data = d; basket = b; cpi = c; wages = w; insights = ins;
     if (basket) myBasket = loadBasket();
     render();
     if (/[#&]check\b/.test(location.hash)) toggleChecker(true);  // bookmarkable: .../#check
