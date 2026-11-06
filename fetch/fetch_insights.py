@@ -13,6 +13,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import time
 import re
 import sys
 import urllib.parse
@@ -59,6 +60,58 @@ def http_get(url: str, timeout: int = 30) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read()
+
+
+def http_post(url: str, body: str, timeout: int = 30) -> bytes:
+    req = urllib.request.Request(url, data=body.encode(), method="POST", headers={
+        "User-Agent": USER_AGENT, "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return resp.read()
+
+
+def decode_batchexecute(text: str) -> str | None:
+    """Pull the article URL out of Google News' batchexecute response (')]}\'' prefix, then JSON)."""
+    try:
+        chunk = text.split("\n\n", 1)[1]
+        rows = json.loads(chunk)
+        for row in rows:
+            if isinstance(row, list) and len(row) > 2 and row[0] == "wrb.fr" and row[2]:
+                inner = json.loads(row[2])
+                if isinstance(inner, list) and len(inner) > 1 and str(inner[1]).startswith("https://"):
+                    return inner[1]
+    except (IndexError, ValueError, TypeError):
+        pass
+    return None
+
+
+def resolve_google_news(url: str) -> str | None:
+    """Google News feed links are redirects that only resolve in a browser. Ask Google News for the
+    article's own address, the way its web page does. Returns None if that doesn't work."""
+    m = re.search(r"news\.google\.com/(?:rss/)?articles/([^?/]+)", url)
+    if not m:
+        return None
+    gid = m.group(1)
+    page = http_get(f"https://news.google.com/articles/{gid}").decode("utf-8", "replace")
+    sg, ts = re.search(r'data-n-a-sg="([^"]+)"', page), re.search(r'data-n-a-ts="([^"]+)"', page)
+    if not (sg and ts):
+        return None
+    req = ["Fbv4je", f'["garturlreq",[["X","X",["X","X"],null,null,1,1,"US:en",null,1,null,null,null,null,null,0,1],'
+                     f'"X","X",1,[1,1,1],1,1,null,0,0,null,0],"{gid}",{ts.group(1)},"{sg.group(1)}"]']
+    body = "f.req=" + urllib.parse.quote(json.dumps([[req]]))
+    return decode_batchexecute(http_post("https://news.google.com/_/DotsSplashUi/data/batchexecute", body).decode("utf-8", "replace"))
+
+
+def resolve_links(headlines: list[dict]) -> None:
+    """Replace Google News redirect links with the article's own address where possible."""
+    for h in headlines:
+        try:
+            real = resolve_google_news(h["url"])
+        except Exception as exc:  # noqa: BLE001 - keep the redirect link if anything goes wrong
+            print(f"    couldn't resolve link ({exc})")
+            real = None
+        if real:
+            h["url"] = real
+        time.sleep(1)  # be polite to Google News
 
 
 def parse_feed(xml_bytes: bytes) -> list[dict]:
@@ -176,7 +229,11 @@ def main() -> None:
     except (OSError, ValueError):
         old = None
     out = keep_explained(out, old)
+    for info in out["items"].values():  # after carry-over, so kept headlines get real links too
+        resolve_links(info["headlines"])
     OUTPUT_PATH.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    resolved = sum(1 for v in items.values() for h in v["headlines"] if "news.google.com" not in h["url"])
+    print(f"Article links resolved: {resolved}/{sum(len(v['headlines']) for v in items.values())}")
     print(f"Wrote headlines for {len(items)} items ({sum(len(v['headlines']) for v in items.values())} total) "
           f"to {OUTPUT_PATH.relative_to(ROOT)}")
 

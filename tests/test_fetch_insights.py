@@ -114,3 +114,14 @@ class CheckInsights(unittest.TestCase):
         self.assertIn("plain text only", found)
         self.assertIn("[3] doesn't exist", found)
         self.assertIn("max 200", " ".join(ci.problems(self.base(summary_ja="あ" * 201 + "[1]", summary_en="a [1]"))))
+
+
+class ResolveLinks(unittest.TestCase):
+    def test_decode_batchexecute(self):
+        inner = json.dumps(["garturlres", "https://news.yahoo.co.jp/articles/abc", 1])
+        text = ")]}'\n\n" + json.dumps([["wrb.fr", "Fbv4je", inner, None, None, None, "generic"], ["di", 10]])
+        self.assertEqual(fi.decode_batchexecute(text), "https://news.yahoo.co.jp/articles/abc")
+        self.assertIsNone(fi.decode_batchexecute("garbage"))
+
+    def test_non_google_links_are_left_alone(self):
+        self.assertIsNone(fi.resolve_google_news("https://news.yahoo.co.jp/articles/abc"))
