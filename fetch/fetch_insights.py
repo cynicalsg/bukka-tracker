@@ -126,6 +126,21 @@ def check_official(config: dict) -> list[dict]:
     return ok
 
 
+def keep_explained(new: dict, old: dict | None) -> dict:
+    """Carry over explanations written for the same data month (by the monthly explainer session).
+    An explained item keeps its old headline list too, so the explanation's [n] citations still
+    point at the right headlines; its price changes and official links are refreshed."""
+    if not old or old.get("month") != new["month"]:
+        return new
+    for item_id, item in new["items"].items():
+        prev = old.get("items", {}).get(item_id)
+        if prev and (prev.get("summary_ja") or prev.get("summary_en") or any(h.get("hide") for h in prev.get("headlines", []))):
+            item.update({k: prev.get(k) for k in ("headlines", "summary_ja", "summary_en")})
+    if old.get("explained"):
+        new["explained"] = old["explained"]
+    return new
+
+
 def main() -> None:
     prices = json.loads(PRICES_PATH.read_text(encoding="utf-8"))
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
@@ -156,6 +171,11 @@ def main() -> None:
         "generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "news_window": [start, end], "items": items,
     }
+    try:
+        old = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        old = None
+    out = keep_explained(out, old)
     OUTPUT_PATH.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"Wrote headlines for {len(items)} items ({sum(len(v['headlines']) for v in items.values())} total) "
           f"to {OUTPUT_PATH.relative_to(ROOT)}")
