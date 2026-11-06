@@ -35,6 +35,6 @@ ESTAT_APP_ID=your-id python fetch/fetch_prices.py
 python -m http.server -d docs 8000            # then open http://localhost:8000
 ```
 
-**Unit changes:** the survey sometimes changes an item's pricing unit or product definition (e.g. tofu went from per 100 g to per 1 kg in 2014). In `fetch/items.json`, `rescale` converts older prices to the current unit and `since` starts a series after a definition change, so the charts don't show false jumps. Units are not in the e-Stat table; they are set in `items.json` from the survey's standard quantities and checked against price levels.
+**Unit changes:** the survey sometimes changes an item's pricing unit or product definition (e.g. tofu went from per 100 g to per 1 kg in 2014). In `fetch/items.json`, `rescale` converts older prices to the current unit and `since` starts a series after a definition change, so the charts don't show false jumps. Units are not in the e-Stat table; they are set in `items.json` from the survey's item and brand list (調査品目及び基本銘柄, a sheet in each month's Excel file on the [Statistics Bureau's survey page](https://www.stat.go.jp/data/kouri/doukou/3.html)), and the history of brand and unit changes is in its 新旧 list.
 
 If an item is missing or matched the wrong product, the fetch log prints which e-Stat item each one matched. Pin the right one by adding `"code": "..."` to that item in `fetch/items.json`.
