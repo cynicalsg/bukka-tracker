@@ -41,6 +41,11 @@ jobs:
         env:
           ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
         run: python fetch/fetch_cpi.py
+      - name: Explore wage tables (temporary)
+        continue-on-error: true
+        env:
+          ESTAT_APP_ID: ${{ secrets.ESTAT_APP_ID }}
+        run: python fetch/explore_wages.py
       - name: Fetch Aichi wages from e-Stat
         # Annual data; a problem here shouldn't stop the price update either.
         continue-on-error: true
