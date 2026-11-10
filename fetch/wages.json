@@ -1,11 +1,101 @@
 {
   "_comment": "Aichi's average scheduled monthly earnings (所定内給与額, 千円) from the Basic Survey on Wage Structure (賃金構造基本統計調査), annual. Tables are found by title; in every other dimension the 'total' category (男女計, 年齢計, 産業計, 企業規模計...) is used. The survey changed its estimation method in 2020, so 2019 and 2020 are not strictly comparable.",
   "stats_code": "00450091",
-  "search_words": ["都道府県別"],
-  "title_must": ["都道府県別"],
-  "title_exclude": ["参考表", "短時間", "５～９人", "5～9人", "職種", "初任給", "外国人", "新規学卒"],
-  "known_tables": ["0003084609"],
+  "search_words": [
+    "都道府県別"
+  ],
+  "title_must": [
+    "都道府県別"
+  ],
+  "title_exclude": [
+    "参考表",
+    "短時間",
+    "５～９人",
+    "5～9人",
+    "職種",
+    "初任給",
+    "外国人",
+    "新規学卒"
+  ],
+  "known_tables": [
+    "0003084609"
+  ],
   "area_match": "愛知",
   "tab_match": "所定内給与額",
-  "name_ja": "愛知県の平均賃金(所定内給与額)", "name_en": "Aichi average monthly pay (scheduled earnings)"
+  "name_ja": "愛知県の平均賃金(所定内給与額)",
+  "name_en": "Aichi average monthly pay (scheduled earnings)",
+  "breakdowns": {
+    "_comment": "Pay by industry and by job, per prefecture, written to docs/data/wages/ (one file per prefecture, plus catalog.json). 'vary' names an entry of the dimension that is broken down; every other dimension uses its total. English names are in fetch/wage_labels.json.",
+    "industry": {
+      "tables": [
+        "0003084609",
+        "0003426933"
+      ],
+      "vary": "産業計"
+    },
+    "job": {
+      "tables": [
+        "0003445759",
+        "0003445758"
+      ],
+      "vary": "管理的職業従事者",
+      "groups": [
+        [
+          "010",
+          1000,
+          1049
+        ],
+        [
+          "020",
+          1050,
+          1249
+        ],
+        [
+          "030",
+          1250,
+          1319
+        ],
+        [
+          "040",
+          1320,
+          1359
+        ],
+        [
+          "050",
+          1360,
+          1449
+        ],
+        [
+          "060",
+          1450,
+          1459
+        ],
+        [
+          "070",
+          1460,
+          1489
+        ],
+        [
+          "080",
+          1490,
+          1599
+        ],
+        [
+          "090",
+          1600,
+          1649
+        ],
+        [
+          "100",
+          1650,
+          1699
+        ],
+        [
+          "110",
+          1700,
+          1799
+        ]
+      ]
+    }
+  }
 }

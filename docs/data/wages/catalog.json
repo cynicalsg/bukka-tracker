@@ -1,0 +1,1705 @@
+{
+"updated": "2026-11-10T02:31:27Z",
+"years": {
+"industry": [
+2010,
+2023
+],
+"job": [
+2020,
+2023
+]
+},
+"prefs": {
+"全国": "00",
+"北海道": "01",
+"青森県": "02",
+"岩手県": "03",
+"宮城県": "04",
+"秋田県": "05",
+"山形県": "06",
+"福島県": "07",
+"茨城県": "08",
+"栃木県": "09",
+"群馬県": "10",
+"埼玉県": "11",
+"千葉県": "12",
+"東京都": "13",
+"神奈川県": "14",
+"新潟県": "15",
+"富山県": "16",
+"石川県": "17",
+"福井県": "18",
+"山梨県": "19",
+"長野県": "20",
+"岐阜県": "21",
+"静岡県": "22",
+"愛知県": "23",
+"三重県": "24",
+"滋賀県": "25",
+"京都府": "26",
+"大阪府": "27",
+"兵庫県": "28",
+"奈良県": "29",
+"和歌山県": "30",
+"鳥取県": "31",
+"島根県": "32",
+"岡山県": "33",
+"広島県": "34",
+"山口県": "35",
+"徳島県": "36",
+"香川県": "37",
+"愛媛県": "38",
+"高知県": "39",
+"福岡県": "40",
+"佐賀県": "41",
+"長崎県": "42",
+"熊本県": "43",
+"大分県": "44",
+"宮崎県": "45",
+"鹿児島県": "46",
+"沖縄県": "47"
+},
+"entries": [
+{
+"id": "i:C",
+"kind": "industry",
+"code": "C",
+"ja": "鉱業，採石業，砂利採取業",
+"en": "Mining and quarrying",
+"parent": null
+},
+{
+"id": "i:D",
+"kind": "industry",
+"code": "D",
+"ja": "建設業",
+"en": "Construction",
+"parent": null
+},
+{
+"id": "i:E",
+"kind": "industry",
+"code": "E",
+"ja": "製造業",
+"en": "Manufacturing",
+"parent": null
+},
+{
+"id": "i:E09",
+"kind": "industry",
+"code": "E09",
+"ja": "食料品製造業",
+"en": "Food manufacturing",
+"parent": "i:E"
+},
+{
+"id": "i:E10",
+"kind": "industry",
+"code": "E10",
+"ja": "飲料・たばこ・飼料製造業",
+"en": "Beverages, tobacco and feed",
+"parent": "i:E"
+},
+{
+"id": "i:E11",
+"kind": "industry",
+"code": "E11",
+"ja": "繊維工業",
+"en": "Textiles",
+"parent": "i:E"
+},
+{
+"id": "i:E12",
+"kind": "industry",
+"code": "E12",
+"ja": "木材・木製品製造業(家具を除く)",
+"en": "Lumber and wood products",
+"parent": "i:E"
+},
+{
+"id": "i:E13",
+"kind": "industry",
+"code": "E13",
+"ja": "家具・装備品製造業",
+"en": "Furniture and fixtures",
+"parent": "i:E"
+},
+{
+"id": "i:E14",
+"kind": "industry",
+"code": "E14",
+"ja": "パルプ・紙・紙加工品製造業",
+"en": "Pulp and paper products",
+"parent": "i:E"
+},
+{
+"id": "i:E15",
+"kind": "industry",
+"code": "E15",
+"ja": "印刷・同関連業",
+"en": "Printing",
+"parent": "i:E"
+},
+{
+"id": "i:E16",
+"kind": "industry",
+"code": "E16",
+"ja": "化学工業",
+"en": "Chemicals",
+"parent": "i:E"
+},
+{
+"id": "i:E18",
+"kind": "industry",
+"code": "E18",
+"ja": "プラスチック製品製造業(別掲を除く)",
+"en": "Plastic products",
+"parent": "i:E"
+},
+{
+"id": "i:E19",
+"kind": "industry",
+"code": "E19",
+"ja": "ゴム製品製造業",
+"en": "Rubber products",
+"parent": "i:E"
+},
+{
+"id": "i:E21",
+"kind": "industry",
+"code": "E21",
+"ja": "窯業・土石製品製造業",
+"en": "Ceramic, stone and clay products",
+"parent": "i:E"
+},
+{
+"id": "i:E22",
+"kind": "industry",
+"code": "E22",
+"ja": "鉄鋼業",
+"en": "Iron and steel",
+"parent": "i:E"
+},
+{
+"id": "i:E23",
+"kind": "industry",
+"code": "E23",
+"ja": "非鉄金属製造業",
+"en": "Non-ferrous metals",
+"parent": "i:E"
+},
+{
+"id": "i:E24",
+"kind": "industry",
+"code": "E24",
+"ja": "金属製品製造業",
+"en": "Fabricated metal products",
+"parent": "i:E"
+},
+{
+"id": "i:E25",
+"kind": "industry",
+"code": "E25",
+"ja": "はん用機械器具製造業",
+"en": "General-purpose machinery",
+"parent": "i:E"
+},
+{
+"id": "i:E26",
+"kind": "industry",
+"code": "E26",
+"ja": "生産用機械器具製造業",
+"en": "Production machinery",
+"parent": "i:E"
+},
+{
+"id": "i:E27",
+"kind": "industry",
+"code": "E27",
+"ja": "業務用機械器具製造業",
+"en": "Business machinery",
+"parent": "i:E"
+},
+{
+"id": "i:E28",
+"kind": "industry",
+"code": "E28",
+"ja": "電子部品・デバイス・電子回路製造業",
+"en": "Electronic parts and devices",
+"parent": "i:E"
+},
+{
+"id": "i:E29",
+"kind": "industry",
+"code": "E29",
+"ja": "電気機械器具製造業",
+"en": "Electrical machinery",
+"parent": "i:E"
+},
+{
+"id": "i:E30",
+"kind": "industry",
+"code": "E30",
+"ja": "情報通信機械器具製造業",
+"en": "Information and communication equipment",
+"parent": "i:E"
+},
+{
+"id": "i:E31",
+"kind": "industry",
+"code": "E31",
+"ja": "輸送用機械器具製造業",
+"en": "Transport equipment (cars, parts, etc.)",
+"parent": "i:E"
+},
+{
+"id": "i:E32",
+"kind": "industry",
+"code": "E32",
+"ja": "その他の製造業",
+"en": "Other manufacturing",
+"parent": "i:E"
+},
+{
+"id": "i:F",
+"kind": "industry",
+"code": "F",
+"ja": "電気・ガス・熱供給・水道業",
+"en": "Electricity, gas, heat and water",
+"parent": null
+},
+{
+"id": "i:G",
+"kind": "industry",
+"code": "G",
+"ja": "情報通信業",
+"en": "Information and communications",
+"parent": null
+},
+{
+"id": "i:G39",
+"kind": "industry",
+"code": "G39",
+"ja": "情報サービス業",
+"en": "Information services (software, IT)",
+"parent": "i:G"
+},
+{
+"id": "i:H",
+"kind": "industry",
+"code": "H",
+"ja": "運輸業，郵便業",
+"en": "Transport and postal services",
+"parent": null
+},
+{
+"id": "i:I",
+"kind": "industry",
+"code": "I",
+"ja": "卸売業，小売業",
+"en": "Wholesale and retail",
+"parent": null
+},
+{
+"id": "i:I50-55",
+"kind": "industry",
+"code": "I50-55",
+"ja": "卸売業",
+"en": "Wholesale",
+"parent": "i:I"
+},
+{
+"id": "i:I56-61",
+"kind": "industry",
+"code": "I56-61",
+"ja": "小売業",
+"en": "Retail",
+"parent": "i:I"
+},
+{
+"id": "i:J",
+"kind": "industry",
+"code": "J",
+"ja": "金融業，保険業",
+"en": "Finance and insurance",
+"parent": null
+},
+{
+"id": "i:K",
+"kind": "industry",
+"code": "K",
+"ja": "不動産業，物品賃貸業",
+"en": "Real estate and rental",
+"parent": null
+},
+{
+"id": "i:L",
+"kind": "industry",
+"code": "L",
+"ja": "学術研究，専門・技術サービス業",
+"en": "Research, professional and technical services",
+"parent": null
+},
+{
+"id": "i:L72",
+"kind": "industry",
+"code": "L72",
+"ja": "専門サービス業（他に分類されないもの）",
+"en": "Professional services",
+"parent": "i:L"
+},
+{
+"id": "i:L73",
+"kind": "industry",
+"code": "L73",
+"ja": "広告業",
+"en": "Advertising",
+"parent": "i:L"
+},
+{
+"id": "i:M",
+"kind": "industry",
+"code": "M",
+"ja": "宿泊業，飲食サービス業",
+"en": "Hotels, restaurants and food service",
+"parent": null
+},
+{
+"id": "i:M75",
+"kind": "industry",
+"code": "M75",
+"ja": "宿泊業",
+"en": "Accommodation",
+"parent": "i:M"
+},
+{
+"id": "i:N",
+"kind": "industry",
+"code": "N",
+"ja": "生活関連サービス業，娯楽業",
+"en": "Personal services and entertainment",
+"parent": null
+},
+{
+"id": "i:N80",
+"kind": "industry",
+"code": "N80",
+"ja": "娯楽業",
+"en": "Entertainment",
+"parent": "i:N"
+},
+{
+"id": "i:O",
+"kind": "industry",
+"code": "O",
+"ja": "教育，学習支援業",
+"en": "Education and learning support",
+"parent": null
+},
+{
+"id": "i:O81",
+"kind": "industry",
+"code": "O81",
+"ja": "学校教育",
+"en": "Schools",
+"parent": "i:O"
+},
+{
+"id": "i:O82",
+"kind": "industry",
+"code": "O82",
+"ja": "その他の教育，学習支援業",
+"en": "Other education (cram schools, lessons, etc.)",
+"parent": "i:O"
+},
+{
+"id": "i:P",
+"kind": "industry",
+"code": "P",
+"ja": "医療，福祉",
+"en": "Medical, health care and welfare",
+"parent": null
+},
+{
+"id": "i:P83",
+"kind": "industry",
+"code": "P83",
+"ja": "医療業",
+"en": "Medical services",
+"parent": "i:P"
+},
+{
+"id": "i:Q",
+"kind": "industry",
+"code": "Q",
+"ja": "複合サービス事業",
+"en": "Compound services (post offices, co-ops)",
+"parent": null
+},
+{
+"id": "i:R",
+"kind": "industry",
+"code": "R",
+"ja": "サービス業（他に分類されないもの）",
+"en": "Other services",
+"parent": null
+},
+{
+"id": "i:R91",
+"kind": "industry",
+"code": "R91",
+"ja": "職業紹介・労働者派遣業",
+"en": "Job placement and staffing agencies",
+"parent": "i:R"
+},
+{
+"id": "i:R92",
+"kind": "industry",
+"code": "R92",
+"ja": "その他の事業サービス業",
+"en": "Other business services",
+"parent": "i:R"
+},
+{
+"id": "j:010",
+"kind": "job",
+"code": "010",
+"ja": "管理的職業従事者",
+"en": "Managers",
+"parent": null
+},
+{
+"id": "j:020",
+"kind": "job",
+"code": "020",
+"ja": "専門的・技術的職業従事者",
+"en": "Professional and technical",
+"parent": null
+},
+{
+"id": "j:030",
+"kind": "job",
+"code": "030",
+"ja": "事務従事者",
+"en": "Clerical",
+"parent": null
+},
+{
+"id": "j:040",
+"kind": "job",
+"code": "040",
+"ja": "販売従事者",
+"en": "Sales",
+"parent": null
+},
+{
+"id": "j:050",
+"kind": "job",
+"code": "050",
+"ja": "サービス職業従事者",
+"en": "Service",
+"parent": null
+},
+{
+"id": "j:060",
+"kind": "job",
+"code": "060",
+"ja": "保安職業従事者",
+"en": "Security",
+"parent": null
+},
+{
+"id": "j:070",
+"kind": "job",
+"code": "070",
+"ja": "農林漁業従事者",
+"en": "Agriculture, forestry and fishery",
+"parent": null
+},
+{
+"id": "j:080",
+"kind": "job",
+"code": "080",
+"ja": "生産工程従事者",
+"en": "Production",
+"parent": null
+},
+{
+"id": "j:090",
+"kind": "job",
+"code": "090",
+"ja": "輸送・機械運転従事者",
+"en": "Transport and machine operation",
+"parent": null
+},
+{
+"id": "j:100",
+"kind": "job",
+"code": "100",
+"ja": "建設・採掘従事者",
+"en": "Construction and mining",
+"parent": null
+},
+{
+"id": "j:110",
+"kind": "job",
+"code": "110",
+"ja": "運搬・清掃・包装等従事者",
+"en": "Carrying, cleaning and packaging",
+"parent": null
+},
+{
+"id": "j:1031",
+"kind": "job",
+"code": "1031",
+"ja": "管理的職業従事者",
+"en": "Managers",
+"parent": "j:010"
+},
+{
+"id": "j:1051",
+"kind": "job",
+"code": "1051",
+"ja": "研究者",
+"en": "Researchers",
+"parent": "j:020"
+},
+{
+"id": "j:1072",
+"kind": "job",
+"code": "1072",
+"ja": "電気・電子・電気通信技術者（通信ネットワーク技術者を除く）",
+"en": "Electrical, electronics and telecom engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1073",
+"kind": "job",
+"code": "1073",
+"ja": "機械技術者",
+"en": "Mechanical engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1074",
+"kind": "job",
+"code": "1074",
+"ja": "輸送用機器技術者",
+"en": "Transport equipment engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1076",
+"kind": "job",
+"code": "1076",
+"ja": "金属技術者",
+"en": "Metallurgical engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1077",
+"kind": "job",
+"code": "1077",
+"ja": "化学技術者",
+"en": "Chemical engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1091",
+"kind": "job",
+"code": "1091",
+"ja": "建築技術者",
+"en": "Architects and building engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1092",
+"kind": "job",
+"code": "1092",
+"ja": "土木技術者",
+"en": "Civil engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1093",
+"kind": "job",
+"code": "1093",
+"ja": "測量技術者",
+"en": "Surveyors",
+"parent": "j:020"
+},
+{
+"id": "j:1101",
+"kind": "job",
+"code": "1101",
+"ja": "システムコンサルタント・設計者",
+"en": "IT consultants and system designers",
+"parent": "j:020"
+},
+{
+"id": "j:1104",
+"kind": "job",
+"code": "1104",
+"ja": "ソフトウェア作成者",
+"en": "Software developers",
+"parent": "j:020"
+},
+{
+"id": "j:1109",
+"kind": "job",
+"code": "1109",
+"ja": "その他の情報処理・通信技術者",
+"en": "Other IT and telecom engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1119",
+"kind": "job",
+"code": "1119",
+"ja": "他に分類されない技術者",
+"en": "Other engineers",
+"parent": "j:020"
+},
+{
+"id": "j:1121",
+"kind": "job",
+"code": "1121",
+"ja": "医師",
+"en": "Doctors",
+"parent": "j:020"
+},
+{
+"id": "j:1122",
+"kind": "job",
+"code": "1122",
+"ja": "歯科医師",
+"en": "Dentists",
+"parent": "j:020"
+},
+{
+"id": "j:1123",
+"kind": "job",
+"code": "1123",
+"ja": "獣医師",
+"en": "Veterinarians",
+"parent": "j:020"
+},
+{
+"id": "j:1124",
+"kind": "job",
+"code": "1124",
+"ja": "薬剤師",
+"en": "Pharmacists",
+"parent": "j:020"
+},
+{
+"id": "j:1131",
+"kind": "job",
+"code": "1131",
+"ja": "保健師",
+"en": "Public health nurses",
+"parent": "j:020"
+},
+{
+"id": "j:1132",
+"kind": "job",
+"code": "1132",
+"ja": "助産師",
+"en": "Midwives",
+"parent": "j:020"
+},
+{
+"id": "j:1133",
+"kind": "job",
+"code": "1133",
+"ja": "看護師",
+"en": "Nurses",
+"parent": "j:020"
+},
+{
+"id": "j:1134",
+"kind": "job",
+"code": "1134",
+"ja": "准看護師",
+"en": "Assistant nurses",
+"parent": "j:020"
+},
+{
+"id": "j:1141",
+"kind": "job",
+"code": "1141",
+"ja": "診療放射線技師",
+"en": "Radiographers",
+"parent": "j:020"
+},
+{
+"id": "j:1143",
+"kind": "job",
+"code": "1143",
+"ja": "臨床検査技師",
+"en": "Clinical laboratory technicians",
+"parent": "j:020"
+},
+{
+"id": "j:1144",
+"kind": "job",
+"code": "1144",
+"ja": "理学療法士，作業療法士，言語聴覚士，視能訓練士",
+"en": "Physical, occupational and speech therapists",
+"parent": "j:020"
+},
+{
+"id": "j:1146",
+"kind": "job",
+"code": "1146",
+"ja": "歯科衛生士",
+"en": "Dental hygienists",
+"parent": "j:020"
+},
+{
+"id": "j:1147",
+"kind": "job",
+"code": "1147",
+"ja": "歯科技工士",
+"en": "Dental technicians",
+"parent": "j:020"
+},
+{
+"id": "j:1151",
+"kind": "job",
+"code": "1151",
+"ja": "栄養士",
+"en": "Dietitians",
+"parent": "j:020"
+},
+{
+"id": "j:1159",
+"kind": "job",
+"code": "1159",
+"ja": "その他の保健医療従事者",
+"en": "Other health professionals",
+"parent": "j:020"
+},
+{
+"id": "j:1163",
+"kind": "job",
+"code": "1163",
+"ja": "保育士",
+"en": "Nursery teachers (hoikushi)",
+"parent": "j:020"
+},
+{
+"id": "j:1168",
+"kind": "job",
+"code": "1168",
+"ja": "介護支援専門員（ケアマネージャー）",
+"en": "Care managers",
+"parent": "j:020"
+},
+{
+"id": "j:1169",
+"kind": "job",
+"code": "1169",
+"ja": "その他の社会福祉専門職業従事者",
+"en": "Other social welfare professionals",
+"parent": "j:020"
+},
+{
+"id": "j:1173",
+"kind": "job",
+"code": "1173",
+"ja": "法務従事者",
+"en": "Legal professionals",
+"parent": "j:020"
+},
+{
+"id": "j:1181",
+"kind": "job",
+"code": "1181",
+"ja": "公認会計士，税理士",
+"en": "Accountants and tax accountants",
+"parent": "j:020"
+},
+{
+"id": "j:1189",
+"kind": "job",
+"code": "1189",
+"ja": "その他の経営・金融・保険専門職業従事者",
+"en": "Other business, finance and insurance professionals",
+"parent": "j:020"
+},
+{
+"id": "j:1191",
+"kind": "job",
+"code": "1191",
+"ja": "幼稚園教員，保育教諭",
+"en": "Kindergarten teachers",
+"parent": "j:020"
+},
+{
+"id": "j:1192",
+"kind": "job",
+"code": "1192",
+"ja": "小・中学校教員",
+"en": "Elementary and junior high school teachers",
+"parent": "j:020"
+},
+{
+"id": "j:1194",
+"kind": "job",
+"code": "1194",
+"ja": "高等学校教員",
+"en": "High school teachers",
+"parent": "j:020"
+},
+{
+"id": "j:1196",
+"kind": "job",
+"code": "1196",
+"ja": "大学教授（高専含む）",
+"en": "University professors",
+"parent": "j:020"
+},
+{
+"id": "j:1197",
+"kind": "job",
+"code": "1197",
+"ja": "大学准教授（高専含む）",
+"en": "University associate professors",
+"parent": "j:020"
+},
+{
+"id": "j:1198",
+"kind": "job",
+"code": "1198",
+"ja": "大学講師・助教（高専含む）",
+"en": "University lecturers and assistant professors",
+"parent": "j:020"
+},
+{
+"id": "j:1199",
+"kind": "job",
+"code": "1199",
+"ja": "その他の教員",
+"en": "Other teachers",
+"parent": "j:020"
+},
+{
+"id": "j:1201",
+"kind": "job",
+"code": "1201",
+"ja": "宗教家",
+"en": "Religious workers",
+"parent": "j:020"
+},
+{
+"id": "j:1211",
+"kind": "job",
+"code": "1211",
+"ja": "著述家，記者，編集者",
+"en": "Writers, reporters and editors",
+"parent": "j:020"
+},
+{
+"id": "j:1221",
+"kind": "job",
+"code": "1221",
+"ja": "美術家，写真家，映像撮影者",
+"en": "Artists, photographers and camera operators",
+"parent": "j:020"
+},
+{
+"id": "j:1224",
+"kind": "job",
+"code": "1224",
+"ja": "デザイナー",
+"en": "Designers",
+"parent": "j:020"
+},
+{
+"id": "j:1231",
+"kind": "job",
+"code": "1231",
+"ja": "音楽家，舞台芸術家",
+"en": "Musicians and performers",
+"parent": "j:020"
+},
+{
+"id": "j:1244",
+"kind": "job",
+"code": "1244",
+"ja": "個人教師",
+"en": "Private tutors and instructors",
+"parent": "j:020"
+},
+{
+"id": "j:1249",
+"kind": "job",
+"code": "1249",
+"ja": "他に分類されない専門的職業従事者",
+"en": "Other professionals",
+"parent": "j:020"
+},
+{
+"id": "j:1251",
+"kind": "job",
+"code": "1251",
+"ja": "庶務・人事事務員",
+"en": "General affairs and HR clerks",
+"parent": "j:030"
+},
+{
+"id": "j:1253",
+"kind": "job",
+"code": "1253",
+"ja": "企画事務員",
+"en": "Planning clerks",
+"parent": "j:030"
+},
+{
+"id": "j:1254",
+"kind": "job",
+"code": "1254",
+"ja": "受付・案内事務員",
+"en": "Receptionists",
+"parent": "j:030"
+},
+{
+"id": "j:1255",
+"kind": "job",
+"code": "1255",
+"ja": "秘書",
+"en": "Secretaries",
+"parent": "j:030"
+},
+{
+"id": "j:1256",
+"kind": "job",
+"code": "1256",
+"ja": "電話応接事務員",
+"en": "Call center and phone staff",
+"parent": "j:030"
+},
+{
+"id": "j:1257",
+"kind": "job",
+"code": "1257",
+"ja": "総合事務員",
+"en": "General office clerks",
+"parent": "j:030"
+},
+{
+"id": "j:1259",
+"kind": "job",
+"code": "1259",
+"ja": "その他の一般事務従事者",
+"en": "Other office clerks",
+"parent": "j:030"
+},
+{
+"id": "j:1261",
+"kind": "job",
+"code": "1261",
+"ja": "会計事務従事者",
+"en": "Accounting clerks",
+"parent": "j:030"
+},
+{
+"id": "j:1271",
+"kind": "job",
+"code": "1271",
+"ja": "生産関連事務従事者",
+"en": "Production clerks",
+"parent": "j:030"
+},
+{
+"id": "j:1281",
+"kind": "job",
+"code": "1281",
+"ja": "営業・販売事務従事者",
+"en": "Sales support clerks",
+"parent": "j:030"
+},
+{
+"id": "j:1291",
+"kind": "job",
+"code": "1291",
+"ja": "外勤事務従事者",
+"en": "Field clerks (collections, meter reading)",
+"parent": "j:030"
+},
+{
+"id": "j:1301",
+"kind": "job",
+"code": "1301",
+"ja": "運輸・郵便事務従事者",
+"en": "Transport and postal clerks",
+"parent": "j:030"
+},
+{
+"id": "j:1311",
+"kind": "job",
+"code": "1311",
+"ja": "事務用機器操作員",
+"en": "Data entry and office machine operators",
+"parent": "j:030"
+},
+{
+"id": "j:1321",
+"kind": "job",
+"code": "1321",
+"ja": "販売店員",
+"en": "Shop staff",
+"parent": "j:040"
+},
+{
+"id": "j:1324",
+"kind": "job",
+"code": "1324",
+"ja": "その他の商品販売従事者",
+"en": "Other sales workers",
+"parent": "j:040"
+},
+{
+"id": "j:1331",
+"kind": "job",
+"code": "1331",
+"ja": "販売類似職業従事者",
+"en": "Brokers and similar sales jobs",
+"parent": "j:040"
+},
+{
+"id": "j:1344",
+"kind": "job",
+"code": "1344",
+"ja": "自動車営業職業従事者",
+"en": "Car sales",
+"parent": "j:040"
+},
+{
+"id": "j:1345",
+"kind": "job",
+"code": "1345",
+"ja": "機械器具・通信・システム営業職業従事者（自動車を除く）",
+"en": "Machinery, telecom and IT sales",
+"parent": "j:040"
+},
+{
+"id": "j:1346",
+"kind": "job",
+"code": "1346",
+"ja": "金融営業職業従事者",
+"en": "Financial sales",
+"parent": "j:040"
+},
+{
+"id": "j:1347",
+"kind": "job",
+"code": "1347",
+"ja": "保険営業職業従事者",
+"en": "Insurance sales",
+"parent": "j:040"
+},
+{
+"id": "j:1349",
+"kind": "job",
+"code": "1349",
+"ja": "その他の営業職業従事者",
+"en": "Other sales representatives",
+"parent": "j:040"
+},
+{
+"id": "j:1361",
+"kind": "job",
+"code": "1361",
+"ja": "介護職員（医療・福祉施設等）",
+"en": "Care workers (care homes, hospitals)",
+"parent": "j:050"
+},
+{
+"id": "j:1362",
+"kind": "job",
+"code": "1362",
+"ja": "訪問介護従事者",
+"en": "Home care workers",
+"parent": "j:050"
+},
+{
+"id": "j:1371",
+"kind": "job",
+"code": "1371",
+"ja": "看護助手",
+"en": "Nursing assistants",
+"parent": "j:050"
+},
+{
+"id": "j:1379",
+"kind": "job",
+"code": "1379",
+"ja": "その他の保健医療サービス職業従事者",
+"en": "Other health care service workers",
+"parent": "j:050"
+},
+{
+"id": "j:1381",
+"kind": "job",
+"code": "1381",
+"ja": "理容・美容師",
+"en": "Barbers and hairdressers",
+"parent": "j:050"
+},
+{
+"id": "j:1383",
+"kind": "job",
+"code": "1383",
+"ja": "美容サービス・浴場従事者（美容師を除く）",
+"en": "Beauty and bath services",
+"parent": "j:050"
+},
+{
+"id": "j:1385",
+"kind": "job",
+"code": "1385",
+"ja": "クリーニング職，洗張職",
+"en": "Laundry and dry-cleaning workers",
+"parent": "j:050"
+},
+{
+"id": "j:1391",
+"kind": "job",
+"code": "1391",
+"ja": "飲食物調理従事者",
+"en": "Cooks",
+"parent": "j:050"
+},
+{
+"id": "j:1403",
+"kind": "job",
+"code": "1403",
+"ja": "飲食物給仕従事者",
+"en": "Waiting staff",
+"parent": "j:050"
+},
+{
+"id": "j:1404",
+"kind": "job",
+"code": "1404",
+"ja": "航空機客室乗務員",
+"en": "Flight attendants",
+"parent": "j:050"
+},
+{
+"id": "j:1405",
+"kind": "job",
+"code": "1405",
+"ja": "身の回り世話従事者",
+"en": "Personal care and attendant workers",
+"parent": "j:050"
+},
+{
+"id": "j:1406",
+"kind": "job",
+"code": "1406",
+"ja": "娯楽場等接客員",
+"en": "Entertainment venue staff",
+"parent": "j:050"
+},
+{
+"id": "j:1411",
+"kind": "job",
+"code": "1411",
+"ja": "居住施設・ビル等管理人",
+"en": "Building and apartment managers",
+"parent": "j:050"
+},
+{
+"id": "j:1421",
+"kind": "job",
+"code": "1421",
+"ja": "その他のサービス職業従事者",
+"en": "Other service workers",
+"parent": "j:050"
+},
+{
+"id": "j:1453",
+"kind": "job",
+"code": "1453",
+"ja": "警備員",
+"en": "Security guards",
+"parent": "j:060"
+},
+{
+"id": "j:1459",
+"kind": "job",
+"code": "1459",
+"ja": "その他の保安職業従事者",
+"en": "Other security workers",
+"parent": "j:060"
+},
+{
+"id": "j:1461",
+"kind": "job",
+"code": "1461",
+"ja": "農林漁業従事者",
+"en": "Agriculture, forestry and fishery workers",
+"parent": "j:070"
+},
+{
+"id": "j:1491",
+"kind": "job",
+"code": "1491",
+"ja": "製銑・製鋼・非鉄金属製錬従事者",
+"en": "Steel and non-ferrous smelting workers",
+"parent": "j:080"
+},
+{
+"id": "j:1492",
+"kind": "job",
+"code": "1492",
+"ja": "鋳物製造・鍛造従事者",
+"en": "Casting and forging workers",
+"parent": "j:080"
+},
+{
+"id": "j:1493",
+"kind": "job",
+"code": "1493",
+"ja": "金属工作機械作業従事者",
+"en": "Machine tool operators",
+"parent": "j:080"
+},
+{
+"id": "j:1494",
+"kind": "job",
+"code": "1494",
+"ja": "金属プレス従事者",
+"en": "Metal press operators",
+"parent": "j:080"
+},
+{
+"id": "j:1495",
+"kind": "job",
+"code": "1495",
+"ja": "鉄工，製缶従事者",
+"en": "Ironworkers and boilermakers",
+"parent": "j:080"
+},
+{
+"id": "j:1496",
+"kind": "job",
+"code": "1496",
+"ja": "板金従事者",
+"en": "Sheet metal workers",
+"parent": "j:080"
+},
+{
+"id": "j:1497",
+"kind": "job",
+"code": "1497",
+"ja": "金属彫刻・表面処理従事者",
+"en": "Metal finishing and plating workers",
+"parent": "j:080"
+},
+{
+"id": "j:1498",
+"kind": "job",
+"code": "1498",
+"ja": "金属溶接・溶断従事者",
+"en": "Welders",
+"parent": "j:080"
+},
+{
+"id": "j:1499",
+"kind": "job",
+"code": "1499",
+"ja": "その他の製品製造・加工処理従事者（金属製品）",
+"en": "Other metal product workers",
+"parent": "j:080"
+},
+{
+"id": "j:1501",
+"kind": "job",
+"code": "1501",
+"ja": "化学製品製造従事者",
+"en": "Chemical product workers",
+"parent": "j:080"
+},
+{
+"id": "j:1502",
+"kind": "job",
+"code": "1502",
+"ja": "窯業・土石製品製造従事者",
+"en": "Ceramic, stone and clay product workers",
+"parent": "j:080"
+},
+{
+"id": "j:1503",
+"kind": "job",
+"code": "1503",
+"ja": "食料品・飲料・たばこ製造従事者",
+"en": "Food and beverage production workers",
+"parent": "j:080"
+},
+{
+"id": "j:1505",
+"kind": "job",
+"code": "1505",
+"ja": "紡織・衣服・繊維製品製造従事者",
+"en": "Textile and clothing workers",
+"parent": "j:080"
+},
+{
+"id": "j:1506",
+"kind": "job",
+"code": "1506",
+"ja": "木・紙製品製造従事者",
+"en": "Wood and paper product workers",
+"parent": "j:080"
+},
+{
+"id": "j:1507",
+"kind": "job",
+"code": "1507",
+"ja": "印刷・製本従事者",
+"en": "Printing and binding workers",
+"parent": "j:080"
+},
+{
+"id": "j:1508",
+"kind": "job",
+"code": "1508",
+"ja": "ゴム・プラスチック製品製造従事者",
+"en": "Rubber and plastic product workers",
+"parent": "j:080"
+},
+{
+"id": "j:1509",
+"kind": "job",
+"code": "1509",
+"ja": "その他の製品製造・加工処理従事者（金属製品を除く）",
+"en": "Other production workers",
+"parent": "j:080"
+},
+{
+"id": "j:1511",
+"kind": "job",
+"code": "1511",
+"ja": "はん用・生産用・業務用機械器具組立従事者",
+"en": "Machinery assemblers",
+"parent": "j:080"
+},
+{
+"id": "j:1512",
+"kind": "job",
+"code": "1512",
+"ja": "電気機械器具組立従事者",
+"en": "Electrical equipment assemblers",
+"parent": "j:080"
+},
+{
+"id": "j:1513",
+"kind": "job",
+"code": "1513",
+"ja": "自動車組立従事者",
+"en": "Car assembly workers",
+"parent": "j:080"
+},
+{
+"id": "j:1514",
+"kind": "job",
+"code": "1514",
+"ja": "その他の機械組立従事者",
+"en": "Other machinery assemblers",
+"parent": "j:080"
+},
+{
+"id": "j:1551",
+"kind": "job",
+"code": "1551",
+"ja": "はん用・生産用・業務用機械器具・電気機械器具整備・修理従事者",
+"en": "Machinery and electrical repair workers",
+"parent": "j:080"
+},
+{
+"id": "j:1553",
+"kind": "job",
+"code": "1553",
+"ja": "自動車整備・修理従事者",
+"en": "Car mechanics",
+"parent": "j:080"
+},
+{
+"id": "j:1554",
+"kind": "job",
+"code": "1554",
+"ja": "その他の機械整備・修理従事者",
+"en": "Other machinery repair workers",
+"parent": "j:080"
+},
+{
+"id": "j:1561",
+"kind": "job",
+"code": "1561",
+"ja": "製品検査従事者（金属製品）",
+"en": "Product inspectors (metal)",
+"parent": "j:080"
+},
+{
+"id": "j:1571",
+"kind": "job",
+"code": "1571",
+"ja": "製品検査従事者（金属製品を除く）",
+"en": "Product inspectors (non-metal)",
+"parent": "j:080"
+},
+{
+"id": "j:1581",
+"kind": "job",
+"code": "1581",
+"ja": "機械検査従事者",
+"en": "Machinery inspectors",
+"parent": "j:080"
+},
+{
+"id": "j:1591",
+"kind": "job",
+"code": "1591",
+"ja": "画工，塗装・看板制作従事者",
+"en": "Painters and sign makers",
+"parent": "j:080"
+},
+{
+"id": "j:1592",
+"kind": "job",
+"code": "1592",
+"ja": "製図その他生産関連・生産類似作業従事者",
+"en": "Drafting and other production support",
+"parent": "j:080"
+},
+{
+"id": "j:1601",
+"kind": "job",
+"code": "1601",
+"ja": "鉄道運転従事者",
+"en": "Train drivers",
+"parent": "j:090"
+},
+{
+"id": "j:1611",
+"kind": "job",
+"code": "1611",
+"ja": "バス運転者",
+"en": "Bus drivers",
+"parent": "j:090"
+},
+{
+"id": "j:1612",
+"kind": "job",
+"code": "1612",
+"ja": "タクシー運転者",
+"en": "Taxi drivers",
+"parent": "j:090"
+},
+{
+"id": "j:1613",
+"kind": "job",
+"code": "1613",
+"ja": "乗用自動車運転者（タクシー運転者を除く）",
+"en": "Chauffeurs and other car drivers",
+"parent": "j:090"
+},
+{
+"id": "j:1614",
+"kind": "job",
+"code": "1614",
+"ja": "営業用大型貨物自動車運転者",
+"en": "Large truck drivers",
+"parent": "j:090"
+},
+{
+"id": "j:1615",
+"kind": "job",
+"code": "1615",
+"ja": "営業用貨物自動車運転者（大型車を除く）",
+"en": "Truck drivers (small and medium)",
+"parent": "j:090"
+},
+{
+"id": "j:1616",
+"kind": "job",
+"code": "1616",
+"ja": "自家用貨物自動車運転者",
+"en": "Company delivery drivers",
+"parent": "j:090"
+},
+{
+"id": "j:1619",
+"kind": "job",
+"code": "1619",
+"ja": "その他の自動車運転従事者",
+"en": "Other drivers",
+"parent": "j:090"
+},
+{
+"id": "j:1624",
+"kind": "job",
+"code": "1624",
+"ja": "航空機操縦士",
+"en": "Pilots",
+"parent": "j:090"
+},
+{
+"id": "j:1631",
+"kind": "job",
+"code": "1631",
+"ja": "車掌",
+"en": "Train conductors",
+"parent": "j:090"
+},
+{
+"id": "j:1639",
+"kind": "job",
+"code": "1639",
+"ja": "他に分類されない輸送従事者",
+"en": "Other transport workers",
+"parent": "j:090"
+},
+{
+"id": "j:1641",
+"kind": "job",
+"code": "1641",
+"ja": "発電員，変電員",
+"en": "Power plant and substation operators",
+"parent": "j:090"
+},
+{
+"id": "j:1643",
+"kind": "job",
+"code": "1643",
+"ja": "クレーン・ウインチ運転従事者",
+"en": "Crane operators",
+"parent": "j:090"
+},
+{
+"id": "j:1645",
+"kind": "job",
+"code": "1645",
+"ja": "建設・さく井機械運転従事者",
+"en": "Construction and drilling machine operators",
+"parent": "j:090"
+},
+{
+"id": "j:1649",
+"kind": "job",
+"code": "1649",
+"ja": "その他の定置・建設機械運転従事者",
+"en": "Other machine operators",
+"parent": "j:090"
+},
+{
+"id": "j:1651",
+"kind": "job",
+"code": "1651",
+"ja": "建設躯体工事従事者",
+"en": "Construction framework workers",
+"parent": "j:100"
+},
+{
+"id": "j:1661",
+"kind": "job",
+"code": "1661",
+"ja": "大工",
+"en": "Carpenters",
+"parent": "j:100"
+},
+{
+"id": "j:1666",
+"kind": "job",
+"code": "1666",
+"ja": "配管従事者",
+"en": "Plumbers",
+"parent": "j:100"
+},
+{
+"id": "j:1669",
+"kind": "job",
+"code": "1669",
+"ja": "その他の建設従事者",
+"en": "Other construction workers",
+"parent": "j:100"
+},
+{
+"id": "j:1671",
+"kind": "job",
+"code": "1671",
+"ja": "電気工事従事者",
+"en": "Electricians",
+"parent": "j:100"
+},
+{
+"id": "j:1681",
+"kind": "job",
+"code": "1681",
+"ja": "土木従事者，鉄道線路工事従事者",
+"en": "Civil engineering and railway track workers",
+"parent": "j:100"
+},
+{
+"id": "j:1691",
+"kind": "job",
+"code": "1691",
+"ja": "ダム・トンネル掘削従事者，採掘従事者",
+"en": "Tunnelling and mining workers",
+"parent": "j:100"
+},
+{
+"id": "j:1702",
+"kind": "job",
+"code": "1702",
+"ja": "船内・沿岸荷役従事者",
+"en": "Dock workers",
+"parent": "j:110"
+},
+{
+"id": "j:1703",
+"kind": "job",
+"code": "1703",
+"ja": "その他の運搬従事者",
+"en": "Other carrying and moving workers",
+"parent": "j:110"
+},
+{
+"id": "j:1711",
+"kind": "job",
+"code": "1711",
+"ja": "ビル・建物清掃員",
+"en": "Building cleaners",
+"parent": "j:110"
+},
+{
+"id": "j:1712",
+"kind": "job",
+"code": "1712",
+"ja": "清掃員（ビル・建物を除く），廃棄物処理従事者",
+"en": "Other cleaners and waste collectors",
+"parent": "j:110"
+},
+{
+"id": "j:1721",
+"kind": "job",
+"code": "1721",
+"ja": "包装従事者",
+"en": "Packers",
+"parent": "j:110"
+},
+{
+"id": "j:1739",
+"kind": "job",
+"code": "1739",
+"ja": "他に分類されない運搬・清掃・包装等従事者",
+"en": "Other carrying, cleaning and packing workers",
+"parent": "j:110"
+}
+]
+}

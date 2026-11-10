@@ -75,3 +75,68 @@ class Wages(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+JOB_CLASSES = {
+    "tab": [{"@code": "10", "@name": "所定内給与額"}, {"@code": "40", "@name": "きまって支給する現金給与額"},
+            {"@code": "42", "@name": "所定内給与額"}],
+    "cat01": [{"@code": "01", "@name": "男女計"}, {"@code": "02", "@name": "男"}],
+    "cat02": [{"@code": "010", "@name": "管理的職業従事者"}, {"@code": "1133", "@name": "看護師"},
+              {"@code": "9999", "@name": "不詳"}],
+    "area": [{"@code": "00000", "@name": "全国"}, {"@code": "23000", "@name": "愛知県"}],
+    "time": [{"@code": "2023000000"}],
+}
+
+
+class WageBreakdowns(unittest.TestCase):
+    def test_plan_breaks_down_jobs_and_fixes_totals(self):
+        plan = fw.plan_breakdown(JOB_CLASSES, "管理的職業従事者", "愛知", "所定内給与額")
+        self.assertEqual(plan, {"vary_key": "cat02", "area_key": "area", "tab_codes": ["10", "42"], "fixed": {"cat01": "01"}})
+
+    def test_plan_breaks_down_industries(self):
+        plan = fw.plan_breakdown(CLASSES, "産業計", "愛知", "所定内給与額")
+        self.assertEqual(plan["vary_key"], "cat04")
+        self.assertEqual(plan["fixed"], {"cat01": "1", "cat02": "01"})
+
+    def test_plan_rejects_table_without_the_breakdown(self):
+        self.assertIsNone(fw.plan_breakdown(JOB_CLASSES, "産業計", "愛知", "所定内給与額"))
+
+    def test_collect_merges_tabs_and_ignores_other_cells(self):
+        plan = fw.plan_breakdown(JOB_CLASSES, "管理的職業従事者", "愛知", "所定内給与額")
+        def v(value, **kw):
+            return {"@cat01": "01", "@area": "23000", "@cat02": "1133", "$": value, **{f"@{k}": x for k, x in kw.items()}}
+        stat = {"DATA_INF": {"VALUE": [
+            v("300.0", tab="10", time="2020000000"),
+            v("320.0", tab="42", time="2023000000"),
+            v("400.0", tab="40", time="2023000000"),           # other pay item
+            v("350.0", tab="42", time="2022000000", cat01="02"),  # men only
+            v("-", tab="42", time="2022000000"),               # suppressed cell
+            v("310.0", tab="42", time="2021000000", area="00000"),
+        ]}}
+        self.assertEqual(fw.collect(stat, plan), {("23000", "1133"): {2020: 300.0, 2023: 320.0},
+                                                  ("00000", "1133"): {2021: 310.0}})
+
+    def test_industry_key(self):
+        self.assertEqual(fw.industry_key("Ｅ３１ 輸送用機械器具製造業"), ("E31", "輸送用機械器具製造業"))
+        self.assertEqual(fw.industry_key("Ｉ５０～５５ 卸売業"), ("I50-55", "卸売業"))
+        self.assertEqual(fw.industry_key("Ｄ 建設業"), ("D", "建設業"))
+        self.assertIsNone(fw.industry_key("Ｔ１ 産業計"))
+
+    def test_job_key_and_parents(self):
+        self.assertIsNone(fw.job_key("9999", "不詳"))
+        groups = fw.json.loads((ROOT / "fetch" / "wages.json").read_text(encoding="utf-8"))["breakdowns"]["job"]["groups"]
+        self.assertEqual(fw.entry_parent("job", "1133", groups), "j:020")
+        self.assertEqual(fw.entry_parent("job", "1513", groups), "j:080")
+        self.assertIsNone(fw.entry_parent("job", "020", groups))
+        self.assertEqual(fw.entry_parent("industry", "E31", []), "i:E")
+        self.assertIsNone(fw.entry_parent("industry", "E", []))
+
+    def test_catalog_entries_have_english_names(self):
+        path = ROOT / "docs" / "data" / "wages" / "catalog.json"
+        if not path.exists():
+            self.skipTest("no catalog yet")
+        catalog = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual([e["id"] for e in catalog["entries"] if not e.get("en")], [])
+        for e in catalog["entries"]:
+            if e["parent"]:
+                self.assertIn(e["parent"], {x["id"] for x in catalog["entries"]})
