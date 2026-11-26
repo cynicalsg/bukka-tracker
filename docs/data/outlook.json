@@ -1,7 +1,7 @@
 {
  "edition": "2026-11",
  "source_url": "https://www.maff.go.jp/j/seisan/ryutu/yasai_zyukyu/attach/pdf/index-172.pdf",
- "generated": "2026-11-10T02:31:30Z",
+ "generated": "2026-11-26T12:31:06Z",
  "baseline": "5-year average for the month, Tokyo central wholesale markets",
  "items": {
   "daikon": {
@@ -60,35 +60,35 @@
   }
  },
  "track_record": {
-  "calls": 129,
-  "same_direction": 0.853,
+  "calls": 136,
+  "same_direction": 0.838,
   "since": "2023-07",
-  "until": "2026-09",
+  "until": "2026-10",
   "up": {
-   "n": 99,
-   "same_direction": 0.869,
-   "median_change": 0.138
+   "n": 104,
+   "same_direction": 0.856,
+   "median_change": 0.133
   },
   "down": {
-   "n": 30,
-   "same_direction": 0.8,
-   "median_change": -0.108
+   "n": 32,
+   "same_direction": 0.781,
+   "median_change": -0.106
   },
   "by_item": {
    "cabbage": {
-    "n": 22,
-    "right": 18
+    "n": 23,
+    "right": 19
    },
    "carrot": {
     "n": 22,
     "right": 21
    },
    "cucumber": {
-    "n": 13,
-    "right": 10
+    "n": 14,
+    "right": 11
    },
    "daikon": {
-    "n": 9,
+    "n": 10,
     "right": 6
    },
    "negi": {
@@ -96,19 +96,19 @@
     "right": 13
    },
    "onion": {
-    "n": 23,
-    "right": 18
+    "n": 24,
+    "right": 19
    },
    "potato": {
-    "n": 8,
+    "n": 9,
     "right": 7
    },
    "spinach": {
-    "n": 1,
-    "right": 1
+    "n": 2,
+    "right": 2
    },
    "tomato": {
-    "n": 18,
+    "n": 19,
     "right": 16
    }
   },

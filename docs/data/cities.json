@@ -44,7 +44,7 @@
    "name_en": "Sapporo",
    "pref": "北海道",
    "region": "ht",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -53,7 +53,7 @@
    "name_en": "Aomori",
    "pref": "青森県",
    "region": "ht",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -62,7 +62,7 @@
    "name_en": "Morioka",
    "pref": "岩手県",
    "region": "ht",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -71,7 +71,7 @@
    "name_en": "Sendai",
    "pref": "宮城県",
    "region": "ht",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -80,7 +80,7 @@
    "name_en": "Akita",
    "pref": "秋田県",
    "region": "ht",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -89,7 +89,7 @@
    "name_en": "Yamagata",
    "pref": "山形県",
    "region": "ht",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -98,7 +98,7 @@
    "name_en": "Fukushima",
    "pref": "福島県",
    "region": "ht",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -107,7 +107,7 @@
    "name_en": "Mito",
    "pref": "茨城県",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -116,7 +116,7 @@
    "name_en": "Utsunomiya",
    "pref": "栃木県",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -125,7 +125,7 @@
    "name_en": "Maebashi",
    "pref": "群馬県",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -134,7 +134,7 @@
    "name_en": "Saitama",
    "pref": "埼玉県",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -143,7 +143,7 @@
    "name_en": "Chiba",
    "pref": "千葉県",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -152,7 +152,7 @@
    "name_en": "Tokyo (23 wards)",
    "pref": "東京都",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -161,7 +161,7 @@
    "name_en": "Yokohama",
    "pref": "神奈川県",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -170,7 +170,7 @@
    "name_en": "Kawasaki",
    "pref": "神奈川県",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 53
   },
   {
@@ -179,7 +179,7 @@
    "name_en": "Sagamihara",
    "pref": "神奈川県",
    "region": "kt",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 53
   },
   {
@@ -188,7 +188,7 @@
    "name_en": "Niigata",
    "pref": "新潟県",
    "region": "hk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -197,7 +197,7 @@
    "name_en": "Toyama",
    "pref": "富山県",
    "region": "hk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -206,7 +206,7 @@
    "name_en": "Kanazawa",
    "pref": "石川県",
    "region": "hk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -215,7 +215,7 @@
    "name_en": "Fukui",
    "pref": "福井県",
    "region": "hk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -224,7 +224,7 @@
    "name_en": "Kofu",
    "pref": "山梨県",
    "region": "hk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -233,7 +233,7 @@
    "name_en": "Nagano",
    "pref": "長野県",
    "region": "hk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -242,7 +242,7 @@
    "name_en": "Gifu",
    "pref": "岐阜県",
    "region": "tk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -251,7 +251,7 @@
    "name_en": "Shizuoka",
    "pref": "静岡県",
    "region": "tk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -260,7 +260,7 @@
    "name_en": "Hamamatsu",
    "pref": "静岡県",
    "region": "tk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 53
   },
   {
@@ -269,7 +269,7 @@
    "name_en": "Nagoya",
    "pref": "愛知県",
    "region": "tk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -278,7 +278,7 @@
    "name_en": "Tsu",
    "pref": "三重県",
    "region": "tk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -287,7 +287,7 @@
    "name_en": "Otsu",
    "pref": "滋賀県",
    "region": "kk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -296,7 +296,7 @@
    "name_en": "Kyoto",
    "pref": "京都府",
    "region": "kk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -305,7 +305,7 @@
    "name_en": "Osaka",
    "pref": "大阪府",
    "region": "kk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -314,7 +314,7 @@
    "name_en": "Sakai",
    "pref": "大阪府",
    "region": "kk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 53
   },
   {
@@ -323,7 +323,7 @@
    "name_en": "Kobe",
    "pref": "兵庫県",
    "region": "kk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -332,7 +332,7 @@
    "name_en": "Nara",
    "pref": "奈良県",
    "region": "kk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -341,7 +341,7 @@
    "name_en": "Wakayama",
    "pref": "和歌山県",
    "region": "kk",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -350,7 +350,7 @@
    "name_en": "Tottori",
    "pref": "鳥取県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -359,7 +359,7 @@
    "name_en": "Matsue",
    "pref": "島根県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -368,7 +368,7 @@
    "name_en": "Okayama",
    "pref": "岡山県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -377,7 +377,7 @@
    "name_en": "Hiroshima",
    "pref": "広島県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -386,7 +386,7 @@
    "name_en": "Yamaguchi",
    "pref": "山口県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -395,7 +395,7 @@
    "name_en": "Tokushima",
    "pref": "徳島県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -404,7 +404,7 @@
    "name_en": "Takamatsu",
    "pref": "香川県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -413,7 +413,7 @@
    "name_en": "Matsuyama",
    "pref": "愛媛県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -422,7 +422,7 @@
    "name_en": "Kochi",
    "pref": "高知県",
    "region": "cs",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -431,7 +431,7 @@
    "name_en": "Fukuoka",
    "pref": "福岡県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -440,7 +440,7 @@
    "name_en": "Kitakyushu",
    "pref": "福岡県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 53
   },
   {
@@ -449,7 +449,7 @@
    "name_en": "Saga",
    "pref": "佐賀県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -458,7 +458,7 @@
    "name_en": "Nagasaki",
    "pref": "長崎県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -467,7 +467,7 @@
    "name_en": "Kumamoto",
    "pref": "熊本県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -476,7 +476,7 @@
    "name_en": "Oita",
    "pref": "大分県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -485,7 +485,7 @@
    "name_en": "Miyazaki",
    "pref": "宮崎県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -494,7 +494,7 @@
    "name_en": "Kagoshima",
    "pref": "鹿児島県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   },
   {
@@ -503,7 +503,7 @@
    "name_en": "Naha",
    "pref": "沖縄県",
    "region": "ko",
-   "latest": "2026-09",
+   "latest": "2026-10",
    "items": 63
   }
  ]
