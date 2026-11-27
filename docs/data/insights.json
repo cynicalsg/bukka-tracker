@@ -15,25 +15,29 @@
      "title": "白菜が依然“例年の倍”の中…高値が続いたキャベツ等の葉物野菜は軒並み『半値』に 入荷増でさらに下がる可能性（東海テレビ）",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/18349596797155bf2c375028aa72427bcd770981",
-     "date": "2026-11-11"
+     "date": "2026-11-11",
+     "title_en": "Chinese cabbage still 'double the usual', while cabbage and other leafy greens that stayed expensive are all at 'half price'; prices may fall further as arrivals grow (Tokai TV)"
     },
     {
      "title": "キャベツ2割安、葉物野菜の下落続く 農水省小売価格調査",
      "source": "日本経済新聞",
      "url": "https://www.nikkei.com/article/DGXZQOUB107IR0Q6A111C2000000/",
-     "date": "2026-11-10"
+     "date": "2026-11-10",
+     "title_en": "Cabbage 20% cheaper as leafy vegetables keep falling: MAFF retail price survey"
     },
     {
      "title": "野菜価格高騰の理由 長雨影響でキャベツ大量破棄に “物価の優等生”キノコにも異変",
      "source": "テレ朝NEWS",
      "url": "https://news.tv-asahi.co.jp/news_economy/articles/900203614.html",
-     "date": "2026-11-06"
+     "date": "2026-11-06",
+     "title_en": "Why vegetable prices soared: long rains force mass disposal of cabbage; trouble even for mushrooms, the 'model student' of prices"
     },
     {
      "title": "キャベツ・白菜・レタスがついに値下がり 野菜の価格高騰は落ち着くか（テレビ愛知）",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/9920dc156f2b5c839ae79108ac2fb22d41aedfe5",
-     "date": "2026-11-06"
+     "date": "2026-11-06",
+     "title_en": "Cabbage, Chinese cabbage and lettuce finally get cheaper: are high vegetable prices settling down? (TV Aichi)"
     }
    ],
    "official": [
@@ -43,8 +47,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "9月の長雨と日照不足で生育が遅れて出荷が減り、10月にかけてキャベツなど葉物野菜の価格が大きく上がったと報じられています[2][3][4]。11月に入ると出荷が増え、名古屋周辺では半値近くまで下がったとも伝えられています[1][4]。",
+   "summary_en": "Reports point to long rains and low sunshine in September that delayed growth and cut shipments, pushing up cabbage and other leafy vegetable prices into October [2][3][4]. As shipments grew in November, prices around Nagoya were reported to have fallen by about half [1][4]."
   },
   "cucumber": {
    "mom": 17.3,
@@ -54,7 +58,8 @@
      "title": "「トマト」「きゅうり」の高値続く 平年比3割高・2割高に 農水省「価格下がるか見通せず」",
      "source": "FNNプライムオンライン",
      "url": "https://www.fnn.jp/articles/-/1110620",
-     "date": "2026-09-08"
+     "date": "2026-09-08",
+     "title_en": "Tomatoes and cucumbers stay expensive at 30% and 20% above normal; MAFF 'can't foresee whether prices will fall'"
     }
    ],
    "official": [
@@ -75,25 +80,29 @@
      "title": "トマト１割安 入荷不安定見越し売り込み消極的",
      "source": "日本農業新聞",
      "url": "https://www.agrinews.co.jp/economy/index/410809",
-     "date": "2026-10-06"
+     "date": "2026-10-06",
+     "title_en": "Tomatoes 10% cheaper; sellers hold back as unstable arrivals expected"
     },
     {
      "title": "レタス２４％上昇、トマトは１０００円強に 野菜小売価格",
      "source": "日本農業新聞",
      "url": "https://www.agrinews.co.jp/economy/index/409573",
-     "date": "2026-09-30"
+     "date": "2026-09-30",
+     "title_en": "Vegetable retail prices: lettuce up 24%, tomatoes over ¥1,000"
     },
     {
      "title": "長引く雨による記録的な日照不足で苗が植えられない… レタスが2倍、トマトは3倍と野菜の価格高騰も（2026年9月17日掲載）",
      "source": "日テレNEWS NNN",
      "url": "https://news.ntv.co.jp/n/ctv/category/society/ct890bfe30139c43e2be3c355f2bd73ebf",
-     "date": "2026-09-17"
+     "date": "2026-09-17",
+     "title_en": "Record lack of sunshine from prolonged rain keeps seedlings from being planted; lettuce doubles, tomatoes triple in price (Sept 17, 2026)"
     },
     {
      "title": "「あれ？もしかしてお買い得？」暖冬でトマトが安い！1個30円ほどのスーパーも あなたはトマトで何を作る？【今が狙い目】",
      "source": "au Webポータル",
      "url": "https://article.auone.jp/d525b466-f764-4061-8c5d-7e4d7fa24acb",
-     "date": "2026-11-18"
+     "date": "2026-11-18",
+     "title_en": "'Wait, is this a bargain?' Warm winter makes tomatoes cheap, about ¥30 each at some supermarkets; what will you make with them? [Now's the time]"
     }
    ],
    "official": [
@@ -103,8 +112,8 @@
      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/"
     }
    ],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "9月には長雨と日照不足でトマトなどの野菜が高値と報じられましたが[2][3]、10月初めには平年より1割ほど安いと伝えられ[1]、11月には暖冬で安いとの報道もあります[4]。10月の値上がりの理由は、これらからははっきりしません。",
+   "summary_en": "Reports described high prices for tomatoes and other vegetables in September after long rains and low sunshine [2][3], but tomatoes were about 10% below normal in early October [1] and cheap in November thanks to warm weather [4]. They don't clearly explain the October rise."
   },
   "grape_shine": {
    "mom": -15.6,
@@ -114,30 +123,34 @@
      "title": "イチゴ「紅ほっぺ」が50円値下がり サンふじやシャインマスカットの最新価格は（テレビ愛知）",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/ff34f1e104e2afabfd2aa99a0ec284caee36a3b1",
-     "date": "2026-11-25"
+     "date": "2026-11-25",
+     "title_en": "Benihoppe strawberries down ¥50; the latest prices of Sun Fuji apples and Shine Muscat grapes (TV Aichi)"
     },
     {
      "title": "韓国のシャインマスカットが供給過剰で価格急落 1房650円 日本から苗木流出",
      "source": "テレ朝NEWS",
      "url": "https://news.tv-asahi.co.jp/news_international/articles/900203082.html",
-     "date": "2026-10-30"
+     "date": "2026-10-30",
+     "title_en": "Shine Muscat prices plunge in South Korea on oversupply, ¥650 a bunch; seedlings had flowed out of Japan"
     },
     {
      "title": "【画像まとめ】韓国のシャインマスカットが供給過剰で価格急落 1房650円 日本から苗木流出",
      "source": "テレ朝NEWS",
      "url": "https://news.tv-asahi.co.jp/news_international/articles/photos/900203082.html",
-     "date": "2026-10-30"
+     "date": "2026-10-30",
+     "title_en": "[Photos] Shine Muscat prices plunge in South Korea on oversupply, ¥650 a bunch; seedlings had flowed out of Japan"
     },
     {
      "title": "次のヒットを探せ シャインマスカット、価格下落傾向 生産者・小売業界、新たな品種模索 ／東京",
      "source": "毎日新聞",
      "url": "https://mainichi.jp/articles/20261019/ddl/k13/020/002000c",
-     "date": "2026-10-19"
+     "date": "2026-10-19",
+     "title_en": "Looking for the next hit: Shine Muscat prices trend down as growers and retailers seek new varieties (Tokyo)"
     }
    ],
    "official": [],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "シャインマスカットは価格が下がる傾向にあり、生産者や小売が新しい品種を探していると報じられています[4]。韓国で供給過剰により価格が急落したとの報道もありますが[2]、国内の10月の値下がりの理由は書かれていません。",
+   "summary_en": "Reports say Shine Muscat prices are trending down, with growers and retailers looking for new varieties [4]. Prices were also reported to have plunged in South Korea on oversupply [2], but the headlines don't say why prices fell here in October."
   },
   "apple": {
    "mom": -12.9,
@@ -147,30 +160,35 @@
      "title": "リンゴ価格、前年比3～4割減 主力「サンふじ」値下がりに農家悲鳴",
      "source": "河北新報オンライン",
      "url": "https://kahoku.news/articles/JY731ROBVJKHN.html",
-     "date": "2026-11-21"
+     "date": "2026-11-21",
+     "title_en": "Apple prices down 30–40% from last year; farmers cry out as the main Sun Fuji variety gets cheaper"
     },
     {
      "title": "「非常に美味しく仕上がっていました」青森県産リンゴの主力「ふじ」の入荷が盛んに行われ市場活況 1箱20kgの「ふじ」が高値1万2960円 「サンふじ」は高値1万800円とまずまずの価格で取り引き進む",
      "source": "TBS NEWS DIG",
      "url": "https://newsdig.tbs.co.jp/articles/-/3056847",
-     "date": "2026-11-02"
+     "date": "2026-11-02",
+     "title_en": "'It turned out very tasty': brisk arrivals of Aomori's main Fuji apples liven the market; a 20 kg box of Fuji tops out at ¥12,960 and Sun Fuji at ¥10,800, trading at fair prices"
     },
     {
      "title": "去年産りんご過去２番目の高値取引 県内取引価格は319円 冬の雪害と夏の猛暑で去年産りんごの収穫量が少なかった",
      "source": "日テレNEWS NNN",
      "url": "https://news.ntv.co.jp/n/rab/category/society/ra6c4424c4d2fd474fa005abd09b9ced2b",
-     "date": "2026-10-09"
+     "date": "2026-10-09",
+     "title_en": "Last season's apples traded at second-highest price on record, ¥319 in the prefecture; snow damage in winter and summer heat cut the harvest"
     },
     {
      "title": "トライアル、全社規模で初のブラックフライデーを開催！ 11月20日から10日間、トライアル・西友全店で実施 生活必需品の食品・日用品をいつものEDLP以上のお買い得価格で提供！ 「黒（クロ）」をテーマにしたお得商品や、りんごの木１本分のりんご販売などのトライアルアプリ",
      "source": "trial-holdings.inc",
      "url": "https://trial-holdings.inc/news/release/3562/",
-     "date": "2026-11-17"
+     "date": "2026-11-17",
+     "title_en": "Trial holds its first company-wide Black Friday for 10 days from Nov 20 at all Trial and Seiyu stores, with food and daily goods below its usual everyday low prices, 'black'-themed deals and a whole apple tree's worth of apples via the Trial app",
+     "hide": true
     }
    ],
    "official": [],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "リンゴの価格は前年より3〜4割安いと報じられています[1]。前年産は雪害と猛暑で収穫が少なく高値だったと伝えられており[3]、今年は青森県産ふじの入荷が盛んとされています[2]。",
+   "summary_en": "Reports say apple prices are 30–40% below last year [1]. Last season's crop was reported to be small and expensive after snow damage and summer heat [3], while this year's Aomori Fuji apples are arriving in good volume [2]."
   },
   "onion": {
    "mom": -10.2,
@@ -180,7 +198,8 @@
      "title": "高いのは葉物だけ？だいこん・にんじん・たまねぎは平年並みで3種1061円（LIMO）",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/06d606efb61cab05be8d70486980144182ca4eb5",
-     "date": "2026-10-21"
+     "date": "2026-10-21",
+     "title_en": "Only leafy greens are expensive? Daikon, carrots and onions at normal prices, ¥1,061 for the three (LIMO)"
     }
    ],
    "official": [
@@ -201,12 +220,13 @@
      "title": "歯磨き粉に1000円超え！？美容ブランドが参入する理由／歯学博士・照山裕子（日刊スポーツ）",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/ac478357a1483ff8170331c43575d5456433b61d",
-     "date": "2026-11-25"
+     "date": "2026-11-25",
+     "title_en": "Toothpaste over ¥1,000?! Why beauty brands are entering the market / Dr. Yuko Teruyama, dentist (Nikkan Sports)"
     }
    ],
    "official": [],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "美容ブランドの参入などで、1000円を超える高価格の歯磨き粉が出てきていると報じられています[1]。既存の商品の値上げについては触れられていません。",
+   "summary_en": "Reports point to beauty brands entering the market with toothpastes priced over ¥1,000 [1]. The article doesn't mention price rises for existing products."
   },
   "greentea": {
    "mom": null,
@@ -216,30 +236,35 @@
      "title": "【イオン】トップバリュ緑茶4品目を12月2日から値下げ！525mlは本体58円、2Lは本体118円に",
      "source": "DXマガジン",
      "url": "https://dxmagazine.jp/news/2664ko51-3/",
-     "date": "2026-11-17"
+     "date": "2026-11-17",
+     "title_en": "[AEON] Topvalu cuts prices of four green tea items from Dec 2: ¥58 for 525 ml and ¥118 for 2 L before tax"
     },
     {
      "title": "トップバリュベストプライス 緑茶飲料４品目を値下げ 輸入洋菓子５品目を新発売",
      "source": "PR TIMES",
      "url": "https://prtimes.jp/main/html/rd/p/000006194.000007505.html",
-     "date": "2026-11-10"
+     "date": "2026-11-10",
+     "title_en": "Topvalu Best Price cuts prices of four green tea drinks and launches five imported sweets",
+     "hide": true
     },
     {
      "title": "緑茶飲料に逆風、麦茶やコーン茶が存在感 世界的な抹茶人気で茶葉価格も上昇",
      "source": "食品産業新聞社ニュースWEB",
      "url": "https://www.ssnp.co.jp/beverage/710672/",
-     "date": "2026-11-08"
+     "date": "2026-11-08",
+     "title_en": "Headwinds for green tea drinks as barley and corn tea gain ground; global matcha popularity also lifts tea leaf prices"
     },
     {
      "title": "マヨネーズ20～30円値上げ 抹茶ブームで緑茶飲料も…11月から1469品目値上げ 前年の約10倍",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/e13e1eff5e0d43725b97244bc600c1cdc3afab81",
-     "date": "2026-10-29"
+     "date": "2026-10-29",
+     "title_en": "Mayonnaise up ¥20–30; green tea drinks too amid matcha boom… 1,469 items rise in November, about 10 times last year"
     }
    ],
    "official": [],
-   "summary_ja": null,
-   "summary_en": null
+   "summary_ja": "世界的な抹茶人気で茶葉の価格が上がり、11月から緑茶飲料が値上げされると報じられています[3][4]。一方、イオンはトップバリュの緑茶飲料を12月から値下げするとも伝えられています[1]。",
+   "summary_en": "Reports point to global matcha popularity driving up tea leaf prices, with green tea drinks rising in price from November [3][4]. AEON, on the other hand, is reported to be cutting prices of its Topvalu green tea drinks from December [1]."
   },
   "rice": {
    "mom": null,
@@ -249,30 +274,39 @@
      "title": "コメ価格が下落…JA福井県は農家への「追加払い」なし 集荷時の前払い金も大幅減額で農家は苦境続く",
      "source": "福井テレビ",
      "url": "https://www.fukui-tv.co.jp/?fukui_news=%E3%82%B3%E3%83%A1%E4%BE%A1%E6%A0%BC%E3%81%8C%E4%B8%8B%E8%90%BDja%E7%A6%8F%E4%BA%95%E7%9C%8C%E3%81%AF%E8%BE%B2%E5%AE%B6%E3%81%B8%E3%81%AE%E3%80%8C%E8%BF%BD%E5%8A%A0%E6%89%95%E3%81%84%E3%80%8D",
-     "date": "2026-11-25"
+     "date": "2026-11-25",
+     "title_en": "Rice prices fall: JA Fukui makes no 'additional payment' to farmers, and advance payments at collection are cut sharply, leaving farmers struggling"
     },
     {
      "title": "【図解】コメ価格、2週ぶり上昇＝5キロ2773円―農水省（時事通信）",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/8fe6b19b3028cf47f90bfe45084db6f03386012f",
-     "date": "2026-11-20"
+     "date": "2026-11-20",
+     "title_en": "[Chart] Rice price rises for the first time in two weeks to ¥2,773 per 5 kg: MAFF (Jiji)"
     },
     {
      "title": "コメ値下がる一方、もち高騰 「もち米を作る農家が少ない」原因は“令和のコメ騒動” 正月への影響懸念",
      "source": "Yahoo!ニュース",
      "url": "https://news.yahoo.co.jp/articles/881a7a8f67d005aa56f38059b4903ebc9d17f329",
-     "date": "2026-11-20"
+     "date": "2026-11-20",
+     "title_en": "Rice keeps getting cheaper while mochi soars: 'few farmers grow glutinous rice', a result of the 'Reiwa rice crisis'; worries about the New Year"
     },
     {
      "title": "コメ価格10週連続3000円下回る 2週ぶり値上がり 2773円/5kg",
      "source": "khb東日本放送",
      "url": "https://www.khb-tv.co.jp/news/17068946",
-     "date": "2026-11-20"
+     "date": "2026-11-20",
+     "title_en": "Rice price below ¥3,000 for 10th straight week, up for the first time in two weeks at ¥2,773 per 5 kg"
     }
    ],
    "official": [],
    "summary_ja": null,
    "summary_en": null
   }
+ },
+ "explained": {
+  "month": "2026-10",
+  "by": "monthly explainer",
+  "date": "2026-11-27"
  }
 }
